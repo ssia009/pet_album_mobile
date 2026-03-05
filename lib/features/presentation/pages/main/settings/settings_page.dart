@@ -8,6 +8,7 @@ import 'package:petAblumMobile/features/presentation/pages/auth/oauth2_login_for
 import 'package:petAblumMobile/core/widgets/app_out_button.dart';
 import 'package:petAblumMobile/core/theme/app_custom_button.dart';
 import 'package:petAblumMobile/features/presentation/pages/main/settings/withdrawal_page.dart';
+import 'package:petAblumMobile/features/presentation/pages/main/settings/Personal_info_page.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -99,14 +100,18 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         padding: const EdgeInsets.all(16),
         children: [
           _fixedCard(child: _card('계정', [
-            _item('개인정보 변경'),
-            _item('비밀번호 변경'),
-            _item('펫시터 계정으로 전환'),
+            _itemWithTap('개인정보 변경', onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const PersonalInfoPage()),
+              );
+            }),
+
           ])),
           const SizedBox(height: 16),
           _fixedCard(child: _card('알림', [
-            _item('메시지 알림'),
-            _item('펫시터 알림'),
+            _item('알림 설정'),
+
           ])),
           const SizedBox(height: 16),
           _fixedCard(child: _card('보안', [
