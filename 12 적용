@@ -1,0 +1,35 @@
+[33mcommit a2859801969e641fb07387add619bdae5b738dbd[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: osm3735 <hdosm3735@gmail.com>
+Date:   Tue Mar 3 11:19:37 2026 +0900
+
+    logo laucher
+
+[33mcommit 85d9c8b980682d642b2fb2eb451a9b640bc6381a[m
+Author: osm3735 <hdosm3735@gmail.com>
+Date:   Tue Mar 3 10:58:45 2026 +0900
+
+    providerscope 추가
+
+[33mcommit e09e3ceab5535bb31b70ccd683179239f99723b5[m
+Author: osm3735 <hdosm3735@gmail.com>
+Date:   Tue Mar 3 10:56:57 2026 +0900
+
+    앨범 하단창 mediaquery
+
+[33mcommit 25123b308c18877c77c09e7ab78a4598684b65bf[m
+Author: osm3735 <hdosm3735@gmail.com>
+Date:   Tue Mar 3 01:47:24 2026 +0900
+
+    260303-connect-widget
+
+[33mcommit 0c7495fe4bb16e00ea9e1a02bf604a2ac33416ba[m
+Author: osm3735 <hdosm3735@gmail.com>
+Date:   Mon Mar 2 22:02:56 2026 +0900
+
+    260302-settings page 변경
+
+[33mcommit 578dcc96430ae42ac97c636b757a60175c325c26[m
+Author: osm3735 <hdosm3735@gmail.com>
+Date:   Sun Mar 1 14:12:11 2026 +0900
+
+    260301-통합작업
