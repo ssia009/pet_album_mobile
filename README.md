@@ -1,4 +1,5 @@
 ## 해야할일
+- ##회원가입 -> 보호자 정보 작성 -> 로그인 후 뒤로가기 버튼 클릭시 검정화면오류 수정하기
 
 
 # 2026-03-06-수정사항
@@ -8,6 +9,7 @@ settings/
 - 비밀번호 변경 페이지 생성 settings/password_change_page
 - 알림 설정 페이지 생성 settings/notification_settings_page
 - 로그인 기기 설정 페이지 생성 login_device_page
+- 회원가입후 보호자 기본 정보 페이지 생성 auth/guardian_info_page
 
 # 2026-03-05-수정사항
 
