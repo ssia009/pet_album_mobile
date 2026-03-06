@@ -4,14 +4,14 @@ import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/widgets/common_app_back_bar_scaffold.dart';
 import 'package:petAblumMobile/core/theme/app_custom_button.dart';
 
-class Email_change_page extends StatefulWidget {
-  const Email_change_page({super.key});
+class Phone_change_page extends StatefulWidget {
+  const Phone_change_page({super.key});
 
   @override
-  State<Email_change_page> createState() => _Email_change_pageState();
+  State<Phone_change_page> createState() => _Phone_change_pageState();
 }
 
-class _Email_change_pageState extends State<Email_change_page> {
+class _Phone_change_pageState extends State<Phone_change_page> {
   final _newEmailController = TextEditingController();
   final _codeController = TextEditingController();
 
@@ -39,10 +39,27 @@ class _Email_change_pageState extends State<Email_change_page> {
 
   bool get _isVerified => _codeResult == true;
 
+  String _formatPhone(String digits) {
+    digits = digits.replaceAll('-', '');
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 7) return '${digits.substring(0, 3)}-${digits.substring(3)}';
+    return '${digits.substring(0, 3)}-${digits.substring(3, 7)}-${digits.substring(7)}';
+  }
+
   @override
   void initState() {
     super.initState();
     _newEmailController.addListener(() => setState(() {}));
+    _newEmailController.addListener(() {
+      final digits = _newEmailController.text.replaceAll('-', '');
+      final formatted = _formatPhone(digits);
+      if (_newEmailController.text != formatted) {
+        _newEmailController.value = TextEditingValue(
+          text: formatted,
+          selection: TextSelection.collapsed(offset: formatted.length),
+        );
+      }
+    });
   }
 
   @override
@@ -56,7 +73,7 @@ class _Email_change_pageState extends State<Email_change_page> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bg,
-      appBar: CommonBackAppBar(title: '이메일 변경'),
+      appBar: CommonBackAppBar(title: '전화번호 변경'),
       body: Column(
         children: [
           Expanded(
@@ -71,7 +88,7 @@ class _Email_change_pageState extends State<Email_change_page> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
-                        '이메일을 수정하기 위해 인증절차가 필요합니다.\n이메일로 발송된 6자리 코드를 입력해 주세요.',
+                        '전화번호을 수정하기 위해 인증절차가 필요합니다.\n문자로 발송된 인증번호를 입력해 주세요.',
                         style: AppTextStyle.body16R140.copyWith(
                           color: AppColors.f04,
                         ),
@@ -80,7 +97,7 @@ class _Email_change_pageState extends State<Email_change_page> {
                   ),
                   const SizedBox(height: 20),
 
-                  /// 현재 이메일 카드
+                  /// 현재 전화번호 카드
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
@@ -92,27 +109,28 @@ class _Email_change_pageState extends State<Email_change_page> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '현재 이메일',
+                          '현재 전화번호',
                           style: AppTextStyle.body16M120.copyWith(
                             color: AppColors.f05,
                           ),
                         ),
                         const SizedBox(height: 8),
-                        _InfoField(value: 'aaa@gmail.com'),
+                        _InfoField(value: '010-0000-0000'),
                       ],
                     ),
                   ),
                   const SizedBox(height: 16),
 
                   /// 변경할 이메일
-                  _Label('변경할 이메일주소'),
+                  _Label('변경할 전화번호'),
                   const SizedBox(height: 16),
                   Row(
                     children: [
                       Expanded(
                         child: _EditableField(
                           controller: _newEmailController,
-                          hint: '이메일을 입력해주세요.',
+                          hint: '전화번호를 입력해주세요.',
+                          keyboardType: TextInputType.number,
                         ),
                       ),
                       if (_newEmailController.text.isNotEmpty) ...[
@@ -275,7 +293,7 @@ class _Label extends StatelessWidget {
 }
 
 ////////////////////////////////////////////////////////////
-/// 🔹 현재 이메일 표시 필드 (수정 불가)
+/// 🔹 현재 전화번호 표시 필드 (수정 불가)
 ////////////////////////////////////////////////////////////
 
 class _InfoField extends StatelessWidget {

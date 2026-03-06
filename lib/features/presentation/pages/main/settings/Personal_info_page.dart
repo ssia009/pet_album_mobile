@@ -5,6 +5,8 @@ import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/widgets/common_app_back_bar_scaffold.dart';
 import 'package:petAblumMobile/core/theme/app_custom_button.dart';
 import 'package:petAblumMobile/features/presentation/pages/main/settings/email_change_page.dart';
+import 'package:petAblumMobile/features/presentation/pages/main/settings/phone_change_page.dart';
+import 'package:petAblumMobile/features/presentation/pages/main/settings/password_change_page.dart';
 
 class PersonalInfoPage extends StatefulWidget {
   const PersonalInfoPage({super.key});
@@ -143,7 +145,12 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                   const SizedBox(height: 8),
                   _TappableField(
                     value: '010-0000-0000',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const Phone_change_page()),
+                      );
+                    },
                   ),
 
                   const SizedBox(height: 20),
@@ -153,7 +160,12 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                   const SizedBox(height: 8),
                   _TappableField(
                     value: '••••••••••',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const Password_change_page()),
+                      );
+                    },
                   ),
                 ],
               ),

@@ -9,6 +9,8 @@ import 'package:petAblumMobile/core/widgets/app_out_button.dart';
 import 'package:petAblumMobile/core/theme/app_custom_button.dart';
 import 'package:petAblumMobile/features/presentation/pages/main/settings/withdrawal_page.dart';
 import 'package:petAblumMobile/features/presentation/pages/main/settings/Personal_info_page.dart';
+import 'package:petAblumMobile/features/presentation/pages/main/settings/notification_settings_page.dart';
+import 'package:petAblumMobile/features/presentation/pages/main/settings/login_device_page.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -106,16 +108,24 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 MaterialPageRoute(builder: (_) => const PersonalInfoPage()),
               );
             }),
-
           ])),
           const SizedBox(height: 16),
           _fixedCard(child: _card('알림', [
-            _item('알림 설정'),
-
+            _itemWithTap('알림 설정', onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const Notification_settings_page()),
+              );
+            }),
           ])),
           const SizedBox(height: 16),
           _fixedCard(child: _card('보안', [
-            _item('로그인 기기 관리'),
+            _itemWithTap('로그인 기기 관리', onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const Login_device_page()),
+              );
+            }),
           ])),
           const SizedBox(height: 16),
           _fixedCard(child: _card('도움', [

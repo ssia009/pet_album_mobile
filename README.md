@@ -1,7 +1,13 @@
 ## 해야할일
 
 
+# 2026-03-06-수정사항
 
+settings/
+- 전화번호 변경 페이지 생성 settings/phone_change_page
+- 비밀번호 변경 페이지 생성 settings/password_change_page
+- 알림 설정 페이지 생성 settings/notification_settings_page
+- 로그인 기기 설정 페이지 생성 login_device_page
 
 # 2026-03-05-수정사항
 
