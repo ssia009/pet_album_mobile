@@ -11,10 +11,12 @@ class AppTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final ValueChanged<String>? onChanged;
   final Widget? prefixIcon;
+  final FocusNode? focusNode;
 
   const AppTextField({
     super.key,
     required this.controller,
+    this.focusNode,
     required this.hintText,
     this.obscureText = false,
     this.prefixIcon,
@@ -26,32 +28,48 @@ class AppTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 55,
-      width: 350,
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        style : AppTextStyle.body16R120.copyWith(
-          color: AppColors.f03,
+      width: double.infinity,
+      child: Container(
+        padding: const EdgeInsets.all(10), // ✅ padding 10
+        decoration: BoxDecoration(
+          color: AppColors.gray01,
+          borderRadius: BorderRadius.circular(16),
         ),
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: AppTextStyle.body16R120.copyWith(
-            color: AppColors.f03,
-          ),
-          prefixIcon: prefixIcon,
-          filled: true,
-          fillColor: AppColors.gray01,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 18,
-          ),
-          suffixIcon: suffixIcon,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
-          ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (prefixIcon != null) ...[
+              prefixIcon!,
+              const SizedBox(width: 8), // ✅ gap 8
+            ],
+
+            Expanded(
+              child: TextField(
+                controller: controller,
+                focusNode: focusNode,
+                obscureText: obscureText,
+                style: AppTextStyle.body16R120.copyWith(
+                  color: AppColors.f03,
+                ),
+                decoration: InputDecoration(
+                  hintText: hintText,
+                  hintStyle: AppTextStyle.body16R120.copyWith(
+                    color: AppColors.f03,
+                  ),
+                  border: InputBorder.none,
+                  isDense: true,
+                  contentPadding: EdgeInsets.zero, // 중요
+                ),
+                onChanged: onChanged,
+              ),
+            ),
+
+            if (suffixIcon != null) ...[
+              const SizedBox(width: 8), // ✅ gap 8
+              suffixIcon!,
+            ],
+          ],
         ),
-        onChanged: onChanged,
       ),
     );
   }

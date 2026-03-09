@@ -7,11 +7,13 @@ import 'package:petAblumMobile/features/presentation/pages/album_crud/edit/stick
 class TextEditorIconBar extends StatefulWidget {
   final VoidCallback? onDrawPressed;
   final VoidCallback? onBackgroundPressed;
+  final VoidCallback? onTextPressed;
 
   const TextEditorIconBar({
     super.key,
     this.onDrawPressed,
     this.onBackgroundPressed,
+    this.onTextPressed,
   });
 
   @override

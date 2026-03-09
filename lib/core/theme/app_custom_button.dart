@@ -1,3 +1,5 @@
+//팝업 버튼 두개 컴포넌트
+
 import 'package:flutter/material.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
@@ -12,7 +14,6 @@ class AppCustomButton extends StatelessWidget {
   final Color? disabledTextColor;
   final double borderWidth;
   final double height;
-  final double? width;
   final double borderRadius;
 
   const AppCustomButton({
@@ -26,15 +27,16 @@ class AppCustomButton extends StatelessWidget {
     this.disabledTextColor,
     this.borderWidth = 1.5,
     this.height = 55,
-    this.width,
     this.borderRadius = 16,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bool isDisabled = onTap == null;
+
     return SizedBox(
       height: height,
-      width: width ?? double.infinity,
+      width: double.infinity,
       child: ElevatedButton(
         onPressed: onTap,
         style: ButtonStyle(

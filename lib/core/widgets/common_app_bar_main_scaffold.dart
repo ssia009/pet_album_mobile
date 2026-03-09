@@ -8,7 +8,7 @@ class CommonMainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final Widget? leadingContent;
   final EdgeInsetsGeometry? leadingPadding;
-  final bool centerTitle;
+  final bool centerTitle; // 추가
 
   const CommonMainAppBar({
     super.key,
@@ -16,10 +16,8 @@ class CommonMainAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.leadingContent,
     this.leadingPadding,
-    this.centerTitle = false,
+    this.centerTitle = false, // 기본값 false (기존 동작 유지)
   });
-
-  static const double _toolbarHeight = kToolbarHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +26,9 @@ class CommonMainAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       surfaceTintColor: Colors.transparent,
       centerTitle: centerTitle,
-      toolbarHeight: _toolbarHeight,
       titleSpacing: 20,
       actionsPadding: const EdgeInsets.only(right: 20),
       leadingWidth: 120,
-      automaticallyImplyLeading: false,
       leading: leadingContent == null
           ? null
           : Padding(
@@ -50,5 +46,5 @@ class CommonMainAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(_toolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
