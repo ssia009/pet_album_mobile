@@ -328,7 +328,7 @@ class _MyPageState extends State<MyPage> {
 
               const SizedBox(height: 20),
 //패밀리
-              Text(
+              /*Text(
                 '패밀리',
                 style: AppTextStyle.subtitle20M120.copyWith(
                   color: AppColors.f05,
@@ -337,7 +337,7 @@ class _MyPageState extends State<MyPage> {
 
               const SizedBox(height: 8),
 
-              Padding(
+                Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
                 child: Text(
                   '패밀리 계정',
@@ -430,7 +430,7 @@ class _MyPageState extends State<MyPage> {
               ),
 
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 20), */
 
               // 라이프케어
               Text(

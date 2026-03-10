@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
+import 'package:petAblumMobile/core/widgets/app_text_field.dart';
 import 'package:petAblumMobile/core/widgets/common_app_back_bar_scaffold.dart';
 import 'package:petAblumMobile/core/theme/app_custom_button.dart';
 
@@ -15,7 +16,6 @@ class _Phone_change_pageState extends State<Phone_change_page> {
   final _newEmailController = TextEditingController();
   final _codeController = TextEditingController();
 
-  // 인증 상태: null=기본, true=인증됨, false=코드틀림
   bool? _codeResult;
   bool _codeSent = false;
   bool _resendAvailable = false;
@@ -31,7 +31,6 @@ class _Phone_change_pageState extends State<Phone_change_page> {
 
   void _verifyCode() {
     if (_codeController.text.isEmpty) return;
-    // 임시: '123456'이 정답
     setState(() {
       _codeResult = _codeController.text == '123456';
     });
@@ -89,9 +88,7 @@ class _Phone_change_pageState extends State<Phone_change_page> {
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
                         '전화번호을 수정하기 위해 인증절차가 필요합니다.\n문자로 발송된 인증번호를 입력해 주세요.',
-                        style: AppTextStyle.body16R140.copyWith(
-                          color: AppColors.f04,
-                        ),
+                        style: AppTextStyle.body16R140.copyWith(color: AppColors.f04),
                       ),
                     ),
                   ),
@@ -108,12 +105,7 @@ class _Phone_change_pageState extends State<Phone_change_page> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '현재 전화번호',
-                          style: AppTextStyle.body16M120.copyWith(
-                            color: AppColors.f05,
-                          ),
-                        ),
+                        Text('현재 전화번호', style: AppTextStyle.body16M120.copyWith(color: AppColors.f05)),
                         const SizedBox(height: 8),
                         _InfoField(value: '010-0000-0000'),
                       ],
@@ -121,16 +113,15 @@ class _Phone_change_pageState extends State<Phone_change_page> {
                   ),
                   const SizedBox(height: 16),
 
-                  /// 변경할 이메일
+                  /// 변경할 전화번호
                   _Label('변경할 전화번호'),
                   const SizedBox(height: 16),
                   Row(
                     children: [
                       Expanded(
-                        child: _EditableField(
+                        child: AppTextField(
                           controller: _newEmailController,
-                          hint: '전화번호를 입력해주세요.',
-                          keyboardType: TextInputType.number,
+                          hintText: '전화번호를 입력해주세요.',
                         ),
                       ),
                       if (_newEmailController.text.isNotEmpty) ...[
@@ -157,11 +148,10 @@ class _Phone_change_pageState extends State<Phone_change_page> {
                     Row(
                       children: [
                         Expanded(
-                          child: _EditableField(
+                          child: AppTextField(
                             controller: _codeController,
-                            hint: '인증번호',
-                            keyboardType: TextInputType.number,
-                            enabled: !_isVerified,
+                            hintText: '인증번호',
+                            onChanged: (_) => setState(() {}),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -170,10 +160,10 @@ class _Phone_change_pageState extends State<Phone_change_page> {
                           height: 55,
                           child: AppCustomButton(
                             text: '확인',
-                            onTap: _verifyCode,
-                            backgroundColor: AppColors.black,
-                            textColor: AppColors.f01,
-                            borderColor: AppColors.black,
+                            onTap: _isVerified ? null : _verifyCode,
+                            backgroundColor: _isVerified ? AppColors.bg : AppColors.black,
+                            textColor: _isVerified ? AppColors.f03 : AppColors.f01,
+                            borderColor: _isVerified ? AppColors.gray01 : AppColors.black,
                             borderRadius: 16,
                           ),
                         ),
@@ -182,65 +172,42 @@ class _Phone_change_pageState extends State<Phone_change_page> {
                   ],
 
                   /// 인증 상태 메시지
-                  if (!_codeSent) ...[
-                    // 아무 메시지 없음
-                  ] else if (_isVerified) ...[
+                  if (_codeSent) ...[
                     const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        '인증되었습니다.',
-                        style: AppTextStyle.description14R120.copyWith(
-                          color: AppColors.f05,
-                        ),
+                    if (_isVerified)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text('인증되었습니다.',
+                            style: AppTextStyle.description14R120.copyWith(color: AppColors.f05)),
+                      )
+                    else if (_codeResult == false)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text('인증번호가 일치하지 않습니다. ',
+                              style: AppTextStyle.description14R120.copyWith(color: Colors.red)),
+                          GestureDetector(
+                            onTap: _sendCode,
+                            child: Text('재전송',
+                                style: AppTextStyle.description14R120.copyWith(
+                                    color: AppColors.f03, decoration: TextDecoration.underline)),
+                          ),
+                        ],
+                      )
+                    else
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text('인증번호가 발송되었습니다. ',
+                              style: AppTextStyle.description14R120.copyWith(color: AppColors.f05)),
+                          GestureDetector(
+                            onTap: _sendCode,
+                            child: Text('재전송',
+                                style: AppTextStyle.description14R120.copyWith(
+                                    color: AppColors.f03, decoration: TextDecoration.underline)),
+                          ),
+                        ],
                       ),
-                    ),
-                  ] else if (_codeResult == false) ...[
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          '인증번호가 일치하지 않습니다. ',
-                          style: AppTextStyle.description14R120.copyWith(
-                            color: Colors.red,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: _sendCode,
-                          child: Text(
-                            '재전송',
-                            style: AppTextStyle.description14R120.copyWith(
-                              color: AppColors.f03,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ] else ...[
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          '인증번호가 발송되었습니다. ',
-                          style: AppTextStyle.description14R120.copyWith(
-                            color: AppColors.f05,
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: _sendCode,
-                          child: Text(
-                            '재전송',
-                            style: AppTextStyle.description14R120.copyWith(
-                              color: AppColors.f03,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ],
               ),
@@ -251,13 +218,7 @@ class _Phone_change_pageState extends State<Phone_change_page> {
           Container(
             decoration: const BoxDecoration(
               color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0x0A000000),
-                  offset: Offset(0, -4),
-                  blurRadius: 12,
-                ),
-              ],
+              boxShadow: [BoxShadow(color: Color(0x0A000000), offset: Offset(0, -4), blurRadius: 12)],
             ),
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
             child: AppCustomButton(
@@ -285,10 +246,7 @@ class _Label extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: AppTextStyle.body16M120.copyWith(color: AppColors.f03),
-    );
+    return Text(text, style: AppTextStyle.body16M120.copyWith(color: AppColors.f03));
   }
 }
 
@@ -304,53 +262,7 @@ class _InfoField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Text(
-        value,
-        style: AppTextStyle.body16M120.copyWith(color: AppColors.f05),
-      ),
-    );
-  }
-}
-
-////////////////////////////////////////////////////////////
-/// 🔹 수정 가능한 입력 필드
-////////////////////////////////////////////////////////////
-
-class _EditableField extends StatelessWidget {
-  final TextEditingController controller;
-  final String hint;
-  final TextInputType keyboardType;
-  final bool enabled;
-
-  const _EditableField({
-    required this.controller,
-    required this.hint,
-    this.keyboardType = TextInputType.text,
-    this.enabled = true,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 55,
-      child: TextField(
-        controller: controller,
-        maxLines: 1,
-        keyboardType: keyboardType,
-        enabled: enabled,
-        style: AppTextStyle.body16M120.copyWith(color: AppColors.f05),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: AppTextStyle.body16M120.copyWith(color: AppColors.f03),
-          filled: true,
-          fillColor: enabled ? AppColors.gray01 : AppColors.gray02,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 17),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
-          ),
-        ),
-      ),
+      child: Text(value, style: AppTextStyle.body16M120.copyWith(color: AppColors.f05)),
     );
   }
 }

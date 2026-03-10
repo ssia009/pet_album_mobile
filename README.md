@@ -2,6 +2,15 @@
 - ##회원가입 -> 보호자 정보 작성 -> 로그인 후 뒤로가기 버튼 클릭시 검정화면오류 수정하기
 
 
+# 2026-03-10-수정사항
+- 마이페이지 펫시터, 결제,패밀리 관련 설정 주석처리
+- 고객센터 페이지 생성 settings/customer_service_page
+- 고객센터/자주묻는 질문 페이지 생성 settings/faq_detail_page
+- 이메일 문의하기 페이지 생성 settings/email_inquiry_page
+- 개인정보 방침... 페이지 생성 settings/privacy_policy_page
+- 네비게이션바 호버 제거
+- 
+
 # 2026-03-06-수정사항
 
 settings/
