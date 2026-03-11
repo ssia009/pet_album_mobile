@@ -27,6 +27,9 @@ class _AlarmPageState extends State<AlarmPage> {
           padding: const EdgeInsets.only(left: 20),
           child: IconButton(
             onPressed: () => Navigator.pop(context),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            hoverColor: Colors.transparent,
             icon: SvgPicture.asset(
               'assets/system/icons/icon_chevron_right.svg',
               width: 24,

@@ -29,6 +29,9 @@ class HomePage extends StatelessWidget {
               Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const AlarmPage()));
             },
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            hoverColor: Colors.transparent,
           ),
           const SizedBox(width: 8),
         ],
@@ -38,7 +41,6 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              /// SVG 이미지
               SvgPicture.asset(
                 'assets/system/dumy/main2.svg',
                 width: 270,
@@ -68,9 +70,7 @@ class HomePage extends StatelessWidget {
                   ),
                   child: Text(
                     '앨범 생성하기',
-                    style: AppTextStyle.body16M120.copyWith(
-                      color: AppColors.f01,
-                    ),
+                    style: AppTextStyle.body16M120.copyWith(color: AppColors.f01),
                   ),
                 ),
               ),

@@ -62,7 +62,7 @@ class _PetTypeRow extends StatelessWidget {
           Expanded(
             child: _PetTypeCard(
               label: '고양이',
-              imagePath: 'assets/system/icons/Orange_Tabby.svg',
+              imagePath: 'assets/system/icons/orange_tabby.svg',
             ),
           ),
         ],
