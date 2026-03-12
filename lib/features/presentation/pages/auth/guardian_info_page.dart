@@ -45,13 +45,13 @@ class _GuardianInfoPageState extends State<GuardianInfoPage> {
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final hPad = constraints.maxWidth * 0.06;
+            const hPad = 20.0;
 
             return Column(
               children: [
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(horizontal: hPad),
+                    padding: const EdgeInsets.all(20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -176,7 +176,7 @@ class _GuardianInfoPageState extends State<GuardianInfoPage> {
 
                 // 하단 버튼
                 Padding(
-                  padding: EdgeInsets.fromLTRB(hPad, 16, hPad, 40),
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
                   child: SizedBox(
                     width: double.infinity,
                     child: AppCustomButton(
