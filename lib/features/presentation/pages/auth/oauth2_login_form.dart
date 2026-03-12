@@ -31,11 +31,10 @@ class Oauth2LoginPage extends ConsumerWidget {
                   SizedBox(height: isSmall ? 40 : screenHeight * 0.1),
 
                   // 로고
-                  Image.asset(
-                    'assets/system/logo/logo.png',
-                    width: screenWidth * 0.28,
-                    height: screenWidth * 0.28,
-                    fit: BoxFit.contain,
+                  SvgPicture.asset(
+                    'assets/system/logo/logo.svg',
+                    colorFilter: const ColorFilter.mode
+                      (AppColors.main, BlendMode.srcIn),
                   ),
 
                   SizedBox(height: isSmall ? 40 : screenHeight * 0.12),
@@ -135,7 +134,7 @@ class Oauth2LoginPage extends ConsumerWidget {
                           decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFF03CF5D)),
                           alignment: Alignment.center,
                           child: SvgPicture.asset(
-                            "assets/system/icons/naver_logo.svg",
+                            "assets/system/icons/Naver_logo.svg",
                             width: 28,
                             height: 28,
                             colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
