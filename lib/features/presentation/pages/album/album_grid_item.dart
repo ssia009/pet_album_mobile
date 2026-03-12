@@ -131,10 +131,14 @@ class AlbumGridItem extends StatelessWidget {
                                 ),
                               ),
                               child: isSelected
-                                  ? const Icon(
-                                Icons.check,
-                                size: 14,
-                                color: Colors.white,
+                                  ? SvgPicture.asset(
+                                'assets/system/icons/icon_check.svg',
+                                width: 24,
+                                height: 24,
+                                colorFilter: const ColorFilter.mode(
+                                  AppColors.white,
+                                  BlendMode.srcIn,
+                                ),
                               )
                                   : null,
                             ),

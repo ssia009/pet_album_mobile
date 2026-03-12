@@ -158,13 +158,20 @@ class _StickerBottomSheetState extends State<StickerBottomSheet>
                       ),
                       suffixIcon: isSearching
                           ? IconButton(
-                        icon: const Icon(Icons.close, color: AppColors.gray03),
+                        icon: SvgPicture.asset(
+                          'assets/system/icons/icon_close_big.svg',
+                          width: 24,
+                          height: 24,
+                          colorFilter: const ColorFilter.mode(
+                            AppColors.gray04,
+                            BlendMode.srcIn,
+                          ),
+                        ),
                         onPressed: () {
                           _searchController.clear();
                           setState(() {});
                         },
-                      )
-                          : null,
+                      )                          : null,
                       onChanged: (value) => setState(() {}),
                     ),
                   ),
@@ -185,10 +192,14 @@ class _StickerBottomSheetState extends State<StickerBottomSheet>
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
-                              Icons.image_not_supported_outlined,
-                              size: 64,
-                              color: AppColors.gray03,
+                            SvgPicture.asset(
+                              'assets/system/icons/icon_image_not_supported.svg',
+                              width: 64,
+                              height: 64,
+                              colorFilter: const ColorFilter.mode(
+                                AppColors.gray03,
+                                BlendMode.srcIn,
+                              ),
                             ),
                             const SizedBox(height: 16),
                             Text(

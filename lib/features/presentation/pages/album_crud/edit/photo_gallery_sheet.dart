@@ -247,14 +247,17 @@ class _PhotoGalleryBottomSheetState extends State<PhotoGalleryBottomSheet> {
                                           ),
                                         ),
                                         child: isSelected
-                                            ? const Center(
-                                          child: Icon(
-                                            Icons.check,
-                                            size: 16,
-                                            color: Colors.white,
+                                            ? Center(
+                                          child: SvgPicture.asset(
+                                            'assets/system/icons/icon_check.svg',
+                                            width: 16,
+                                            height: 16,
+                                            colorFilter: const ColorFilter.mode(
+                                              Colors.white,
+                                              BlendMode.srcIn,
+                                            ),
                                           ),
-                                        )
-                                            : null,
+                                        )                                            : null,
                                       ),
                                     ),
 
@@ -268,12 +271,16 @@ class _PhotoGalleryBottomSheetState extends State<PhotoGalleryBottomSheet> {
                                         height: 24,
                                         decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
-                                          color: Color(0x99000000),
+                                          color: AppColors.f05,
                                         ),
-                                        child: const Icon(
-                                          Icons.play_arrow,
-                                          size: 16,
-                                          color: Colors.white,
+                                        child: SvgPicture.asset(
+                                          'assets/system/icons/icon_play_arrow.svg',
+                                          width: 16,
+                                          height: 16,
+                                          colorFilter: const ColorFilter.mode(
+                                            AppColors.white,
+                                            BlendMode.srcIn,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -303,8 +310,15 @@ class _PhotoGalleryBottomSheetState extends State<PhotoGalleryBottomSheet> {
           // ✕ 엑스: 닫기
           GestureDetector(
             onTap: () => Navigator.pop(context),
-            child: const Icon(Icons.close, size: 24, color: AppColors.f05),
-          ),
+              child: SvgPicture.asset(
+                'assets/system/icons/icon_close_big.svg',
+                width: 24,
+                height: 24,
+                colorFilter: const ColorFilter.mode(
+                  AppColors.f05,
+                  BlendMode.srcIn,
+                ),
+              )),
 
           // 중앙 "사진" 텍스트
           Expanded(
@@ -315,9 +329,16 @@ class _PhotoGalleryBottomSheetState extends State<PhotoGalleryBottomSheet> {
 
           // ✓ 체크: 선택한 사진 확인 후 닫기
           GestureDetector(
-            onTap: _onConfirm,
-            child: const Icon(Icons.check, size: 24, color: AppColors.f05),
-          ),
+            onTap: () => Navigator.pop(context),
+              child: SvgPicture.asset(
+                'assets/system/icons/icon_check.svg',
+                width: 24,
+                height: 24,
+                colorFilter: const ColorFilter.mode(
+                  AppColors.f05,
+                  BlendMode.srcIn,
+                ),
+              )          ),
         ],
       ),
     );

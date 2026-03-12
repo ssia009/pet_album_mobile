@@ -138,6 +138,57 @@
 - 카테고리 ui 수정 + 간격 수정
 - 검색 필드 수정 (입력 시 상하 정렬)
 - 시트 닫기 임시 기능 추가 
+
+# 2026-03-09-수정사항
+- app_text_field
+- 기본 텍스트 스타일 고정  AppTextStyle.body16R120
+- 입력 시 텍스트 컬러 f05로 수정
 - 
+- album_search_page
+- 텍스트 필드 스타일 제거
+
+# 2026-09-10-수정사항
 - drawing_tool_sheet
+- 바 삭제
+- 엑스 아이콘, 체크 아이콘, “그리기” 추가
+- +, - 아이콘 삭제
+- 섹션라벨 삭제
+- 전체 패딩, 간격 수정
+- 선두께 ui 수정
+- 선 스타일 ui 수정
+- 시트 닫는 기능 오류 해결
 - 
+- photo_gallery_sheet
+- 핸들바 아이콘 svg로 수정
+- 비디오 아이콘 수정
+- 
+- album_create_sheet 페이지 생성
+- icon svg로 변경
+- 버튼 수정 ui 수정
+
+
+# 2026-03-11-수정사항
+- album 폴더 안 icon 모두 svg로 변경
+- album_crud/edit 폴더 안 icon 모두 svg로 변경
+- 
+- album_create_sheet, album_search_page, sticker_search_sheet
+- 검색 필드 icon_close 수정
+- 
+- album_create_sheet 
+- 텍스트 문구 수정 
+- 버튼 수정 
+- 핸들 바 삭제 
+- 
+- album_menu_board_sheet 
+- icon 모두 svg로 변경 
+- 
+- album_common_actions 
+- showAlbumMenu에 onCopy 파라미터 추가 
+- onShare SnackBar UI 수정
+- 토스트 바 색상 수정 및 블러 효과 추가
+- 
+- album_page, album_search_page 
+- 복사 기능 구현 (_duplicateAlbum: 앨범 복제 시 "제목(2)", "제목(3)" 형태로 생성)
+- 
+- album_page
+- '선택' 텍스트 버튼 터치 영역 수정

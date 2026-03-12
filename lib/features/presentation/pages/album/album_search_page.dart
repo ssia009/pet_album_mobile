@@ -97,25 +97,35 @@ class _AlbumSearchState extends State<AlbumSearch> {
                 controller: _nameController,
                 focusNode: _focusNode,
                 hintText: '검색어를 입력해주세요.',
-                style: AppTextStyle.body16M120.copyWith(color: AppColors.f05),
+
                 prefixIcon: SvgPicture.asset(
                   'assets/system/icons/icon_search.svg',
                   width: 24,
                   height: 24,
                   colorFilter: const ColorFilter.mode(
-                    AppColors.gray03,
+                    AppColors.f05,
                     BlendMode.srcIn,
                   ),
                 ),
+
                 suffixIcon: isSearching
                     ? IconButton(
-                  icon: const Icon(Icons.close, color: AppColors.gray03),
                   onPressed: () {
                     _nameController.clear();
                     setState(() {});
                   },
+                  icon: SvgPicture.asset(
+                    'assets/system/icons/icon_close.svg',
+                    width: 24,
+                    height: 24,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.gray04,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 )
                     : null,
+
                 onChanged: (value) {
                   setState(() {});
                 },
@@ -215,9 +225,31 @@ class _AlbumSearchState extends State<AlbumSearch> {
       petName: petName,
       petId: petId,
       isBookmarked: isBookmarked,
+      onCopy: () => _duplicateAlbum(petId),
       onBookmarkToggle: () => _toggleBookmark(petId),
       onDelete: () => _handleDelete(petId, petName),
     );
+  }
+
+  void _duplicateAlbum(String petId) {
+    final original = albums.firstWhere((a) => a['id'] == petId);
+    final baseTitle = original['title']!;
+
+    int count = 2;
+    String newTitle = '$baseTitle($count)';
+    while (albums.any((a) => a['title'] == newTitle)) {
+      count++;
+      newTitle = '$baseTitle($count)';
+    }
+
+    setState(() {
+      albums.add({
+        'id': 'pet_${DateTime.now().millisecondsSinceEpoch}',
+        'title': newTitle,
+        'imageUrl': original['imageUrl']!,
+        'isBookmarked': 'false',
+      });
+    });
   }
 
   void _handleDelete(String petId, String petName) {
