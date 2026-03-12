@@ -20,10 +20,46 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
   final TextEditingController _foodController = TextEditingController();
+  int _currentPage = 0;
+  bool _isForward = true;
+  late final PageController _pageController = PageController(
+    viewportFraction: 0.88,
+  );
+
+  // 더미 펫 데이터 리스트
+  final List<Map<String, dynamic>> _pets = [
+    {
+      'imageUrl': 'assets/system/logo/logo.png',
+      'name': '또또 (2세)',
+      'species': '말티즈',
+      'personality': ['코지', '예민함', '물어요', '손조심'],
+      'favoriteToy': '목욕',
+      'sex': '수컷',
+      'birth': '2025.01.02',
+      'petFamily': '또또네 가족',
+      'traits': ['큰소리 주의', '이물질 섭취 주위 필요', '입질경험있음', '분리불안'],
+      'health': ['관절문제있음', '슬개골문제 있음', '피부문제있음'],
+      'medicine': ['없음'],
+    },
+    {
+      'imageUrl': 'assets/system/logo/logo.png',
+      'name': '콩이 (1세)',
+      'species': '포메라니안',
+      'personality': ['활동가', '애교쟁이', '산책광'],
+      'favoriteToy': '공놀이',
+      'sex': '암컷',
+      'birth': '2024.03.15',
+      'petFamily': '또또네 가족',
+      'traits': ['낯선사람 주의', '소심한'],
+      'health': ['없음'],
+      'medicine': ['없음'],
+    },
+  ];
 
   @override
   void dispose() {
     _foodController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -54,7 +90,7 @@ class _MyPageState extends State<MyPage> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -133,55 +169,43 @@ class _MyPageState extends State<MyPage> {
               ),
               const SizedBox(height: 32),
 
-              _buildPetCard(0),
-              const SizedBox(height: 20),
+              // 스와이프 가능한 펫 카드 + 반려동물 정보
+              // 스와이프 가능한 펫 카드 + 반려동물 정보
+              // 스와이프 가능한 펫 카드 + 반려동물 정보
+              SizedBox(
+                height: _getPetSectionHeight(_currentPage),
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: _pets.length,
+                  onPageChanged: (index) {
+                    setState(() => _currentPage = index);
+                  },
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: _buildPetSection(_pets[index], index),
+                    );
+                  },
+                ),
+              ),
 
+              // 페이지 인디케이터
+              const SizedBox(height: 16),
               Center(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                    _pets.length,
+                        (index) => Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: 8,
+                      height: 8,
                       decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('반려동물 정보', style: AppTextStyle.subtitle20M120.copyWith(color: AppColors.f05)),
-                          const SizedBox(height: 20),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(width: 60, child: Padding(padding: const EdgeInsets.fromLTRB(4, 7.5, 5, 7.5), child: Text('성향', style: AppTextStyle.caption12R120.copyWith(color: AppColors.f03)))),
-                              const SizedBox(width: 12),
-                              Expanded(child: Wrap(spacing: 6, runSpacing: 6, children: [_buildChip('큰소리 주의'), _buildChip('이물질 섭취 주위 필요'), _buildChip('입질경험있음'), _buildChip('분리불안')])),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(width: 60, child: Padding(padding: const EdgeInsets.fromLTRB(4, 7.5, 5, 7.5), child: Text('건강', style: AppTextStyle.caption12R120.copyWith(color: AppColors.f03)))),
-                              const SizedBox(width: 12),
-                              Expanded(child: Wrap(spacing: 8, runSpacing: 8, children: [_buildChip('관절문제있음'), _buildChip('슬개골문제 있음'), _buildChip('피부문제있음')])),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(width: 60, child: Padding(padding: const EdgeInsets.fromLTRB(4, 7.5, 5, 7.5), child: Text('복용약', style: AppTextStyle.caption12R120.copyWith(color: AppColors.f03)))),
-                              const SizedBox(width: 12),
-                              Expanded(child: Wrap(spacing: 8, runSpacing: 8, children: [_buildChip('없음')])),
-                            ],
-                          ),
-                        ],
+                        color: _currentPage == index ? AppColors.main : AppColors.gray02,
+                        shape: BoxShape.circle,
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    _buildPageIndicator(),
-                  ],
+                  ),
                 ),
               ),
 
@@ -217,38 +241,82 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
+  double _getPetSectionHeight(int index) {
+    final pet = _pets[index];
+    final traitCount = (pet['traits'] as List).length;
+    final healthCount = (pet['health'] as List).length;
+    final infoHeight = 80.0 + (traitCount * 36.0) + (healthCount * 36.0) + 100.0;
+    return 230.0 + infoHeight;
+  }
+
+  Widget _buildPetSection(Map<String, dynamic> pet, int index) {
+    return Column(
+      key: ValueKey(index),
+      children: [
+        PetCard(
+          imageUrl: pet['imageUrl'],
+          name: pet['name'],
+          species: pet['species'],
+          personality: List<String>.from(pet['personality']),
+          favoriteToy: pet['favoriteToy'],
+          sex: pet['sex'],
+          birth: pet['birth'],
+          petFamily: pet['petFamily'],
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const PetListPage()));
+          },
+        ),
+        const SizedBox(height: 20),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('반려동물 정보', style: AppTextStyle.subtitle20M120.copyWith(color: AppColors.f05)),
+              const SizedBox(height: 20),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(width: 60, child: Padding(padding: const EdgeInsets.fromLTRB(4, 7.5, 5, 7.5), child: Text('성향', style: AppTextStyle.caption12R120.copyWith(color: AppColors.f03)))),
+                  const SizedBox(width: 12),
+                  Expanded(child: Wrap(spacing: 6, runSpacing: 6, children: List<String>.from(pet['traits']).map((t) => _buildChip(t)).toList())),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(width: 60, child: Padding(padding: const EdgeInsets.fromLTRB(4, 7.5, 5, 7.5), child: Text('건강', style: AppTextStyle.caption12R120.copyWith(color: AppColors.f03)))),
+                  const SizedBox(width: 12),
+                  Expanded(child: Wrap(spacing: 8, runSpacing: 8, children: List<String>.from(pet['health']).map((h) => _buildChip(h)).toList())),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(width: 60, child: Padding(padding: const EdgeInsets.fromLTRB(4, 7.5, 5, 7.5), child: Text('복용약', style: AppTextStyle.caption12R120.copyWith(color: AppColors.f03)))),
+                  const SizedBox(width: 12),
+                  Expanded(child: Wrap(spacing: 8, runSpacing: 8, children: List<String>.from(pet['medicine']).map((m) => _buildChip(m)).toList())),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildChip(String label) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(color: AppColors.gray01, borderRadius: BorderRadius.circular(8)),
       child: Text(label, style: AppTextStyle.description14R120.copyWith(color: AppColors.f05)),
-    );
-  }
-
-  Widget _buildPageIndicator() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(width: 8, height: 8, decoration: const BoxDecoration(color: AppColors.main, shape: BoxShape.circle)),
-        const SizedBox(width: 8),
-        Container(width: 8, height: 8, decoration: const BoxDecoration(color: AppColors.gray02, shape: BoxShape.circle)),
-      ],
-    );
-  }
-
-  Widget _buildPetCard(int index) {
-    return PetCard(
-      imageUrl: 'assets/system/logo/logo.png',
-      name: '또또 (2세)',
-      species: '말티즈',
-      personality: ['코지', '예민함', '물어요', '손조심'],
-      favoriteToy: '목욕',
-      sex: '수컷',
-      birth: '2025.01.02',
-      petFamily: '또또네 가족',
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const PetListPage()));
-      },
     );
   }
 }
