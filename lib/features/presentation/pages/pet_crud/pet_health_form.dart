@@ -5,7 +5,7 @@ import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/widgets/common_app_back_bar_scaffold.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:petAblumMobile/core/theme/app_custom_button.dart';
-import 'package:petAblumMobile/features/presentation/pages/main/main_shell.dart';
+import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_list.dart';
 
 ////////////////////////////////////////////////////////////
 /// 💊 약 정보 모델
@@ -65,7 +65,6 @@ class _PetHealthState extends State<PetHealthEditor> {
 
   void _togglePicker(int index) {
     setState(() {
-      // 다른 피커 모두 닫기
       for (int i = 0; i < _medicines.length; i++) {
         if (i != index) _medicines[i].isPickerOpen = false;
       }
@@ -141,7 +140,7 @@ class _PetHealthState extends State<PetHealthEditor> {
                             Navigator.of(context).pop();
                             Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
-                                builder: (_) => MainShell(),
+                                builder: (_) => const PetListPage(),
                               ),
                                   (route) => false,
                             );
@@ -259,9 +258,9 @@ class _PetHealthState extends State<PetHealthEditor> {
               onSkip: () => _showSkipDialog(),
               onNext: _isFormValid
                   ? () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => MainShell()),
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => const PetListPage()),
+                      (route) => false,
                 );
               }
                   : null,
@@ -298,7 +297,6 @@ class _MedicineRowWithPicker extends StatefulWidget {
 
 class _MedicineRowWithPickerState
     extends State<_MedicineRowWithPicker> {
-  // 피커 내부 선택값 (저장 전) - 기본값 오전 1:00
   int _amPmIndex = 0;
   int _hourIndex = 0;
   int _minuteIndex = 0;
@@ -341,7 +339,6 @@ class _MedicineRowWithPickerState
 
     return Column(
       children: [
-        /// 약 이름 + 시간/아이콘 행
         Container(
           width: double.infinity,
           height: 55,
@@ -395,7 +392,6 @@ class _MedicineRowWithPickerState
           ),
         ),
 
-        /// 인라인 피커 (isOpen일 때만 표시)
         if (isOpen)
           Container(
             decoration: const BoxDecoration(
@@ -407,13 +403,11 @@ class _MedicineRowWithPickerState
             ),
             child: Column(
               children: [
-                /// 드럼롤 피커
                 SizedBox(
                   height: 200,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      /// 선택 하이라이트
                       Positioned(
                         left: 0,
                         right: 0,
@@ -422,40 +416,30 @@ class _MedicineRowWithPickerState
                           color: AppColors.gray02.withOpacity(0.4),
                         ),
                       ),
-
                       Row(
                         children: [
-                          /// 오전/오후
                           Expanded(
                             flex: 2,
                             child: _DrumrollPicker(
                               items: _amPmList,
                               selectedIndex: _amPmIndex,
-                              onChanged: (i) {
-                                _amPmIndex = i;
-                              },
+                              onChanged: (i) => _amPmIndex = i,
                             ),
                           ),
-                          /// 시
                           Expanded(
                             flex: 2,
                             child: _DrumrollPicker(
                               items: _hourList,
                               selectedIndex: _hourIndex,
-                              onChanged: (i) {
-                                _hourIndex = i;
-                              },
+                              onChanged: (i) => _hourIndex = i,
                             ),
                           ),
-                          /// 분
                           Expanded(
                             flex: 2,
                             child: _DrumrollPicker(
                               items: _minuteList,
                               selectedIndex: _minuteIndex,
-                              onChanged: (i) {
-                                _minuteIndex = i;
-                              },
+                              onChanged: (i) => _minuteIndex = i,
                             ),
                           ),
                         ],
@@ -463,8 +447,6 @@ class _MedicineRowWithPickerState
                     ],
                   ),
                 ),
-
-                /// 저장 버튼
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                   child: GestureDetector(
@@ -496,7 +478,7 @@ class _MedicineRowWithPickerState
 }
 
 ////////////////////////////////////////////////////////////
-/// 🎡 드럼롤 피커 (CupertinoPicker 기반)
+/// 🎡 드럼롤 피커
 ////////////////////////////////////////////////////////////
 
 class _DrumrollPicker extends StatefulWidget {
@@ -744,7 +726,7 @@ class _InputField extends StatelessWidget {
           color: AppColors.f03,
         ),
         filled: true,
-        fillColor: AppColors.gray02,
+        fillColor: AppColors.gray01,
         contentPadding:
         const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
@@ -757,7 +739,7 @@ class _InputField extends StatelessWidget {
 }
 
 ////////////////////////////////////////////////////////////
-/// 🔹 답변 선택 옵션 (SVG 라디오 버튼)
+/// 🔹 답변 선택 옵션
 ////////////////////////////////////////////////////////////
 
 class _AnswerOption extends StatelessWidget {
@@ -777,8 +759,7 @@ class _AnswerOption extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding:
-        const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -791,8 +772,7 @@ class _AnswerOption extends StatelessWidget {
           children: [
             Text(
               text,
-              style: AppTextStyle.body16M120
-                  .copyWith(color: AppColors.f05),
+              style: AppTextStyle.body16M120.copyWith(color: AppColors.f05),
             ),
             const Spacer(),
             SvgPicture.asset(
@@ -827,6 +807,7 @@ class _BottomDualButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       decoration: const BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -841,33 +822,32 @@ class _BottomDualButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 171,
-              height: 55,
-              child: AppCustomButton(
-                text: '건너뛰기',
-                onTap: onSkip,
-                backgroundColor: Colors.white,
-                textColor: AppColors.f05,
-                borderColor: AppColors.gray02,
-                borderRadius: 16,
+            Expanded(
+              child: SizedBox(
+                height: 55,
+                child: AppCustomButton(
+                  text: '건너뛰기',
+                  onTap: onSkip,
+                  backgroundColor: Colors.white,
+                  textColor: AppColors.f05,
+                  borderColor: AppColors.gray02,
+                  borderRadius: 16,
+                ),
               ),
             ),
             const SizedBox(width: 8),
-            SizedBox(
-              width: 171,
-              height: 55,
-              child: AppCustomButton(
-                text: '다음',
-                onTap: onNext,
-                backgroundColor:
-                isActive ? AppColors.black : AppColors.bg,
-                textColor: isActive ? AppColors.white : AppColors.f03,
-                borderColor:
-                isActive ? AppColors.gray05 : AppColors.gray01,
-                borderRadius: 16,
+            Expanded(
+              child: SizedBox(
+                height: 55,
+                child: AppCustomButton(
+                  text: '완료',
+                  onTap: onNext,
+                  backgroundColor: isActive ? AppColors.black : AppColors.bg,
+                  textColor: isActive ? AppColors.white : AppColors.f03,
+                  borderColor: isActive ? AppColors.gray05 : AppColors.gray01,
+                  borderRadius: 16,
+                ),
               ),
             ),
           ],

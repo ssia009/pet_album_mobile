@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:petAblumMobile/core/theme/app_theme.dart';
 import 'features/presentation/pages/auth/oauth2_login_form.dart';
 
@@ -51,8 +52,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset(
-          'assets/system/logo/logo.png',
+        child: SvgPicture.asset(
+          'assets/system/logo/logo.svg',
           width: 200,
           height: 200,
           fit: BoxFit.contain,

@@ -23,6 +23,16 @@ class _PetInfoEditorState extends State<PetInfoEditor> {
   late final TextEditingController _weightController;
 
   String? _selectedGender;
+  final Set<String> _selectedPersonalities = {};
+
+  static final List<String> _personalityOptions = [
+    '순둥이', '애교쟁이', '사랑둥이', '사근사근',
+    '온순한', '활동가', '산책광', '장난꾸러기',
+    '에너지뿜뿜', '호기심쟁이', '소심한',
+    '눈치백단', '신중한', '조용조용',
+    '혼자서도 잘해요', '뚝순이', '고집쟁이',
+    '자기주장 강함', '예민보스',
+  ];
 
   bool get _isFormValid =>
       _nameController.text.isNotEmpty &&
@@ -181,6 +191,21 @@ class _PetInfoEditorState extends State<PetInfoEditor> {
                     const SizedBox(height: 8),
                     _WeightInputField(controller: _weightController),
 
+                    const SizedBox(height: 24),
+                    _PersonalitySelector(
+                      options: _personalityOptions,
+                      selected: _selectedPersonalities,
+                      onToggle: (val) {
+                        setState(() {
+                          if (_selectedPersonalities.contains(val)) {
+                            _selectedPersonalities.remove(val);
+                          } else if (_selectedPersonalities.length < 3) {
+                            _selectedPersonalities.add(val);
+                          }
+                        });
+                      },
+                    ),
+
                     const SizedBox(height: 80),
                   ],
                 ),
@@ -264,7 +289,7 @@ class _Label extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text, style: AppTextStyle.body16M120);
+    return Text(text, style: AppTextStyle.body16M120.copyWith(color: AppColors.f03));
   }
 }
 
@@ -543,6 +568,73 @@ class _GenderButton extends StatelessWidget {
 }
 
 ////////////////////////////////////////////////////////////
+/// 🔹 성격 선택 (최대 3개)
+////////////////////////////////////////////////////////////
+
+class _PersonalitySelector extends StatelessWidget {
+  final List<String> options;
+  final Set<String> selected;
+  final ValueChanged<String> onToggle;
+
+  const _PersonalitySelector({
+    required this.options,
+    required this.selected,
+    required this.onToggle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text('성격', style: AppTextStyle.body16M120.copyWith(color: AppColors.f03)),
+            const SizedBox(width: 6),
+            Text(
+              '(최대 3개 선택)',
+              style: AppTextStyle.body16M120.copyWith(
+                color: AppColors.f03,
+                fontSize: 13,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: options.map((option) {
+            final isSelected = selected.contains(option);
+            return GestureDetector(
+              onTap: () => onToggle(option),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                decoration: BoxDecoration(
+                  color: isSelected ? Colors.white : AppColors.gray01,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: isSelected ? AppColors.main : Colors.transparent,
+                    width: 1.5,
+                  ),
+                ),
+                child: Text(
+                  option,
+                  style:AppTextStyle.body16R120.copyWith(
+                    color: AppColors.f04,
+
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+}
+
+////////////////////////////////////////////////////////////
 /// 🔹 하단 버튼
 ////////////////////////////////////////////////////////////
 
@@ -574,31 +666,32 @@ class _BottomDualButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 171,
-              height: 55,
-              child: AppCustomButton(
-                text: '건너뛰기',
-                onTap: onSkip,
-                backgroundColor: Colors.white,
-                textColor: AppColors.f05,
-                borderColor: AppColors.gray02,
-                borderRadius: 16,
+            Expanded(
+              child: SizedBox(
+                height: 55,
+                child: AppCustomButton(
+                  text: '건너뛰기',
+                  onTap: onSkip,
+                  backgroundColor: Colors.white,
+                  textColor: AppColors.f05,
+                  borderColor: AppColors.gray02,
+                  borderRadius: 16,
+                ),
               ),
             ),
             const SizedBox(width: 8),
-            SizedBox(
-              width: 171,
-              height: 55,
-              child: AppCustomButton(
-                text: '다음',
-                onTap: onNext,
-                backgroundColor: isActive ? AppColors.black : AppColors.bg,
-                textColor: isActive ? AppColors.white : AppColors.f03,
-                borderColor: isActive ? AppColors.gray05 : AppColors.gray01,
-                borderRadius: 16,
+            Expanded(
+              child: SizedBox(
+                height: 55,
+                child: AppCustomButton(
+                  text: '다음',
+                  onTap: onNext,
+                  backgroundColor: isActive ? AppColors.black : AppColors.bg,
+                  textColor: isActive ? AppColors.white : AppColors.f03,
+                  borderColor: isActive ? AppColors.gray05 : AppColors.gray01,
+                  borderRadius: 16,
+                ),
               ),
             ),
           ],

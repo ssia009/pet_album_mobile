@@ -34,7 +34,7 @@ class Oauth2LoginPage extends ConsumerWidget {
                   SvgPicture.asset(
                     'assets/system/logo/logo.svg',
                     colorFilter: const ColorFilter.mode
-                      (AppColors.main, BlendMode.srcIn),
+                      (AppColors.black, BlendMode.srcIn),
                   ),
 
                   SizedBox(height: isSmall ? 40 : screenHeight * 0.12),
@@ -110,14 +110,14 @@ class Oauth2LoginPage extends ConsumerWidget {
                         highlightColor: Colors.transparent,
                         hoverColor: Colors.transparent,
                         icon: Container(
-                          width: 60,
-                          height: 60,
+                          width: 58,
+                          height: 58,
                           decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.black),
                           alignment: Alignment.center,
                           child: SvgPicture.asset(
                             "assets/system/icons/apple_logo.svg",
-                            width: 28,
-                            height: 28,
+                            width: 24,
+                            height: 24,
                             colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                           ),
                         ),
@@ -129,14 +129,14 @@ class Oauth2LoginPage extends ConsumerWidget {
                         highlightColor: Colors.transparent,
                         hoverColor: Colors.transparent,
                         icon: Container(
-                          width: 60,
-                          height: 60,
+                          width: 58,
+                          height: 58,
                           decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFF03CF5D)),
                           alignment: Alignment.center,
                           child: SvgPicture.asset(
-                            "assets/system/icons/Naver_logo.svg",
-                            width: 28,
-                            height: 28,
+                            "assets/system/icons/naver_logo.svg",
+                            width: 24,
+                            height: 24,
                             colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                           ),
                         ),

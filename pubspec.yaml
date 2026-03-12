@@ -78,6 +78,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/system/logo/logo.png
+    - assets/system/logo/logo.svg
     - assets/system/icons/
     - assets/system/dumy/
     - assets/system/pet_card/
