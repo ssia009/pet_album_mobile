@@ -83,6 +83,12 @@ class _EmailInquiryPageState extends State<EmailInquiryPage> {
                   AppTextField(controller: _emailController, hintText: '이메일을 입력해주세요.'),
                   const SizedBox(height: 20),
 
+                  /// 이메일 제목
+                  _Label('제목'),
+                  const SizedBox(height: 8),
+                  AppTextField(controller: _emailController, hintText: '제목을 입력해주세요.'),
+                  const SizedBox(height: 20),
+
                   /// 문의내용
                   _Label('문의내용'),
                   const SizedBox(height: 8),

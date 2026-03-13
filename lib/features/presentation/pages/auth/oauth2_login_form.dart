@@ -7,6 +7,7 @@ import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/theme/app_text_semantic.dart';
 import 'package:petAblumMobile/features/presentation/pages/auth/login_form.dart';
 import 'package:petAblumMobile/features/presentation/pages/auth/sign_up_page.dart';
+import 'package:petAblumMobile/features/presentation/pages/main/settings/customer_service_page.dart';
 
 class Oauth2LoginPage extends ConsumerWidget {
   const Oauth2LoginPage({super.key});
@@ -31,10 +32,11 @@ class Oauth2LoginPage extends ConsumerWidget {
                   SizedBox(height: isSmall ? 40 : screenHeight * 0.1),
 
                   // 로고
-                  SvgPicture.asset(
-                    'assets/system/logo/logo.svg',
-                    colorFilter: const ColorFilter.mode
-                      (AppColors.black, BlendMode.srcIn),
+                  Image.asset(
+                    'assets/system/logo/logo.png',
+                    width: screenWidth * 0.28,
+                    height: screenWidth * 0.28,
+                    fit: BoxFit.contain,
                   ),
 
                   SizedBox(height: isSmall ? 40 : screenHeight * 0.12),
@@ -110,14 +112,14 @@ class Oauth2LoginPage extends ConsumerWidget {
                         highlightColor: Colors.transparent,
                         hoverColor: Colors.transparent,
                         icon: Container(
-                          width: 58,
-                          height: 58,
+                          width: 60,
+                          height: 60,
                           decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.black),
                           alignment: Alignment.center,
                           child: SvgPicture.asset(
                             "assets/system/icons/apple_logo.svg",
-                            width: 24,
-                            height: 24,
+                            width: 28,
+                            height: 28,
                             colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                           ),
                         ),
@@ -129,14 +131,14 @@ class Oauth2LoginPage extends ConsumerWidget {
                         highlightColor: Colors.transparent,
                         hoverColor: Colors.transparent,
                         icon: Container(
-                          width: 58,
-                          height: 58,
+                          width: 60,
+                          height: 60,
                           decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFF03CF5D)),
                           alignment: Alignment.center,
                           child: SvgPicture.asset(
                             "assets/system/icons/naver_logo.svg",
-                            width: 24,
-                            height: 24,
+                            width: 28,
+                            height: 28,
                             colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                           ),
                         ),
@@ -168,7 +170,9 @@ class Oauth2LoginPage extends ConsumerWidget {
                       ),
                       const Text('|'),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomerServicePage()));
+                        },
                         style: TextButton.styleFrom(
                           splashFactory: NoSplash.splashFactory,
                           overlayColor: Colors.transparent,
