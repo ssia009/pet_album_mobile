@@ -196,100 +196,102 @@ class _MyPageState extends State<MyPage> {
                     final pet = _pets[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Column(
-                        children: [
-                          PetCard(
-                            imageUrl: pet['imageUrl'],
-                            name: pet['name'],
-                            species: pet['species'],
-                            personality: List<String>.from(pet['personality']),
-                            favoriteToy: pet['favoriteToy'],
-                            sex: pet['sex'],
-                            birth: pet['birth'],
-                            petFamily: pet['petFamily'],
-                            cardSvg: pet['cardSvg'] ?? 'assets/system/pet_card/dog_pet_card.svg',
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => const PetListPage()));
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                          Container(
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(16),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            PetCard(
+                              imageUrl: pet['imageUrl'],
+                              name: pet['name'],
+                              species: pet['species'],
+                              personality: List<String>.from(pet['personality']),
+                              favoriteToy: pet['favoriteToy'],
+                              sex: pet['sex'],
+                              birth: pet['birth'],
+                              petFamily: pet['petFamily'],
+                              cardSvg: pet['cardSvg'] ?? 'assets/system/pet_card/dog_pet_card.svg',
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (_) => const PetListPage()));
+                              },
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('반려동물 정보', style: AppTextStyle.subtitle20M120.copyWith(color: AppColors.f05)),
-                                const SizedBox(height: 20),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: 40,
-                                      height: 29,
-                                      child: Center(child: Text('성향', style: AppTextStyle.caption12R120.copyWith(color: AppColors.f03))),
-                                    ),
-                                    const SizedBox(width: 16),
-                                    SizedBox(
-                                      width: 256,
-                                      height: 64,
-                                      child: Wrap(
-                                        spacing: 6,
-                                        runSpacing: 6,
-                                        children: List<String>.from(pet['traits']).map((t) => _buildChip(t)).toList(),
+                            const SizedBox(height: 20),
+                            Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('반려동물 정보', style: AppTextStyle.subtitle20M120.copyWith(color: AppColors.f05)),
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: 40,
+                                        height: 29,
+                                        child: Center(child: Text('성향', style: AppTextStyle.caption12R120.copyWith(color: AppColors.f03))),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: 40,
-                                      height: 29,
-                                      child: Center(child: Text('건강', style: AppTextStyle.caption12R120.copyWith(color: AppColors.f03))),
-                                    ),
-                                    const SizedBox(width: 16),
-                                    SizedBox(
-                                      width: 256,
-                                      height: 64,
-                                      child: Wrap(
-                                        spacing: 8,
-                                        runSpacing: 8,
-                                        children: List<String>.from(pet['health']).map((h) => _buildChip(h)).toList(),
+                                      const SizedBox(width: 16),
+                                      SizedBox(
+                                        width: 256,
+                                        height: 64,
+                                        child: Wrap(
+                                          spacing: 6,
+                                          runSpacing: 6,
+                                          children: List<String>.from(pet['traits']).map((t) => _buildChip(t)).toList(),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: 40,
-                                      height: 29,
-                                      child: Center(child: Text('복용약', style: AppTextStyle.caption12R120.copyWith(color: AppColors.f03))),
-                                    ),
-                                    const SizedBox(width: 16),
-                                    SizedBox(
-                                      width: 256,
-                                      height: 64,
-                                      child: Wrap(
-                                        spacing: 8,
-                                        runSpacing: 8,
-                                        children: List<String>.from(pet['medicine']).map((m) => _buildChip(m)).toList(),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: 40,
+                                        height: 29,
+                                        child: Center(child: Text('건강', style: AppTextStyle.caption12R120.copyWith(color: AppColors.f03))),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                      const SizedBox(width: 16),
+                                      SizedBox(
+                                        width: 256,
+                                        height: 64,
+                                        child: Wrap(
+                                          spacing: 8,
+                                          runSpacing: 8,
+                                          children: List<String>.from(pet['health']).map((h) => _buildChip(h)).toList(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: 40,
+                                        height: 29,
+                                        child: Center(child: Text('복용약', style: AppTextStyle.caption12R120.copyWith(color: AppColors.f03))),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      SizedBox(
+                                        width: 256,
+                                        height: 64,
+                                        child: Wrap(
+                                          spacing: 8,
+                                          runSpacing: 8,
+                                          children: List<String>.from(pet['medicine']).map((m) => _buildChip(m)).toList(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },

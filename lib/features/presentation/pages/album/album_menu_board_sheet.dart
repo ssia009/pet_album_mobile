@@ -1,7 +1,9 @@
+// album_search.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/services.dart';
 import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
-import 'package:petAblumMobile/features/presentation/pages/album_crud/album_edit_form.dart';
 
 class MenuBottomSheet extends StatelessWidget {
   final String petName;
@@ -58,19 +60,15 @@ class MenuBottomSheet extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             _MenuItem(
-              icon: Icons.edit_outlined,
+              svgPath: 'assets/system/icons/icon_edit.svg',
               label: '편집',
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const AlbumEditFormPage(),
-                  ),
-                );
+                Navigator.pop(context);
+                onEdit();
               },
             ),
             _MenuItem(
-              icon: Icons.copy_outlined,
+              svgPath: 'assets/system/icons/icon_copy.svg',
               label: '복사',
               onTap: () {
                 Navigator.pop(context);
@@ -78,7 +76,7 @@ class MenuBottomSheet extends StatelessWidget {
               },
             ),
             _MenuItem(
-              icon: Icons.share_outlined,
+              svgPath: 'assets/system/icons/icon_share.svg',
               label: '공유',
               onTap: () {
                 Navigator.pop(context);
@@ -86,7 +84,9 @@ class MenuBottomSheet extends StatelessWidget {
               },
             ),
             _MenuItem(
-              icon: isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+              svgPath: isBookmarked
+                  ? 'assets/system/icons/icon_bookmark_add.svg'
+                  : 'assets/system/icons/icon_bookmark.svg',
               label: '북마크',
               onTap: () {
                 Navigator.pop(context);
@@ -94,7 +94,7 @@ class MenuBottomSheet extends StatelessWidget {
               },
             ),
             _MenuItem(
-              icon: Icons.delete_outline,
+              svgPath: 'assets/system/icons/icon_delete.svg',
               label: '삭제',
               isDelete: true,
               onTap: () {
@@ -136,14 +136,14 @@ class MenuBottomSheet extends StatelessWidget {
 }
 
 class _MenuItem extends StatelessWidget {
-  final IconData icon;
+  final String svgPath;
   final String label;
   final VoidCallback onTap;
   final bool isDelete;
 
   const _MenuItem({
     Key? key,
-    required this.icon,
+    required this.svgPath,
     required this.label,
     required this.onTap,
     this.isDelete = false,
@@ -151,27 +151,27 @@ class _MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = isDelete ? AppColors.red : AppColors.f05;
     return InkWell(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Row(
           children: [
-            Icon(
-              icon,
-              size: 24,
-              color: isDelete ? Colors.red : AppColors.f05,
+            SvgPicture.asset(
+              svgPath,
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
             ),
-            const SizedBox(width: 16),
-            Text(
+            const SizedBox(width: 16),Text(
               label,
-              style: AppTextStyle.body16R120.copyWith(
-                color: isDelete ? Colors.red : AppColors.f05,
-              ),
+              style: AppTextStyle.body16R120.copyWith(color: color),
             ),
           ],
         ),
       ),
     );
+
   }
 }
