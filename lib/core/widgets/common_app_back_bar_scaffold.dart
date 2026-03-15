@@ -34,6 +34,9 @@ class CommonBackAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           onPressed: () => Navigator.pop(context),
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          hoverColor: Colors.transparent,
         ),
       ),
       title: title == null

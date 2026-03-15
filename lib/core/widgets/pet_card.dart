@@ -16,6 +16,7 @@ class PetCard extends StatelessWidget {
   final String petFamily;
   final bool isSelected;
   final bool isDeleteMode;
+  final String cardSvg;
 
   const PetCard({
     super.key,
@@ -31,6 +32,7 @@ class PetCard extends StatelessWidget {
     required this.petFamily,
     this.isSelected = false,
     this.isDeleteMode = false,
+    this.cardSvg = 'assets/system/pet_card/dog_pet_card.svg',
   });
 
   @override
@@ -41,10 +43,8 @@ class PetCard extends StatelessWidget {
         final double h = w * (210 / 350);
         final double s = w / 350;
 
-        // 스트로크 색상 결정: 삭제 모드일 때만 표시
-        // 선택됨 → main 컬러, 미선택 → gray01
         final Color strokeColor = isSelected
-            ? AppColors.main  // main 컬러로 교체 (프로젝트 AppColors.main 사용)
+            ? AppColors.main
             : AppColors.gray01;
         final bool showStroke = isDeleteMode;
 
@@ -57,9 +57,9 @@ class PetCard extends StatelessWidget {
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  // SVG 배경
+                  // SVG 배경 (cardSvg 파라미터로 교체)
                   SvgPicture.asset(
-                    'assets/system/pet_card/dog_pet_card.svg',
+                    cardSvg,
                     width: w,
                     height: h,
                     fit: BoxFit.fill,
@@ -100,7 +100,6 @@ class PetCard extends StatelessWidget {
                     ),
                   ),
 
-                  // topRightIcon (필요 시 유지)
                   if (topRightIcon != null)
                     Positioned(
                       right: 8 * s,
@@ -108,7 +107,6 @@ class PetCard extends StatelessWidget {
                       child: topRightIcon!,
                     ),
 
-                  // 외곽 스트로크 - SVG 포함 모든 레이어 위에 렌더링
                   if (showStroke)
                     Positioned.fill(
                       child: IgnorePointer(

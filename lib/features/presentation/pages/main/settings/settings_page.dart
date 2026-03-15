@@ -11,6 +11,8 @@ import 'package:petAblumMobile/features/presentation/pages/main/settings/withdra
 import 'package:petAblumMobile/features/presentation/pages/main/settings/Personal_info_page.dart';
 import 'package:petAblumMobile/features/presentation/pages/main/settings/notification_settings_page.dart';
 import 'package:petAblumMobile/features/presentation/pages/main/settings/login_device_page.dart';
+import 'package:petAblumMobile/features/presentation/pages/main/settings/customer_service_page.dart';
+import 'package:petAblumMobile/features/presentation/pages/main/settings/privacy_policy_page.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -28,9 +30,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       builder: (context) {
         return Dialog(
           insetPadding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: SizedBox(
             width: 350,
             child: Padding(
@@ -38,20 +38,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    '로그아웃 하시겠습니까?',
-                    style: AppTextStyle.subtitle20M120.copyWith(
-                      color: AppColors.f05,
-                    ),
-                  ),
+                  Text('로그아웃 하시겠습니까?',
+                      style: AppTextStyle.subtitle20M120.copyWith(color: AppColors.f05)),
                   const SizedBox(height: 8),
-                  Text(
-                    '로그아웃하시면 서비스 이용이 제한될 수 있습니다.',
-                    style: AppTextStyle.description14R120.copyWith(
-                      color: AppColors.f04,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                  Text('로그아웃하시면 서비스 이용이 제한될 수 있습니다.',
+                      style: AppTextStyle.description14R120.copyWith(color: AppColors.f04),
+                      textAlign: TextAlign.center),
                   const SizedBox(height: 24),
                   Row(
                     children: [
@@ -71,9 +63,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           onTap: () {
                             Navigator.of(context).pop();
                             Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (_) => const Oauth2LoginPage(),
-                              ),
+                              MaterialPageRoute(builder: (_) => const Oauth2LoginPage()),
                                   (route) => false,
                             );
                           },
@@ -98,78 +88,56 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     return Scaffold(
       appBar: CommonBackAppBar(title: '설정'),
       backgroundColor: AppColors.bg,
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _fixedCard(child: _card('계정', [
-            _itemWithTap('개인정보 변경', onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const PersonalInfoPage()),
-              );
-            }),
-          ])),
-          const SizedBox(height: 16),
-          _fixedCard(child: _card('알림', [
-            _itemWithTap('알림 설정', onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const Notification_settings_page()),
-              );
-            }),
-          ])),
-          const SizedBox(height: 16),
-          _fixedCard(child: _card('보안', [
-            _itemWithTap('로그인 기기 관리', onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const Login_device_page()),
-              );
-            }),
-          ])),
-          const SizedBox(height: 16),
-          _fixedCard(child: _card('도움', [
-            _item('자주 묻는 질문'),
-            _item('고객센터'),
-          ])),
-          const SizedBox(height: 16),
-          _fixedCard(child: _card('약관 및 정책', [
-            _item('서비스 이용 약관'),
-            _item('개인정보 처리 방침'),
-          ])),
-          const SizedBox(height: 16),
-          _fixedCard(
-            child: _cardOnlyItems([
-              _itemWithTap(
-                '로그아웃',
-                showArrow: false,
-                onTap: _showLogoutDialog,
-              ),
-              _itemWithTap(
-                '회원탈퇴',
-                showArrow: false,
-                color: Colors.red,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => WithdrawalPage()),
-                  );
-                },
-              ),
-            ]),
-          ),
-        ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              _card('계정', [
+                _itemWithTap('개인정보 변경', onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const PersonalInfoPage()));
+                }),
+              ]),
+              const SizedBox(height: 16),
+              _card('알림', [
+                _itemWithTap('알림 설정', onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const Notification_settings_page()));
+                }),
+              ]),
+              const SizedBox(height: 16),
+              _card('보안', [
+                _itemWithTap('로그인 기기 관리', onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const Login_device_page()));
+                }),
+              ]),
+              const SizedBox(height: 16),
+              _card('도움', [
+                _itemWithTap('고객센터', onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomerServicePage()));
+                }),
+              ]),
+              const SizedBox(height: 16),
+              _card('약관 및 정책', [
+                _itemWithTap('개인정보 처리 방침 및 이용약관', onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => const PrivacyPolicyPage()));
+                }),
+              ]),
+              const SizedBox(height: 16),
+              _cardOnlyItems([
+                _itemWithTap('로그아웃', showArrow: false, onTap: _showLogoutDialog),
+                _itemWithTap('회원탈퇴', showArrow: false, color: Colors.red, onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => WithdrawalPage()));
+                }),
+              ]),
+            ],
+          );
+        },
       ),
     );
   }
 }
 
-Widget _itemWithTap(
-    String text, {
-      bool showArrow = true,
-      Color? color,
-      VoidCallback? onTap,
-    }) {
+Widget _itemWithTap(String text, {bool showArrow = true, Color? color, VoidCallback? onTap}) {
   return GestureDetector(
     onTap: onTap,
     child: SizedBox(
@@ -177,35 +145,20 @@ Widget _itemWithTap(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            text,
-            style: AppTextStyle.body16R120.copyWith(
-              color: color ?? AppColors.f04,
-            ),
-          ),
+          Text(text, style: AppTextStyle.body16R120.copyWith(color: color ?? AppColors.f04)),
           if (showArrow)
-            SvgPicture.asset(
-              'assets/system/icons/chevron_right.svg',
-              width: 24,
-              height: 24,
-            ),
+            SvgPicture.asset('assets/system/icons/chevron_right.svg', width: 24, height: 24),
         ],
       ),
     ),
   );
 }
 
-Widget _fixedCard({required Widget child}) {
-  return Center(child: SizedBox(width: 350, child: child));
-}
-
 Widget _card(String title, List<Widget> items) {
   return Container(
+    width: double.infinity,
     padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(16),
-    ),
+    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -217,22 +170,9 @@ Widget _card(String title, List<Widget> items) {
   );
 }
 
-Widget _item(String text, {bool showArrow = true, Color? color}) {
-  return SizedBox(
-    height: 36,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(text, style: AppTextStyle.body16R120.copyWith(color: color ?? AppColors.f04)),
-        if (showArrow)
-          SvgPicture.asset('assets/system/icons/chevron_right.svg', width: 24, height: 24),
-      ],
-    ),
-  );
-}
-
 Widget _cardOnlyItems(List<Widget> items) {
   return Container(
+    width: double.infinity,
     padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
     child: Column(

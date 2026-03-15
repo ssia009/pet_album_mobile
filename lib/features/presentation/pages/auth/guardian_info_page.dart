@@ -42,164 +42,165 @@ class _GuardianInfoPageState extends State<GuardianInfoPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CommonBackAppBar(title: ''),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Center(
-                child: SizedBox(
-                  width: 350,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      /// 타이틀
-                      Text(
-                        '보호자님의 기본정보를\n알려주세요.',
-                        style: AppTextStyle.titlePage28Sb130.copyWith(color: AppColors.f05),
-                      ),
-                      const SizedBox(height: 40),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            const hPad = 20.0;
 
-                      /// 프로필 사진
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: 130,
-                          height: 145,
-                          decoration: BoxDecoration(
-                            color: AppColors.gray03,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Center(
-                            child: SvgPicture.asset(
-                              'assets/system/icons/icon_camera.svg',
-                              width: 44,
-                              height: 44,
-                              colorFilter: ColorFilter.mode(AppColors.f01, BlendMode.srcIn),
+            return Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 20),
+
+                        // 타이틀
+                        Text(
+                          '보호자님의 기본정보를\n알려주세요.',
+                          style: AppTextStyle.titlePage28Sb130.copyWith(color: AppColors.f05),
+                        ),
+                        const SizedBox(height: 40),
+
+                        // 프로필 사진
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            width: 130,
+                            height: 145,
+                            decoration: BoxDecoration(
+                              color: AppColors.gray03,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                'assets/system/icons/icon_camera.svg',
+                                width: 44,
+                                height: 44,
+                                colorFilter: ColorFilter.mode(AppColors.f01, BlendMode.srcIn),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
+                        const SizedBox(height: 20),
 
-                      /// 닉네임
-                      Text('닉네임', style: AppTextStyle.body16M120.copyWith(color: AppColors.f03)),
-                      const SizedBox(height: 8),
-                      _InputField(controller: _nicknameController, hint: '닉네임을 입력해주세요'),
-                      const SizedBox(height: 20),
+                        // 닉네임
+                        Text('닉네임', style: AppTextStyle.body16M120.copyWith(color: AppColors.f03)),
+                        const SizedBox(height: 8),
+                        _InputField(controller: _nicknameController, hint: '닉네임을 입력해주세요'),
+                        const SizedBox(height: 20),
 
-                      /// 성별
-                      Text('성별', style: AppTextStyle.body16M120.copyWith(color: AppColors.f03)),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _GenderButton(
-                              label: '여자',
-                              isSelected: _selectedGender == 'female',
-                              onTap: () => setState(() => _selectedGender = 'female'),
+                        // 성별
+                        Text('성별', style: AppTextStyle.body16M120.copyWith(color: AppColors.f03)),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _GenderButton(
+                                label: '여자',
+                                isSelected: _selectedGender == 'female',
+                                onTap: () => setState(() => _selectedGender = 'female'),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _GenderButton(
+                                label: '남자',
+                                isSelected: _selectedGender == 'male',
+                                onTap: () => setState(() => _selectedGender = 'male'),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+
+                        // 거주지
+                        Text('거주지', style: AppTextStyle.body16M120.copyWith(color: AppColors.f03)),
+                        const SizedBox(height: 8),
+                        Container(
+                          width: double.infinity,
+                          height: 81,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                            color: AppColors.gray01,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  height: 25,
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  child: Text(
+                                    '지도에서 위치 확인',
+                                    style: AppTextStyle.description14R120.copyWith(color: AppColors.f05),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _GenderButton(
-                              label: '남자',
-                              isSelected: _selectedGender == 'male',
-                              onTap: () => setState(() => _selectedGender = 'male'),
+                        ),
+
+                        // 주소
+                        if (_address.isNotEmpty) ...[
+                          const SizedBox(height: 18),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: Text(
+                              _address,
+                              style: AppTextStyle.body16M120.copyWith(color: AppColors.f05),
                             ),
                           ),
                         ],
-                      ),
-                      const SizedBox(height: 20),
-
-                      /// 거주지
-                      Text('거주지', style: AppTextStyle.body16M120.copyWith(color: AppColors.f03)),
-                      const SizedBox(height: 8),
-
-                      /// 지도에서 위치 확인 박스
-                      Container(
-                        width: double.infinity,
-                        height: 81,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(
-                          color: AppColors.gray01,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                height: 25,
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                child: Text(
-                                  '지도에서 위치 확인',
-                                  style: AppTextStyle.description14R120.copyWith(color: AppColors.f05),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      /// 선택된 주소
-                      if (_address.isNotEmpty) ...[
                         const SizedBox(height: 18),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _address,
-                                style: AppTextStyle.body16M120.copyWith(color: AppColors.f05),
-                              ),
-                            ],
-                          ),
+
+                        // 상세주소
+                        _InputField(
+                          controller: _addressDetailController,
+                          hint: '건물 명, 동/호수 등의 상세주소 입력',
                         ),
+                        const SizedBox(height: 20),
                       ],
-
-                      const SizedBox(height: 18),
-
-                      /// 상세주소
-                      _InputField(
-                        controller: _addressDetailController,
-                        hint: '건물 명, 동/호수 등의 상세주소 입력',
-                      ),
-                      const SizedBox(height: 20),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
 
-          /// 하단 버튼
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
-            child: AppCustomButton(
-              text: '완료',
-              onTap: _isFormFilled
-                  ? () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const IdLoginPage()),
-                      (route) => route.isFirst,
-                );
-              }
-                  : null,
-              backgroundColor: _isFormFilled ? AppColors.black : AppColors.gray02,
-              textColor: _isFormFilled ? AppColors.f01 : AppColors.f03,
-              borderColor: _isFormFilled ? AppColors.black : AppColors.gray02,
-              borderRadius: 16,
-            ),
-          ),
-        ],
+                // 하단 버튼
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: AppCustomButton(
+                      text: '완료',
+                      onTap: _isFormFilled
+                          ? () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (_) => const IdLoginPage()),
+                              (route) => route.isFirst,
+                        );
+                      }
+                          : null,
+                      backgroundColor: _isFormFilled ? AppColors.black : AppColors.gray02,
+                      textColor: _isFormFilled ? AppColors.f01 : AppColors.f03,
+                      borderColor: _isFormFilled ? AppColors.black : AppColors.gray02,
+                      borderRadius: 16,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

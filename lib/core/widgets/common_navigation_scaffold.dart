@@ -22,6 +22,7 @@ class CommonNavigationScaffold extends StatelessWidget {
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
           indicatorColor: Colors.transparent,
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
           labelTextStyle: WidgetStateProperty.resolveWith(
                 (states) => AppTextStyle.caption12R140.copyWith(
               fontSize: 12,
@@ -42,9 +43,7 @@ class CommonNavigationScaffold extends StatelessWidget {
                 width: 24,
                 height: 24,
                 colorFilter: ColorFilter.mode(
-                  currentIndex == 0
-                      ? AppColors.fMain
-                      : AppColors.f02,
+                  currentIndex == 0 ? AppColors.fMain : AppColors.f02,
                   BlendMode.srcIn,
                 ),
               ),
@@ -56,9 +55,7 @@ class CommonNavigationScaffold extends StatelessWidget {
                 width: 24,
                 height: 24,
                 colorFilter: ColorFilter.mode(
-                  currentIndex == 1
-                      ? AppColors.fMain
-                      : AppColors.f02,
+                  currentIndex == 1 ? AppColors.fMain : AppColors.f02,
                   BlendMode.srcIn,
                 ),
               ),
@@ -70,9 +67,7 @@ class CommonNavigationScaffold extends StatelessWidget {
                 width: 24,
                 height: 24,
                 colorFilter: ColorFilter.mode(
-                  currentIndex == 2
-                      ? AppColors.fMain
-                      : AppColors.f02,
+                  currentIndex == 2 ? AppColors.fMain : AppColors.f02,
                   BlendMode.srcIn,
                 ),
               ),

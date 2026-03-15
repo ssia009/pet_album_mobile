@@ -393,9 +393,10 @@ class _InputField extends StatelessWidget {
         ),
         filled: true,
         fillColor: AppColors.gray01,
+        isCollapsed: true,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
-          vertical: 16,
+          vertical: 18,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -429,14 +430,14 @@ class _AnswerOption extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
-          vertical: 16,
+          vertical: 18,
         ),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isSelected ? AppColors.main : AppColors.gray02,
-            width: isSelected ? 2 : 1,
+            width: 2,
           ),
         ),
         child: Row(
@@ -496,29 +497,31 @@ class _BottomDualButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 171,
-              height: 55,
-              child: AppCustomButton(
-                text: '건너뛰기',
-                onTap: onSkip,
-                backgroundColor: Colors.white,
-                textColor: AppColors.f05,
-                borderColor: AppColors.gray02,
-                borderRadius: 16,
+            Expanded(
+              child: SizedBox(
+                height: 55,
+                child: AppCustomButton(
+                  text: '건너뛰기',
+                  onTap: onSkip,
+                  backgroundColor: Colors.white,
+                  textColor: AppColors.f05,
+                  borderColor: AppColors.gray02,
+                  borderRadius: 16,
+                ),
               ),
             ),
             const SizedBox(width: 8),
-            SizedBox(
-              width: 171,
-              height: 55,
-              child: AppCustomButton(
-                text: '다음',
-                onTap: onNext,
-                backgroundColor: isActive ? AppColors.black : AppColors.bg,
-                textColor: isActive ? AppColors.white : AppColors.f03,
-                borderColor: isActive ? AppColors.gray05 : AppColors.gray01,
-                borderRadius: 16,
+            Expanded(
+              child: SizedBox(
+                height: 55,
+                child: AppCustomButton(
+                  text: '다음',
+                  onTap: onNext,
+                  backgroundColor: isActive ? AppColors.black : AppColors.bg,
+                  textColor: isActive ? AppColors.white : AppColors.f03,
+                  borderColor: isActive ? AppColors.gray05 : AppColors.gray01,
+                  borderRadius: 16,
+                ),
               ),
             ),
           ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:petAblumMobile/core/theme/app_button_theme.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
@@ -39,7 +40,6 @@ class _IdLoginPageState extends ConsumerState<IdLoginPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
 
-            /// 🔼 위쪽 영역
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -59,6 +59,9 @@ class _IdLoginPageState extends ConsumerState<IdLoginPage> {
                       color: Colors.grey,
                     ),
                     onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -75,7 +78,6 @@ class _IdLoginPageState extends ConsumerState<IdLoginPage> {
               ],
             ),
 
-            /// 🔽 아래 SNS
             Padding(
               padding: const EdgeInsets.only(bottom: 98),
               child: Column(
@@ -94,13 +96,13 @@ class _IdLoginPageState extends ConsumerState<IdLoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _snsButton(asset: 'assets/system/icons/kakao.png', onTap: () => debugPrint('카카오 로그인')),
+                      _snsButton(asset: 'assets/system/icons/kakao_logo.svg', onTap: () => debugPrint('카카오 로그인'), bgColor: const Color(0xFFFFE812)),
                       const SizedBox(width: 10),
-                      _snsButton(asset: 'assets/system/icons/google.png', onTap: () => debugPrint('구글 로그인')),
+                      _snsButton(asset: 'assets/system/icons/google_logo.svg', onTap: () => debugPrint('구글 로그인'), bgColor: AppColors.gray01, strokeColor: AppColors.gray02),
                       const SizedBox(width: 10),
-                      _snsButton(asset: 'assets/system/icons/apple.png', onTap: () => debugPrint('애플 로그인')),
+                      _snsButton(asset: 'assets/system/icons/apple_logo.svg', onTap: () => debugPrint('애플 로그인'), bgColor: AppColors.black, iconColor: Colors.white),
                       const SizedBox(width: 10),
-                      _snsButton(asset: 'assets/system/icons/naver.png', onTap: () => debugPrint('네이버 로그인')),
+                      _snsButton(asset: 'assets/system/icons/naver_logo.svg', onTap: () => debugPrint('네이버 로그인'), bgColor: const Color(0xFF03CF5D), iconColor: Colors.white),
                     ],
                   ),
                 ],
@@ -112,10 +114,35 @@ class _IdLoginPageState extends ConsumerState<IdLoginPage> {
     );
   }
 
-  Widget _snsButton({required String asset, required VoidCallback onTap}) {
+  Widget _snsButton({
+    required String asset,
+    required VoidCallback onTap,
+    Color? bgColor,
+    Color? iconColor,
+    Color? strokeColor,
+  }) {
     return GestureDetector(
       onTap: onTap,
-      child: Image.asset(asset, width: 52, height: 52),
+      child: Container(
+        width: 52,
+        height: 52,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: bgColor ?? Colors.transparent,
+          border: strokeColor != null
+              ? Border.all(color: strokeColor, width: 1.5)
+              : null,
+        ),
+        alignment: Alignment.center,
+        child: SvgPicture.asset(
+          asset,
+          width: 24,
+          height: 24,
+          colorFilter: iconColor != null
+              ? ColorFilter.mode(iconColor, BlendMode.srcIn)
+              : null,
+        ),
+      ),
     );
   }
 }
