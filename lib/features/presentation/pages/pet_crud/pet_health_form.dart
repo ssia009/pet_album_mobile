@@ -94,6 +94,7 @@ class _PetHealthState extends State<PetHealthEditor> {
       barrierColor: Colors.black.withOpacity(0.4),
       builder: (context) {
         return Dialog(
+          backgroundColor:AppColors.white,
           insetPadding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -260,7 +261,7 @@ class _PetHealthState extends State<PetHealthEditor> {
                   ? () {
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (_) => const PetListPage()),
-                      (route) => false,
+                      (route) => route.isFirst,
                 );
               }
                   : null,

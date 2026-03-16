@@ -9,6 +9,7 @@ import 'package:petAblumMobile/core/widgets/pet_card.dart';
 import 'package:petAblumMobile/features/presentation/pages/main/settings/settings_page.dart';
 import 'package:petAblumMobile/features/presentation/pages/auth/guardian_info_page.dart';
 import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_list.dart';
+import 'package:petAblumMobile/features/presentation/pages/main/main_shell.dart'; // ✅ 추가
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MyPage extends StatefulWidget {
@@ -107,7 +108,6 @@ class _MyPageState extends State<MyPage> {
             children: [
               const SizedBox(height: 24),
 
-              // 반려동물 프로필 사진
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
@@ -165,7 +165,7 @@ class _MyPageState extends State<MyPage> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const GuardianInfoPage()),
+                            MaterialPageRoute(builder: (_) => const GuardianInfoPage(isEdit: true)),
                           );
                         },
                         child: FittedBox(
@@ -183,7 +183,6 @@ class _MyPageState extends State<MyPage> {
               ),
               const SizedBox(height: 32),
 
-              // 스와이프 카드 영역 (패딩 없음)
               SizedBox(
                 height: 560,
                 child: PageView.builder(
@@ -298,7 +297,6 @@ class _MyPageState extends State<MyPage> {
                 ),
               ),
 
-              // 페이지 인디케이터
               const SizedBox(height: 16),
               Center(
                 child: Row(
@@ -327,9 +325,15 @@ class _MyPageState extends State<MyPage> {
                   children: [
                     Text('반려동물', style: AppTextStyle.subtitle20M120.copyWith(color: AppColors.f05)),
                     const SizedBox(height: 8),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      child: Text('내 앨범', style: AppTextStyle.body16M120.copyWith(color: AppColors.f04)),
+                    // ✅ 내 앨범 탭하면 앨범 페이지로 이동
+                    GestureDetector(
+                      onTap: () {
+                        MainShell.navigatorKey.currentState?.setTab(1);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        child: Text('내 앨범', style: AppTextStyle.body16M120.copyWith(color: AppColors.f04)),
+                      ),
                     ),
                     const SizedBox(height: 20),
                     Text('라이프케어', style: AppTextStyle.subtitle20M120.copyWith(color: AppColors.f05)),

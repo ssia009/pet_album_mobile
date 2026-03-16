@@ -22,11 +22,12 @@ class _PetPersonalityEditorState extends State<PetPersonalityEditor> {
   final _controller3 = TextEditingController();
   final _controller4 = TextEditingController();
 
-  /// 1~3번 질문 모두 답변해야 활성화
+  /// ✅ 1~4번 질문 모두 답변해야 활성화
   bool get _isFormValid =>
       _answers[1] != null &&
           _answers[2] != null &&
-          _answers[3] != null;
+          _answers[3] != null &&
+          _answers[4] != null;
 
   void _onAnswerSelected(int index, String answer) {
     setState(() {
@@ -49,6 +50,7 @@ class _PetPersonalityEditorState extends State<PetPersonalityEditor> {
       barrierColor: Colors.black.withOpacity(0.4),
       builder: (context) {
         return Dialog(
+          backgroundColor: AppColors.white,
           insetPadding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -130,18 +132,14 @@ class _PetPersonalityEditorState extends State<PetPersonalityEditor> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 16),
-
-                    /// 🔵 페이지 인디케이터
                     const _PageIndicator(
                       currentIndex: 1,
                       totalCount: 3,
                     ),
-
                     const SizedBox(height: 24),
                     const _TitleText(),
                     const SizedBox(height: 40),
 
-                    /// 1번 질문
                     _QuestionText(
                       1,
                       '예민하게 반응하거나\n   무서워하는 소리, 상황이 있나요?',
@@ -155,7 +153,6 @@ class _PetPersonalityEditorState extends State<PetPersonalityEditor> {
                     ),
                     const SizedBox(height: 32),
 
-                    /// 2번 질문
                     _QuestionText(
                       2,
                       '이물질이나 장난감을\n    주워 먹은 적이 있나요?',
@@ -169,7 +166,6 @@ class _PetPersonalityEditorState extends State<PetPersonalityEditor> {
                     ),
                     const SizedBox(height: 32),
 
-                    /// 3번 질문
                     _QuestionText(
                       3,
                       '사람이나 다른 동물을 공격하거나\n     덤빈 적이 있나요?',
@@ -183,7 +179,6 @@ class _PetPersonalityEditorState extends State<PetPersonalityEditor> {
                     ),
                     const SizedBox(height: 32),
 
-                    /// 4번 질문 (선택)
                     _QuestionText(
                       4,
                       '산책이나 돌봄 시 행동 / 환경 측면에서\n    주의할 점이 있나요?',
@@ -209,7 +204,6 @@ class _PetPersonalityEditorState extends State<PetPersonalityEditor> {
               ),
             ),
 
-            /// 하단 버튼
             _BottomDualButton(
               isActive: _isFormValid,
               onSkip: () => _showSkipDialog(context),
@@ -370,7 +364,7 @@ class _AnswerGroup extends StatelessWidget {
 }
 
 ////////////////////////////////////////////////////////////
-/// 🔹 입력 필드 (힌트 색상 f03)
+/// 🔹 입력 필드
 ////////////////////////////////////////////////////////////
 
 class _InputField extends StatelessWidget {
@@ -408,7 +402,7 @@ class _InputField extends StatelessWidget {
 }
 
 ////////////////////////////////////////////////////////////
-/// 🔹 답변 선택 옵션 (SVG 라디오 버튼)
+/// 🔹 답변 선택 옵션
 ////////////////////////////////////////////////////////////
 
 class _AnswerOption extends StatelessWidget {

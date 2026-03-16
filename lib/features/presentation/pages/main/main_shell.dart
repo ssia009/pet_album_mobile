@@ -7,6 +7,7 @@ import 'package:petAblumMobile/features/presentation/pages/main/my_page.dart';
 class MainShell extends StatefulWidget {
   const MainShell({super.key});
 
+  // ✅ GlobalKey를 StatefulWidget이 아닌 State에 직접 연결
   static final GlobalKey<_MainShellState> navigatorKey = GlobalKey<_MainShellState>();
 
   @override
@@ -23,7 +24,7 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) {
     return CommonNavigationScaffold(
-      key: MainShell.navigatorKey,
+      // ✅ key를 여기서 제거하고 MainShell 위젯 자체에 key를 달아야 함
       currentIndex: _index,
       onTap: (i) => setState(() => _index = i),
       body: IndexedStack(

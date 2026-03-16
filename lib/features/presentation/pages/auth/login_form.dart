@@ -68,7 +68,7 @@ class _IdLoginPageState extends ConsumerState<IdLoginPage> {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => const MainShell()),
+                      MaterialPageRoute(builder: (context) => MainShell(key: MainShell.navigatorKey)),
                           (route) => false,
                     );
                   },

@@ -66,7 +66,9 @@ class _PetInfoEditorState extends State<PetInfoEditor> {
       context: context,
       barrierColor: Colors.black.withOpacity(0.4),
       builder: (context) {
-        return Dialog(
+        return
+          Dialog(
+            backgroundColor:AppColors.white,
           insetPadding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
