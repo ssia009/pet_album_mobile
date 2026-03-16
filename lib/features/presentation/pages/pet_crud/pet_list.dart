@@ -18,6 +18,42 @@ class _PetListPageState extends State<PetListPage> {
   bool _isDeleteMode = false;
   final Set<int> _selectedPets = {};
 
+  final List<Map<String, dynamic>> _pets = [
+    {
+      'imageUrl': 'assets/system/logo/logo.png',
+      'name': '    또또',
+      'species': '말티즈',
+      'personality': ['코지', '예민함', '물어요', '손조심'],
+      'favoriteToy': '2세',
+      'sex': '여아',
+      'birth': '2025.01.02',
+      'petFamily': '또또네 가족',
+      'cardSvg': 'assets/system/pet_card/dog_pet_card.svg',
+    },
+    {
+      'imageUrl': 'assets/system/logo/logo.png',
+      'name': '    망고',
+      'species': '치즈',
+      'personality': ['활동가', '애교쟁이', '산책광'],
+      'favoriteToy': '2세',
+      'sex': '남아',
+      'birth': '2024.03.15',
+      'petFamily': '또또네 가족',
+      'cardSvg': 'assets/system/pet_card/cat_pet_card.svg',
+    },
+    {
+      'imageUrl': 'assets/system/logo/logo.png',
+      'name': '    모모',
+      'species': '비숑',
+      'personality': ['순둥이', '먹보', '잠꾸러기'],
+      'favoriteToy': '3세',
+      'sex': '남아',
+      'birth': '2023.06.10',
+      'petFamily': '또또네 가족',
+      'cardSvg': 'assets/system/pet_card/dog_pet_card.svg',
+    },
+  ];
+
   void _toggleDeleteMode() {
     setState(() {
       _isDeleteMode = !_isDeleteMode;
@@ -43,6 +79,7 @@ class _PetListPageState extends State<PetListPage> {
       content: '${_selectedPets.length}개의 반려동물을 삭제합니다.',
       onConfirm: () {
         setState(() {
+          // 나중에 백 연동 시 실제 삭제 처리
           _selectedPets.clear();
           _isDeleteMode = false;
         });
@@ -67,9 +104,7 @@ class _PetListPageState extends State<PetListPage> {
             child: Text(
               '삭제',
               style: AppTextStyle.description14R120.copyWith(
-                color: _selectedPets.isEmpty
-                    ? AppColors.gray03
-                    : AppColors.red,
+                color: _selectedPets.isEmpty ? AppColors.gray03 : AppColors.red,
               ),
             ),
           ),
@@ -82,9 +117,7 @@ class _PetListPageState extends State<PetListPage> {
             ),
             child: Text(
               '닫기',
-              style: AppTextStyle.description14R120.copyWith(
-                color: AppColors.f05,
-              ),
+              style: AppTextStyle.description14R120.copyWith(color: AppColors.f05),
             ),
           ),
         ]
@@ -97,10 +130,7 @@ class _PetListPageState extends State<PetListPage> {
                 'assets/system/icons/icon_delete.svg',
                 width: 24,
                 height: 24,
-                colorFilter: const ColorFilter.mode(
-                  AppColors.f05,
-                  BlendMode.srcIn,
-                ),
+                colorFilter: const ColorFilter.mode(AppColors.f05, BlendMode.srcIn),
               ),
             ),
           ),
@@ -110,31 +140,33 @@ class _PetListPageState extends State<PetListPage> {
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
-          _buildPetCard(0),
-          const SizedBox(height: 12),
-          _buildPetCard(1),
+          ...List.generate(_pets.length, (index) {
+            final pet = _pets[index];
+            final isSelected = _selectedPets.contains(index);
+            return Column(
+              children: [
+                PetCard(
+                  imageUrl: pet['imageUrl'],
+                  name: pet['name'],
+                  species: pet['species'],
+                  personality: List<String>.from(pet['personality']),
+                  favoriteToy: pet['favoriteToy'],
+                  sex: pet['sex'],
+                  birth: pet['birth'],
+                  petFamily: pet['petFamily'],
+                  cardSvg: pet['cardSvg'] ?? 'assets/system/pet_card/dog_pet_card.svg',
+                  isSelected: isSelected,
+                  isDeleteMode: _isDeleteMode,
+                  onTap: _isDeleteMode ? () => _togglePetSelection(index) : null,
+                ),
+                if (index < _pets.length - 1) const SizedBox(height: 12),
+              ],
+            );
+          }),
           const SizedBox(height: 24),
           if (!_isDeleteMode) const _AddPetButton(),
         ],
       ),
-    );
-  }
-
-  Widget _buildPetCard(int index) {
-    final isSelected = _selectedPets.contains(index);
-
-    return PetCard(
-      imageUrl: 'assets/system/logo/logo.png',
-      name: '또또 (2세)',
-      species: '말티즈',
-      personality: ['코지', '예민함', '물어요', '손조심'],
-      favoriteToy: '목욕',
-      sex: '수컷',
-      birth: '2025.01.02',
-      petFamily: '또또네 가족',
-      isSelected: isSelected,
-      isDeleteMode: _isDeleteMode,
-      onTap: _isDeleteMode ? () => _togglePetSelection(index) : null,
     );
   }
 }
@@ -148,9 +180,7 @@ class _AddPetButton extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (_) => const PetTypCreatePage(),
-          ),
+          MaterialPageRoute(builder: (_) => const PetTypCreatePage()),
         );
       },
       child: Container(
@@ -172,10 +202,7 @@ class _AddPetButton extends StatelessWidget {
             'assets/system/icons/icon_add.svg',
             width: 24,
             height: 24,
-            colorFilter: const ColorFilter.mode(
-              AppColors.f05,
-              BlendMode.srcIn,
-            ),
+            colorFilter: const ColorFilter.mode(AppColors.f05, BlendMode.srcIn),
           ),
         ),
       ),
