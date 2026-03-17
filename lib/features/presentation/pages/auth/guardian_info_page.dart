@@ -4,8 +4,7 @@ import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/theme/app_custom_button.dart';
 import 'package:petAblumMobile/core/widgets/common_app_back_bar_scaffold.dart';
-import 'package:petAblumMobile/features/presentation/pages/main/main_shell.dart';
-import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_character_select_page.dart'; // ✅ 변경
+import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_character_select_page.dart';
 
 class GuardianInfoPage extends StatefulWidget {
   final bool isEdit;
@@ -167,7 +166,6 @@ class _GuardianInfoPageState extends State<GuardianInfoPage> {
                   ),
                 ),
 
-                // ✅ 완료 누르면 MainShell(홈)으로 이동
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
                   child: SizedBox(
@@ -182,7 +180,7 @@ class _GuardianInfoPageState extends State<GuardianInfoPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const PetCharacterSelectPage(),
+                              builder: (_) => const PetCharacterIntroPage(),
                             ),
                           );
                         }

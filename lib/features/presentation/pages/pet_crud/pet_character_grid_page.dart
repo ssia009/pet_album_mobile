@@ -3,17 +3,25 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/widgets/common_app_back_bar_scaffold.dart';
+import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_info_form.dart';
 
-class PetCharacterSelectPage extends StatefulWidget {
-  const PetCharacterSelectPage({super.key});
+class PetCharacterGridPage extends StatefulWidget {
+  final bool isFromMyPage;
+  const PetCharacterGridPage({
+    super.key,
+    this.isFromMyPage = false,
+  });
 
   @override
-  State<PetCharacterSelectPage> createState() => _PetCharacterSelectPageState();
+  State<PetCharacterGridPage> createState() => _PetCharacterGridPageState();
 }
 
-class _PetCharacterSelectPageState extends State<PetCharacterSelectPage> {
+class _PetCharacterGridPageState extends State<PetCharacterGridPage> {
   int _tabIndex = 0;
-  String? _selectedCharacter;
+  String? _selectedDog;
+  String? _selectedCat;
+
+  String? get _selectedCharacter => _tabIndex == 0 ? _selectedDog : _selectedCat;
 
   static const List<Map<String, String>> _dogs = [
     {'name': '아프간하운드', 'file': 'afghan_hound'},
@@ -85,12 +93,23 @@ class _PetCharacterSelectPageState extends State<PetCharacterSelectPage> {
     {'name': '턱시도', 'file': 'tuxedo'},
   ];
 
-  List<Map<String, String>> get _currentList =>
-      _tabIndex == 0 ? _dogs : _cats;
+  List<Map<String, String>> get _currentList {
+    final list = _tabIndex == 0 ? _dogs : _cats;
+    return [...list]..sort((a, b) => a['name']!.compareTo(b['name']!));
+  }
 
   String get _basePath => _tabIndex == 0
       ? 'assets/system/pet_character/dog/basic_dog'
       : 'assets/system/pet_character/cat/basic_cat';
+
+  @override
+  void initState() {
+    super.initState();
+    final sortedDogs = [..._dogs]..sort((a, b) => a['name']!.compareTo(b['name']!));
+    final sortedCats = [..._cats]..sort((a, b) => a['name']!.compareTo(b['name']!));
+    _selectedDog = sortedDogs.first['file'];
+    _selectedCat = sortedCats.first['file'];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +131,14 @@ class _PetCharacterSelectPageState extends State<PetCharacterSelectPage> {
         actions: [
           TextButton(
             onPressed: _selectedCharacter != null
-                ? () => Navigator.pop(context, _selectedCharacter)
+                ? () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => PetInfoEditor(
+                  isFromMyPage: widget.isFromMyPage,
+                ),
+              ),
+            )
                 : null,
             child: Text(
               '완료',
@@ -125,10 +151,9 @@ class _PetCharacterSelectPageState extends State<PetCharacterSelectPage> {
       ),
       body: Column(
         children: [
-          // 선택된 캐릭터 미리보기
           Container(
             width: double.infinity,
-            height: 220,
+            height: 273,
             color: Colors.white,
             child: Center(
               child: _selectedCharacter != null
@@ -142,7 +167,6 @@ class _PetCharacterSelectPageState extends State<PetCharacterSelectPage> {
             ),
           ),
 
-          // 탭 (강아지 / 고양이)
           Container(
             color: AppColors.bg,
             padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
@@ -151,25 +175,18 @@ class _PetCharacterSelectPageState extends State<PetCharacterSelectPage> {
                 _TabButton(
                   label: '강아지',
                   isSelected: _tabIndex == 0,
-                  onTap: () => setState(() {
-                    _tabIndex = 0;
-                    _selectedCharacter = null;
-                  }),
+                  onTap: () => setState(() => _tabIndex = 0),
                 ),
                 const SizedBox(width: 16),
                 _TabButton(
                   label: '고양이',
                   isSelected: _tabIndex == 1,
-                  onTap: () => setState(() {
-                    _tabIndex = 1;
-                    _selectedCharacter = null;
-                  }),
+                  onTap: () => setState(() => _tabIndex = 1),
                 ),
               ],
             ),
           ),
 
-          // 캐릭터 그리드
           Expanded(
             child: Container(
               color: Colors.white,
@@ -190,7 +207,11 @@ class _PetCharacterSelectPageState extends State<PetCharacterSelectPage> {
                     imagePath: '$_basePath/${item['file']}.svg',
                     isSelected: isSelected,
                     onTap: () => setState(() {
-                      _selectedCharacter = item['file'];
+                      if (_tabIndex == 0) {
+                        _selectedDog = item['file'];
+                      } else {
+                        _selectedCat = item['file'];
+                      }
                     }),
                   );
                 },

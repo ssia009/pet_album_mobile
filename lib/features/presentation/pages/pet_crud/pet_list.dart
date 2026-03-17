@@ -5,7 +5,9 @@ import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/widgets/common_app_back_bar_scaffold.dart';
 import 'package:petAblumMobile/core/widgets/delete_modal.dart';
 import 'package:petAblumMobile/core/widgets/pet_card.dart';
-import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_type_create.dart';
+import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_character_select_page.dart';
+import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_character_grid_page.dart';
+import 'package:petAblumMobile/features/presentation/pages/main/main_shell.dart';
 
 class PetListPage extends StatefulWidget {
   const PetListPage({super.key});
@@ -79,7 +81,6 @@ class _PetListPageState extends State<PetListPage> {
       content: '${_selectedPets.length}개의 반려동물을 삭제합니다.',
       onConfirm: () {
         setState(() {
-          // 나중에 백 연동 시 실제 삭제 처리
           _selectedPets.clear();
           _isDeleteMode = false;
         });
@@ -87,11 +88,25 @@ class _PetListPageState extends State<PetListPage> {
     );
   }
 
+  void _goToMyPage() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MainShell(key: MainShell.navigatorKey),
+      ),
+          (route) => false,
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      MainShell.navigatorKey.currentState?.setTab(2);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonBackAppBar(
         title: '반려동물 캐릭터 관리',
+        onBack: _goToMyPage,
         actions: _isDeleteMode
             ? [
           TextButton(
@@ -157,7 +172,16 @@ class _PetListPageState extends State<PetListPage> {
                   cardSvg: pet['cardSvg'] ?? 'assets/system/pet_card/dog_pet_card.svg',
                   isSelected: isSelected,
                   isDeleteMode: _isDeleteMode,
-                  onTap: _isDeleteMode ? () => _togglePetSelection(index) : null,
+                  onTap: _isDeleteMode
+                      ? () => _togglePetSelection(index)
+                      : () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const PetCharacterGridPage(
+                        isFromMyPage: true,
+                      ),
+                    ),
+                  ),
                 ),
                 if (index < _pets.length - 1) const SizedBox(height: 12),
               ],
@@ -180,7 +204,9 @@ class _AddPetButton extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const PetTypCreatePage()),
+          MaterialPageRoute(
+            builder: (_) => const PetCharacterIntroPage(isFromMyPage: true),
+          ),
         );
       },
       child: Container(

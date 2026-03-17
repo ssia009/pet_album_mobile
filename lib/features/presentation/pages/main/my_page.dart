@@ -9,7 +9,7 @@ import 'package:petAblumMobile/core/widgets/pet_card.dart';
 import 'package:petAblumMobile/features/presentation/pages/main/settings/settings_page.dart';
 import 'package:petAblumMobile/features/presentation/pages/auth/guardian_info_page.dart';
 import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_list.dart';
-import 'package:petAblumMobile/features/presentation/pages/main/main_shell.dart'; // ✅ 추가
+import 'package:petAblumMobile/features/presentation/pages/main/main_shell.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MyPage extends StatefulWidget {
@@ -64,7 +64,7 @@ class _MyPageState extends State<MyPage> {
       'petFamily': '또또네 가족',
       'cardSvg': 'assets/system/pet_card/dog_pet_card.svg',
       'traits': ['겁쟁이', '낯가림'],
-      'health': ['눈물자국 있음', '관절문제 있음','간식 주의', '정해진식단'],
+      'health': ['눈물자국 있음', '관절문제 있음', '간식 주의', '정해진식단'],
       'medicine': ['안약', '비타민'],
     },
   ];
@@ -209,7 +209,10 @@ class _MyPageState extends State<MyPage> {
                               petFamily: pet['petFamily'],
                               cardSvg: pet['cardSvg'] ?? 'assets/system/pet_card/dog_pet_card.svg',
                               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (_) => const PetListPage()));
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => const PetListPage()),
+                                );
                               },
                             ),
                             const SizedBox(height: 20),
@@ -325,7 +328,6 @@ class _MyPageState extends State<MyPage> {
                   children: [
                     Text('반려동물', style: AppTextStyle.subtitle20M120.copyWith(color: AppColors.f05)),
                     const SizedBox(height: 8),
-                    // ✅ 내 앨범 탭하면 앨범 페이지로 이동
                     GestureDetector(
                       onTap: () {
                         MainShell.navigatorKey.currentState?.setTab(1);

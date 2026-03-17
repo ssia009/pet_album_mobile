@@ -5,11 +5,8 @@ import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/widgets/common_app_back_bar_scaffold.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:petAblumMobile/core/theme/app_custom_button.dart';
+import 'package:petAblumMobile/features/presentation/pages/main/main_shell.dart';
 import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_list.dart';
-
-////////////////////////////////////////////////////////////
-/// 💊 약 정보 모델
-////////////////////////////////////////////////////////////
 
 class _MedicineEntry {
   final TextEditingController nameController;
@@ -23,12 +20,9 @@ class _MedicineEntry {
   void dispose() => nameController.dispose();
 }
 
-////////////////////////////////////////////////////////////
-/// 🏠 메인 위젯
-////////////////////////////////////////////////////////////
-
 class PetHealthEditor extends StatefulWidget {
-  const PetHealthEditor({super.key});
+  final bool isFromMyPage;
+  const PetHealthEditor({super.key, this.isFromMyPage = false});
 
   @override
   State<PetHealthEditor> createState() => _PetHealthState();
@@ -77,6 +71,22 @@ class _PetHealthState extends State<PetHealthEditor> {
     return last.nameController.text.isNotEmpty || last.selectedTime != null;
   }
 
+  void _goToDestination() {
+    if (widget.isFromMyPage) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const PetListPage()),
+            (route) => false,
+      );
+    } else {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const MainShell()),
+            (route) => false,
+      );
+    }
+  }
+
   @override
   void dispose() {
     _controller1.dispose();
@@ -86,80 +96,6 @@ class _PetHealthState extends State<PetHealthEditor> {
       m.dispose();
     }
     super.dispose();
-  }
-
-  void _showSkipDialog() {
-    showDialog(
-      context: context,
-      barrierColor: Colors.black.withOpacity(0.4),
-      builder: (context) {
-        return Dialog(
-          backgroundColor:AppColors.white,
-          insetPadding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: SizedBox(
-            width: 350,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '건너뛰시겠습니까?',
-                    style: AppTextStyle.subtitle20M120.copyWith(
-                      color: AppColors.f05,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '미작성 시 다른 서비스 이용이 제한됩니다.\n입력한 내용은 자동저장됩니다.',
-                    style: AppTextStyle.description14R120.copyWith(
-                      color: AppColors.f04,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: AppCustomButton(
-                          text: '취소',
-                          onTap: () => Navigator.of(context).pop(),
-                          backgroundColor: AppColors.gray02,
-                          textColor: AppColors.f05,
-                          borderColor: AppColors.gray02,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: AppCustomButton(
-                          text: '건너뛰기',
-                          onTap: () {
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (_) => const PetListPage(),
-                              ),
-                                  (route) => false,
-                            );
-                          },
-                          backgroundColor: AppColors.black,
-                          textColor: AppColors.f01,
-                          borderColor: AppColors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -177,13 +113,11 @@ class _PetHealthState extends State<PetHealthEditor> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 16),
-
                     const _PageIndicator(currentIndex: 2, totalCount: 3),
                     const SizedBox(height: 24),
                     const _TitleText(),
                     const SizedBox(height: 40),
 
-                    /// 1번 질문
                     _QuestionText(1, '현재 반려동물에게 관절 질환이 있나요?'),
                     const SizedBox(height: 16),
                     _AnswerGroup(
@@ -194,7 +128,6 @@ class _PetHealthState extends State<PetHealthEditor> {
                     ),
                     const SizedBox(height: 32),
 
-                    /// 2번 질문
                     _QuestionText(2, '현재 반려동물에게 피부 질환이 있나요?'),
                     const SizedBox(height: 16),
                     _AnswerGroup(
@@ -205,16 +138,11 @@ class _PetHealthState extends State<PetHealthEditor> {
                     ),
                     const SizedBox(height: 32),
 
-                    /// 3번 질문
-                    _QuestionText(
-                      3,
-                      '산책이나 돌봄 시\n건강상 특별히 주의해야 할 점이 있나요?',
-                    ),
+                    _QuestionText(3, '산책이나 돌봄 시\n건강상 특별히 주의해야 할 점이 있나요?'),
                     const SizedBox(height: 8),
                     Text(
                       '앞선 내용 외에, 산책이나 돌봄 시 행동·환경 측면에서\n더 알려주고 싶은 점이 있다면 작성해주세요.',
-                      style: AppTextStyle.description14R120
-                          .copyWith(color: AppColors.f03),
+                      style: AppTextStyle.description14R120.copyWith(color: AppColors.f03),
                     ),
                     const SizedBox(height: 16),
                     _AnswerGroup(
@@ -225,11 +153,9 @@ class _PetHealthState extends State<PetHealthEditor> {
                     ),
                     const SizedBox(height: 32),
 
-                    /// 4번 질문
                     _QuestionText(4, '반려동물이 복용하는 약과 시간을\n작성해 주세요.'),
                     const SizedBox(height: 16),
 
-                    /// 약 목록
                     for (int i = 0; i < _medicines.length; i++) ...[
                       _MedicineRowWithPicker(
                         key: ValueKey(i),
@@ -238,11 +164,9 @@ class _PetHealthState extends State<PetHealthEditor> {
                         onTimeSaved: (time) => _onTimeSaved(i, time),
                         onNameChanged: () => setState(() {}),
                       ),
-                      if (i < _medicines.length - 1)
-                        const SizedBox(height: 12),
+                      if (i < _medicines.length - 1) const SizedBox(height: 12),
                     ],
 
-                    /// + 추가 버튼
                     if (_showAddButton) ...[
                       const SizedBox(height: 12),
                       _AddMedicineButton(onTap: _addMedicine),
@@ -256,15 +180,11 @@ class _PetHealthState extends State<PetHealthEditor> {
 
             _BottomDualButton(
               isActive: _isFormValid,
-              onSkip: () => _showSkipDialog(),
-              onNext: _isFormValid
-                  ? () {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (_) => const PetListPage()),
-                      (route) => route.isFirst,
-                );
-              }
-                  : null,
+              onSkip: () => SkipDialog.show(
+                context: context,
+                onSkip: _goToDestination,
+              ),
+              onNext: _isFormValid ? _goToDestination : null,
             ),
           ],
         ),
@@ -272,10 +192,6 @@ class _PetHealthState extends State<PetHealthEditor> {
     );
   }
 }
-
-////////////////////////////////////////////////////////////
-/// 💊 약 행 + 인라인 피커
-////////////////////////////////////////////////////////////
 
 class _MedicineRowWithPicker extends StatefulWidget {
   final _MedicineEntry entry;
@@ -292,21 +208,17 @@ class _MedicineRowWithPicker extends StatefulWidget {
   });
 
   @override
-  State<_MedicineRowWithPicker> createState() =>
-      _MedicineRowWithPickerState();
+  State<_MedicineRowWithPicker> createState() => _MedicineRowWithPickerState();
 }
 
-class _MedicineRowWithPickerState
-    extends State<_MedicineRowWithPicker> {
+class _MedicineRowWithPickerState extends State<_MedicineRowWithPicker> {
   int _amPmIndex = 0;
   int _hourIndex = 0;
   int _minuteIndex = 0;
 
   final List<String> _amPmList = ['오전', '오후'];
-  final List<String> _hourList =
-  List.generate(12, (i) => '${i + 1}');
-  final List<String> _minuteList =
-  List.generate(60, (i) => i.toString().padLeft(2, '0'));
+  final List<String> _hourList = List.generate(12, (i) => '${i + 1}');
+  final List<String> _minuteList = List.generate(60, (i) => i.toString().padLeft(2, '0'));
 
   @override
   void initState() {
@@ -347,10 +259,7 @@ class _MedicineRowWithPickerState
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.gray02,
-              width: 1,
-            ),
+            border: Border.all(color: AppColors.gray02, width: 1),
           ),
           child: Row(
             children: [
@@ -358,12 +267,10 @@ class _MedicineRowWithPickerState
                 child: TextField(
                   controller: widget.entry.nameController,
                   onChanged: (_) => widget.onNameChanged(),
-                  style: AppTextStyle.body16M120
-                      .copyWith(color: AppColors.f05),
+                  style: AppTextStyle.body16M120.copyWith(color: AppColors.f05),
                   decoration: InputDecoration(
                     hintText: '예)비타민, 철분',
-                    hintStyle: AppTextStyle.body16M120
-                        .copyWith(color: AppColors.f03),
+                    hintStyle: AppTextStyle.body16M120.copyWith(color: AppColors.f03),
                     border: InputBorder.none,
                     isDense: true,
                     contentPadding: EdgeInsets.zero,
@@ -376,17 +283,13 @@ class _MedicineRowWithPickerState
                 child: hasTime
                     ? Text(
                   widget.entry.selectedTime!,
-                  style: AppTextStyle.body16M120
-                      .copyWith(color: AppColors.f05),
+                  style: AppTextStyle.body16M120.copyWith(color: AppColors.f05),
                 )
                     : SvgPicture.asset(
                   'assets/system/icons/icon_timer.svg',
                   width: 24,
                   height: 24,
-                  colorFilter: ColorFilter.mode(
-                    AppColors.f03,
-                    BlendMode.srcIn,
-                  ),
+                  colorFilter: ColorFilter.mode(AppColors.f03, BlendMode.srcIn),
                 ),
               ),
             ],
@@ -463,8 +366,7 @@ class _MedicineRowWithPickerState
                       child: Center(
                         child: Text(
                           '저장',
-                          style: AppTextStyle.body16M120
-                              .copyWith(color: AppColors.f05),
+                          style: AppTextStyle.body16M120.copyWith(color: AppColors.f05),
                         ),
                       ),
                     ),
@@ -477,10 +379,6 @@ class _MedicineRowWithPickerState
     );
   }
 }
-
-////////////////////////////////////////////////////////////
-/// 🎡 드럼롤 피커
-////////////////////////////////////////////////////////////
 
 class _DrumrollPicker extends StatefulWidget {
   final List<String> items;
@@ -504,9 +402,7 @@ class _DrumrollPickerState extends State<_DrumrollPicker> {
   @override
   void initState() {
     super.initState();
-    _controller = FixedExtentScrollController(
-      initialItem: widget.selectedIndex,
-    );
+    _controller = FixedExtentScrollController(initialItem: widget.selectedIndex);
   }
 
   @override
@@ -538,10 +434,6 @@ class _DrumrollPickerState extends State<_DrumrollPicker> {
   }
 }
 
-////////////////////////////////////////////////////////////
-/// ➕ 약 추가 버튼
-////////////////////////////////////////////////////////////
-
 class _AddMedicineButton extends StatelessWidget {
   final VoidCallback onTap;
 
@@ -564,10 +456,7 @@ class _AddMedicineButton extends StatelessWidget {
             'assets/system/icons/icon_add.svg',
             width: 24,
             height: 24,
-            colorFilter: ColorFilter.mode(
-              AppColors.f03,
-              BlendMode.srcIn,
-            ),
+            colorFilter: ColorFilter.mode(AppColors.f03, BlendMode.srcIn),
           ),
         ),
       ),
@@ -575,18 +464,11 @@ class _AddMedicineButton extends StatelessWidget {
   }
 }
 
-////////////////////////////////////////////////////////////
-/// 🔵 페이지 인디케이터
-////////////////////////////////////////////////////////////
-
 class _PageIndicator extends StatelessWidget {
   final int currentIndex;
   final int totalCount;
 
-  const _PageIndicator({
-    required this.currentIndex,
-    required this.totalCount,
-  });
+  const _PageIndicator({required this.currentIndex, required this.totalCount});
 
   @override
   Widget build(BuildContext context) {
@@ -604,7 +486,6 @@ class _PageIndicator extends StatelessWidget {
 
 class _Dot extends StatelessWidget {
   final bool isActive;
-
   const _Dot({required this.isActive});
 
   @override
@@ -619,10 +500,6 @@ class _Dot extends StatelessWidget {
     );
   }
 }
-
-////////////////////////////////////////////////////////////
-/// 🔹 타이틀
-////////////////////////////////////////////////////////////
 
 class _TitleText extends StatelessWidget {
   const _TitleText();
@@ -642,10 +519,6 @@ class _TitleText extends StatelessWidget {
   }
 }
 
-////////////////////////////////////////////////////////////
-/// 🔹 질문 텍스트
-////////////////////////////////////////////////////////////
-
 class _QuestionText extends StatelessWidget {
   final int number;
   final String text;
@@ -656,17 +529,10 @@ class _QuestionText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       '$number. $text',
-      style: AppTextStyle.body16M120.copyWith(
-        color: AppColors.f05,
-        height: 1.4,
-      ),
+      style: AppTextStyle.body16M120.copyWith(color: AppColors.f05, height: 1.4),
     );
   }
 }
-
-////////////////////////////////////////////////////////////
-/// 🔹 답변 그룹
-////////////////////////////////////////////////////////////
 
 class _AnswerGroup extends StatelessWidget {
   final String? selectedAnswer;
@@ -707,10 +573,6 @@ class _AnswerGroup extends StatelessWidget {
   }
 }
 
-////////////////////////////////////////////////////////////
-/// 🔹 입력 필드
-////////////////////////////////////////////////////////////
-
 class _InputField extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
@@ -723,13 +585,10 @@ class _InputField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: AppTextStyle.body16M120.copyWith(
-          color: AppColors.f03,
-        ),
+        hintStyle: AppTextStyle.body16M120.copyWith(color: AppColors.f03),
         filled: true,
         fillColor: AppColors.gray01,
-        contentPadding:
-        const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
@@ -738,10 +597,6 @@ class _InputField extends StatelessWidget {
     );
   }
 }
-
-////////////////////////////////////////////////////////////
-/// 🔹 답변 선택 옵션
-////////////////////////////////////////////////////////////
 
 class _AnswerOption extends StatelessWidget {
   final String text;
@@ -789,10 +644,6 @@ class _AnswerOption extends StatelessWidget {
     );
   }
 }
-
-////////////////////////////////////////////////////////////
-/// 🔹 하단 버튼
-////////////////////////////////////////////////////////////
 
 class _BottomDualButton extends StatelessWidget {
   final bool isActive;

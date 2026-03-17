@@ -29,7 +29,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       barrierColor: Colors.black.withOpacity(0.4),
       builder: (context) {
         return Dialog(
-          backgroundColor:AppColors.white,
+          backgroundColor: AppColors.white,
           insetPadding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: SizedBox(
@@ -139,17 +139,22 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 }
 
 Widget _itemWithTap(String text, {bool showArrow = true, Color? color, VoidCallback? onTap}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: SizedBox(
-      height: 36,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(text, style: AppTextStyle.body16R120.copyWith(color: color ?? AppColors.f04)),
-          if (showArrow)
-            SvgPicture.asset('assets/system/icons/chevron_right.svg', width: 24, height: 24),
-        ],
+  return Material(
+    color: Colors.transparent,
+    child: InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: SizedBox(
+        width: double.infinity,
+        height: 36,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(text, style: AppTextStyle.body16R120.copyWith(color: color ?? AppColors.f04)),
+            if (showArrow)
+              SvgPicture.asset('assets/system/icons/chevron_right.svg', width: 24, height: 24),
+          ],
+        ),
       ),
     ),
   );

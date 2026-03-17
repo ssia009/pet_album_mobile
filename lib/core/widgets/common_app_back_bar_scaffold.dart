@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
+
 class CommonBackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final List<Widget>? actions;
+  final VoidCallback? onBack;
 
   const CommonBackAppBar({
     super.key,
     this.title,
     this.actions,
+    this.onBack,
   });
 
   @override
@@ -20,9 +23,9 @@ class CommonBackAppBar extends StatelessWidget implements PreferredSizeWidget {
       titleSpacing: 0,
       backgroundColor: AppColors.gray00,
       elevation: 0,
-      toolbarHeight: kToolbarHeight + 40, // ✅ 상하 20씩 높이 추가
+      toolbarHeight: kToolbarHeight + 40,
       leading: Padding(
-        padding: const EdgeInsets.only(left: 20), // ✅ 왼쪽 20
+        padding: const EdgeInsets.only(left: 20),
         child: IconButton(
           icon: SvgPicture.asset(
             'assets/system/icons/icon_back.svg',
@@ -33,7 +36,7 @@ class CommonBackAppBar extends StatelessWidget implements PreferredSizeWidget {
               BlendMode.srcIn,
             ),
           ),
-          onPressed: () => Navigator.pop(context),
+          onPressed: onBack ?? () => Navigator.pop(context),
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           hoverColor: Colors.transparent,
@@ -51,6 +54,7 @@ class CommonBackAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: actions,
     );
   }
+
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
