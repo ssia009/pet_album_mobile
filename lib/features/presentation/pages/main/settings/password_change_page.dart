@@ -51,6 +51,7 @@ class _Password_change_pageState extends State<Password_change_page> {
       barrierColor: Colors.black.withOpacity(0.4),
       builder: (context) {
         return Dialog(
+          backgroundColor: AppColors.white,
           insetPadding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: SizedBox(
