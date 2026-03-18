@@ -271,6 +271,18 @@
 - album_icon_button_list_box
 - 텍스트 색상 변경 시트 핸들바 수정 
 - onFontPressed를 text_style_sheet 연결
+
+# 2026-03-18-수정사항
+- photo_gallery_single_sheet
+- 카메라 셀 추가
 - 
-- Album edit form
+- color_pickup_sheet
+- + 아이콘 선 추가
+- 바 삭제
+- 엑스, 체크 아이콘 추가
+- 스포이드 svg추가
+- hex 삭제
 - 
+- color_select_scale_sheet
+- import 정리
+- _addColor 이중 호출 제거

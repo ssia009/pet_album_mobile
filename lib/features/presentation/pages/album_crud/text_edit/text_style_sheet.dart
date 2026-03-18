@@ -24,22 +24,22 @@ class TextStylePanel extends StatefulWidget {
     required this.onClose,
   }) : super(key: key);
 
+  // 외부에서 TextStylePanel.fonts 로 접근 가능
+  static const List<FontItem> fonts = [
+    FontItem(label: '프리텐다드',       fontFamily: 'Pretendard'),
+    FontItem(label: '프리텐다드\nBold', fontFamily: 'PretendardExtraBold'),
+    FontItem(label: 'Memoment\nKkukkukk', fontFamily: 'MemomentKkukkukk'),
+    FontItem(label: 'LTIM',             fontFamily: 'LTIM'),
+    FontItem(label: 'Hubbell',          fontFamily: 'Soap'),
+    FontItem(label: 'IMPACT',           fontFamily: 'Impact'),
+  ];
+
   @override
   State<TextStylePanel> createState() => _FontStylePanelState();
 }
 
 class _FontStylePanelState extends State<TextStylePanel> {
   late String _selectedFamily;
-
-  // 사용 가능한 폰트 목록
-  static const List<FontItem> fonts = [
-    FontItem(label: '프리텐다드',  fontFamily: 'Pretendard'),
-    FontItem(label: '프리텐다드\nBold', fontFamily: 'PretendardExtraBold'),
-    FontItem(label: 'Memoment\nKkukkukk', fontFamily: 'MemomentKkukkukk'),
-    FontItem(label: 'LTIM',       fontFamily: 'LTIM'),
-    FontItem(label: 'Hubbell',    fontFamily: 'Soap'),
-    FontItem(label: 'IMPACT',     fontFamily: 'Impact'),
-  ];
 
   @override
   void initState() {
@@ -133,68 +133,56 @@ class _FontStylePanelState extends State<TextStylePanel> {
     );
   }
 
-  // ── 폰트 그리드 (wrap, 반응형) ──
+  // ── 폰트 그리드 (wrap) ──
   Widget _buildFontGrid() {
-    const int crossAxisCount = 4;
-    const double horizontalSpacing = 16;
-    const double itemAspectRatio = 75 / 42; // 원본 비율 유지
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final double totalSpacing = horizontalSpacing * (crossAxisCount - 1);
-        final double itemWidth = (constraints.maxWidth - totalSpacing) / crossAxisCount;
-        final double itemHeight = itemWidth / itemAspectRatio;
-
-        return Wrap(
-          spacing: horizontalSpacing,
-          runSpacing: 16,
-          children: fonts.map((font) {
-            final isSelected = _selectedFamily == font.fontFamily;
-            return GestureDetector(
-              onTap: () {
-                setState(() => _selectedFamily = font.fontFamily);
-                widget.onTextFamilyChanged(font.fontFamily);
-              },
-              child: Container(
-                width: itemWidth,
-                height: itemHeight,
-                padding: isSelected
-                    ? EdgeInsets.zero
-                    : const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(
-                    color: isSelected ? AppColors.main : AppColors.gray01,
-                    width: isSelected ? 1.5 : 1,
-                  ),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0x0A000000),
-                      blurRadius: 12,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      children: TextStylePanel.fonts.map((font) {
+        final isSelected = _selectedFamily == font.fontFamily;
+        return GestureDetector(
+          onTap: () {
+            setState(() => _selectedFamily = font.fontFamily);
+            widget.onTextFamilyChanged(font.fontFamily);
+          },
+          child: Container(
+            width: 75,
+            height: 42,
+            padding: isSelected
+                ? EdgeInsets.zero
+                : const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(
+                color: isSelected ? AppColors.main : AppColors.gray01,
+                width: isSelected ? 1.5 : 1,
+              ),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x0A000000),
+                  blurRadius: 12,
+                  offset: Offset(0, 4),
                 ),
-                child: Center(
-                  child: Text(
-                    font.label,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: font.fontFamily,
-                      fontSize: itemWidth * 0.13,
-                      fontWeight: FontWeight.w400,
-                      height: 1.4,
-                      letterSpacing: -0.2,
-                      color: const Color(0xFF505050),
-                    ),
-                  ),
+              ],
+            ),
+            child: Center(
+              child: Text(
+                font.label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: font.fontFamily,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w400,
+                  height: 1.4,
+                  letterSpacing: -0.2,
+                  color: const Color(0xFF505050),
                 ),
               ),
-            );
-          }).toList(),
+            ),
+          ),
         );
-      },
+      }).toList(),
     );
   }
 }

@@ -150,33 +150,49 @@ class _PhotoGallerySingleBottomSheetState
                 mainAxisSpacing: 2,
               ),
               itemCount: items.length,
-                itemBuilder: (_, i) {
-                  final isSelected = selectedIndex == i;
+              itemBuilder: (_, i) {
+                final isCamera = i == 0;
+                final isSelected = selectedIndex == i;
 
-                  return GestureDetector(
-                    onTap: () => select(i),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
+                return GestureDetector(
+                  onTap: isCamera ? null : () => select(i),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
 
-                        /// 이미지 영역
+                      /// 이미지 영역 (카메라 셀 / 빈 셀 분기)
+                      if (isCamera)
                         Container(
                           color: AppColors.gray01,
-                        ),
-
-                        /// 선택 오버레이
-                        if (isSelected)
-                          Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0x4D000000),
-                              border: Border.all(
-                                color: Colors.white,
-                                width: 2,
+                          child: Center(
+                            child: SvgPicture.asset(
+                              'assets/system/icons/icon_camera.svg',
+                              width: 32,
+                              height: 32,
+                              colorFilter: const ColorFilter.mode(
+                                AppColors.gray04,
+                                BlendMode.srcIn,
                               ),
                             ),
                           ),
+                        )
+                      else
+                        Container(color: AppColors.gray01),
 
-                        /// 체크 아이콘 (기존 시트와 동일)
+                      /// 선택 오버레이 (카메라 셀 제외)
+                      if (!isCamera && isSelected)
+                        Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0x4D000000),
+                            border: Border.all(
+                              color: Colors.white,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+
+                      /// 체크 아이콘 (카메라 셀 제외)
+                      if (!isCamera)
                         Positioned(
                           top: 8,
                           right: 8,
@@ -211,10 +227,10 @@ class _PhotoGallerySingleBottomSheetState
                                 : null,
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                },
+                    ],
+                  ),
+                );
+              },
             ),
           ),
         ],
