@@ -16,6 +16,7 @@ class EmailInquiryPage extends StatefulWidget {
 class _EmailInquiryPageState extends State<EmailInquiryPage> {
   final _idController = TextEditingController();
   final _emailController = TextEditingController();
+  final _subjectController = TextEditingController();
   final _contentController = TextEditingController();
 
   // 임시 첨부파일 목록 (파일명, 용량MB)
@@ -31,6 +32,7 @@ class _EmailInquiryPageState extends State<EmailInquiryPage> {
     super.initState();
     _idController.addListener(() => setState(() {}));
     _emailController.addListener(() => setState(() {}));
+    _subjectController.addListener(() => setState(() {}));
     _contentController.addListener(() => setState(() {}));
   }
 
@@ -38,6 +40,7 @@ class _EmailInquiryPageState extends State<EmailInquiryPage> {
   void dispose() {
     _idController.dispose();
     _emailController.dispose();
+    _subjectController.dispose();
     _contentController.dispose();
     super.dispose();
   }
@@ -93,7 +96,7 @@ class _EmailInquiryPageState extends State<EmailInquiryPage> {
                     /// 이메일 제목
                     _Label('제목'),
                     const SizedBox(height: 8),
-                    AppTextField(controller: _emailController, hintText: '제목을 입력해주세요.'),
+                    AppTextField(controller: _subjectController, hintText: '제목을 입력해주세요.'),
                     const SizedBox(height: 20),
 
                     /// 문의내용
