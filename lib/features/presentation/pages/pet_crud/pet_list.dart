@@ -5,8 +5,7 @@ import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/widgets/common_app_back_bar_scaffold.dart';
 import 'package:petAblumMobile/core/widgets/delete_modal.dart';
 import 'package:petAblumMobile/core/widgets/pet_card.dart';
-import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_character_select_page.dart';
-import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_character_grid_page.dart';
+import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_info_form.dart';
 import 'package:petAblumMobile/features/presentation/pages/main/main_shell.dart';
 
 class PetListPage extends StatefulWidget {
@@ -177,7 +176,7 @@ class _PetListPageState extends State<PetListPage> {
                       : () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const PetCharacterGridPage(
+                      builder: (_) => const PetInfoEditor(
                         isFromMyPage: true,
                       ),
                     ),
@@ -205,7 +204,7 @@ class _AddPetButton extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => const PetCharacterIntroPage(isFromMyPage: true),
+            builder: (_) => const PetInfoEditor(isFromMyPage: true),
           ),
         );
       },

@@ -109,10 +109,10 @@ class _PetPersonalityEditorState extends State<PetPersonalityEditor> {
                     ),
                     const SizedBox(height: 32),
 
-                    _QuestionText(4, '산책이나 돌봄 시 행동 / 환경 측면에서\n    주의할 점이 있나요?'),
+                    _QuestionText(4, '산책이나 돌봄 시 행동 / 환경 측면에서\n     주의할 점이 있나요?'),
                     const SizedBox(height: 8),
                     Text(
-                      '- 앞선 내용 외에, 산책이나 돌봄 시 행동·환경 측면에서,\n   더 알려주고 싶은 점이 있다면 작성해주세요.',
+                      '-  앞선 내용 외에, 산책이나 돌봄 시 행동·환경 측면에서,\n    더 알려주고 싶은 점이 있다면 작성해주세요.',
                       style: AppTextStyle.description14R140.copyWith(color: AppColors.f03),
                     ),
                     const SizedBox(height: 16),

@@ -138,10 +138,10 @@ class _PetHealthState extends State<PetHealthEditor> {
                     ),
                     const SizedBox(height: 32),
 
-                    _QuestionText(3, '산책이나 돌봄 시\n건강상 특별히 주의해야 할 점이 있나요?'),
+                    _QuestionText(3, '산책이나 돌봄 시\n    건강상 특별히 주의해야 할 점이 있나요?'),
                     const SizedBox(height: 8),
                     Text(
-                      '앞선 내용 외에, 산책이나 돌봄 시 행동·환경 측면에서\n더 알려주고 싶은 점이 있다면 작성해주세요.',
+                      '    앞선 내용 외에, 산책이나 돌봄 시 행동·환경 측면에서\n    더 알려주고 싶은 점이 있다면 작성해주세요.',
                       style: AppTextStyle.description14R120.copyWith(color: AppColors.f03),
                     ),
                     const SizedBox(height: 16),
@@ -153,7 +153,7 @@ class _PetHealthState extends State<PetHealthEditor> {
                     ),
                     const SizedBox(height: 32),
 
-                    _QuestionText(4, '반려동물이 복용하는 약과 시간을\n작성해 주세요.'),
+                    _QuestionText(4, '반려동물이 복용하는 약과 시간을\n    작성해 주세요.'),
                     const SizedBox(height: 16),
 
                     for (int i = 0; i < _medicines.length; i++) ...[
@@ -352,12 +352,12 @@ class _MedicineRowWithPickerState extends State<_MedicineRowWithPicker> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                   child: GestureDetector(
                     onTap: () => widget.onTimeSaved(_formattedTime),
                     child: Container(
                       width: double.infinity,
-                      height: 52,
+                      height: 55,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
@@ -123,3 +123,6 @@ class PetCharacterIntroPage extends StatelessWidget {
     );
   }
 }
+
+다음 개발때 사용
+ */
