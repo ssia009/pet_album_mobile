@@ -102,93 +102,101 @@ class _PetListPageState extends State<PetListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CommonBackAppBar(
-        title: '반려동물 캐릭터 관리',
-        onBack: _goToMyPage,
-        actions: _isDeleteMode
-            ? [
-          TextButton(
-            onPressed: _selectedPets.isEmpty ? null : _deleteSelectedPets,
-            style: TextButton.styleFrom(
-              minimumSize: Size.zero,
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            child: Text(
-              '삭제',
-              style: AppTextStyle.description14R120.copyWith(
-                color: _selectedPets.isEmpty ? AppColors.gray03 : AppColors.red,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: _toggleDeleteMode,
-            style: TextButton.styleFrom(
-              minimumSize: Size.zero,
-              padding: const EdgeInsets.only(left: 8, right: 20),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            child: Text(
-              '닫기',
-              style: AppTextStyle.description14R120.copyWith(color: AppColors.f05),
-            ),
-          ),
-        ]
-            : [
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: IconButton(
-              onPressed: _toggleDeleteMode,
-              icon: SvgPicture.asset(
-                'assets/system/icons/icon_delete.svg',
-                width: 24,
-                height: 24,
-                colorFilter: const ColorFilter.mode(AppColors.f05, BlendMode.srcIn),
-              ),
-            ),
-          ),
-        ],
+    return Theme(
+      // 스크롤 시 앱바 색상 변경 방지
+      data: Theme.of(context).copyWith(
+        appBarTheme: Theme.of(context).appBarTheme.copyWith(
+          scrolledUnderElevation: 0,
+        ),
       ),
-      backgroundColor: AppColors.bg,
-      body: ListView(
-        padding: const EdgeInsets.all(24),
-        children: [
-          ...List.generate(_pets.length, (index) {
-            final pet = _pets[index];
-            final isSelected = _selectedPets.contains(index);
-            return Column(
-              children: [
-                PetCard(
-                  imageUrl: pet['imageUrl'],
-                  name: pet['name'],
-                  species: pet['species'],
-                  personality: List<String>.from(pet['personality']),
-                  favoriteToy: pet['favoriteToy'],
-                  sex: pet['sex'],
-                  birth: pet['birth'],
-                  petFamily: pet['petFamily'],
-                  cardSvg: pet['cardSvg'] ?? 'assets/system/pet_card/dog_pet_card.svg',
-                  isSelected: isSelected,
-                  isDeleteMode: _isDeleteMode,
-                  onTap: _isDeleteMode
-                      ? () => _togglePetSelection(index)
-                      : () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const PetInfoEditor(
-                        isFromMyPage: true,
+      child: Scaffold(
+        appBar: CommonBackAppBar(
+          title: '반려동물 캐릭터 관리',
+          onBack: _goToMyPage,
+          actions: _isDeleteMode
+              ? [
+            TextButton(
+              onPressed: _selectedPets.isEmpty ? null : _deleteSelectedPets,
+              style: TextButton.styleFrom(
+                minimumSize: Size.zero,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              child: Text(
+                '삭제',
+                style: AppTextStyle.description14R120.copyWith(
+                  color: _selectedPets.isEmpty ? AppColors.gray03 : AppColors.red,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: _toggleDeleteMode,
+              style: TextButton.styleFrom(
+                minimumSize: Size.zero,
+                padding: const EdgeInsets.only(left: 8, right: 20),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              child: Text(
+                '닫기',
+                style: AppTextStyle.description14R120.copyWith(color: AppColors.f05),
+              ),
+            ),
+          ]
+              : [
+            Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: IconButton(
+                onPressed: _toggleDeleteMode,
+                icon: SvgPicture.asset(
+                  'assets/system/icons/icon_delete.svg',
+                  width: 24,
+                  height: 24,
+                  colorFilter: const ColorFilter.mode(AppColors.f05, BlendMode.srcIn),
+                ),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: AppColors.bg,
+        body: ListView(
+          padding: const EdgeInsets.all(24),
+          children: [
+            ...List.generate(_pets.length, (index) {
+              final pet = _pets[index];
+              final isSelected = _selectedPets.contains(index);
+              return Column(
+                children: [
+                  PetCard(
+                    imageUrl: pet['imageUrl'],
+                    name: pet['name'],
+                    species: pet['species'],
+                    personality: List<String>.from(pet['personality']),
+                    favoriteToy: pet['favoriteToy'],
+                    sex: pet['sex'],
+                    birth: pet['birth'],
+                    petFamily: pet['petFamily'],
+                    cardSvg: pet['cardSvg'] ?? 'assets/system/pet_card/dog_pet_card.svg',
+                    isSelected: isSelected,
+                    isDeleteMode: _isDeleteMode,
+                    onTap: _isDeleteMode
+                        ? () => _togglePetSelection(index)
+                        : () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const PetInfoEditor(
+                          isFromMyPage: true,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                if (index < _pets.length - 1) const SizedBox(height: 12),
-              ],
-            );
-          }),
-          const SizedBox(height: 24),
-          if (!_isDeleteMode) const _AddPetButton(),
-        ],
+                  if (index < _pets.length - 1) const SizedBox(height: 12),
+                ],
+              );
+            }),
+            const SizedBox(height: 24),
+            if (!_isDeleteMode) const _AddPetButton(),
+          ],
+        ),
       ),
     );
   }

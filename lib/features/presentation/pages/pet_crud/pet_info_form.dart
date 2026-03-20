@@ -92,83 +92,91 @@ class _PetInfoEditorState extends State<PetInfoEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const CommonBackAppBar(),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    const _PageIndicator(),
-                    const SizedBox(height: 12),
-                    const _TitleText(),
-                    const SizedBox(height: 40),
-                    const _PetImagePicker(),
-                    const SizedBox(height: 24),
+    return Theme(
+      // 스크롤 시 앱바 색상 변경 방지
+      data: Theme.of(context).copyWith(
+        appBarTheme: Theme.of(context).appBarTheme.copyWith(
+          scrolledUnderElevation: 0,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: const CommonBackAppBar(),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      const _PageIndicator(),
+                      const SizedBox(height: 12),
+                      const _TitleText(),
+                      const SizedBox(height: 40),
+                      const _PetImagePicker(),
+                      const SizedBox(height: 24),
 
-                    _Label('이름'),
-                    const SizedBox(height: 8),
-                    _InputField(controller: _nameController, hint: '이름'),
+                      _Label('이름'),
+                      const SizedBox(height: 8),
+                      _InputField(controller: _nameController, hint: '이름'),
 
-                    const SizedBox(height: 24),
-                    _Label('성별'),
-                    const SizedBox(height: 12),
-                    _GenderSelector(
-                      selectedGender: _selectedGender,
-                      onGenderChanged: _onGenderChanged,
-                    ),
+                      const SizedBox(height: 24),
+                      _Label('성별'),
+                      const SizedBox(height: 12),
+                      _GenderSelector(
+                        selectedGender: _selectedGender,
+                        onGenderChanged: _onGenderChanged,
+                      ),
 
-                    const SizedBox(height: 24),
-                    _Label('생일'),
-                    const SizedBox(height: 8),
-                    _BirthdayInputField(controller: _birthController),
+                      const SizedBox(height: 24),
+                      _Label('생일'),
+                      const SizedBox(height: 8),
+                      _BirthdayInputField(controller: _birthController),
 
-                    const SizedBox(height: 24),
-                    _Label('품종'),
-                    const SizedBox(height: 8),
-                    _InputField(controller: _breedController, hint: '예) 말티즈'),
+                      const SizedBox(height: 24),
+                      _Label('품종'),
+                      const SizedBox(height: 8),
+                      _InputField(controller: _breedController, hint: '예) 말티즈'),
 
-                    const SizedBox(height: 24),
-                    _Label('몸무게'),
-                    const SizedBox(height: 8),
-                    _WeightInputField(controller: _weightController),
+                      const SizedBox(height: 24),
+                      _Label('몸무게'),
+                      const SizedBox(height: 8),
+                      _WeightInputField(controller: _weightController),
 
-                    const SizedBox(height: 24),
-                    _PersonalitySelector(
-                      options: _personalityOptions,
-                      selected: _selectedPersonalities,
-                      onToggle: (val) {
-                        setState(() {
-                          if (_selectedPersonalities.contains(val)) {
-                            _selectedPersonalities.remove(val);
-                          } else if (_selectedPersonalities.length < 3) {
-                            _selectedPersonalities.add(val);
-                          }
-                        });
-                      },
-                    ),
+                      const SizedBox(height: 24),
+                      _PersonalitySelector(
+                        options: _personalityOptions,
+                        selected: _selectedPersonalities,
+                        onToggle: (val) {
+                          setState(() {
+                            if (_selectedPersonalities.contains(val)) {
+                              _selectedPersonalities.remove(val);
+                            } else if (_selectedPersonalities.length < 3) {
+                              _selectedPersonalities.add(val);
+                            }
+                          });
+                        },
+                      ),
 
-                    const SizedBox(height: 80),
-                  ],
+                      const SizedBox(height: 80),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            _BottomDualButton(
-              isActive: _isFormValid,
-              onSkip: () => SkipDialog.show(
-                context: context,
-                onSkip: _goToDestination,
+              _BottomDualButton(
+                isActive: _isFormValid,
+                onSkip: () => SkipDialog.show(
+                  context: context,
+                  onSkip: _goToDestination,
+                ),
+                onNext: _isFormValid ? _navigateNext : null,
               ),
-              onNext: _isFormValid ? _navigateNext : null,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

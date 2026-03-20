@@ -61,92 +61,100 @@ class _PetPersonalityEditorState extends State<PetPersonalityEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const CommonBackAppBar(),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    const _PageIndicator(currentIndex: 1, totalCount: 3),
-                    const SizedBox(height: 24),
-                    const _TitleText(),
-                    const SizedBox(height: 40),
+    return Theme(
+      // 스크롤 시 앱바 색상 변경 방지
+      data: Theme.of(context).copyWith(
+        appBarTheme: Theme.of(context).appBarTheme.copyWith(
+          scrolledUnderElevation: 0,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: const CommonBackAppBar(),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      const _PageIndicator(currentIndex: 1, totalCount: 3),
+                      const SizedBox(height: 24),
+                      const _TitleText(),
+                      const SizedBox(height: 40),
 
-                    _QuestionText(1, '예민하게 반응하거나\n   무서워하는 소리, 상황이 있나요?'),
-                    const SizedBox(height: 16),
-                    _AnswerGroup(
-                      selectedAnswer: _answers[1],
-                      onAnswerSelected: (v) => _onAnswerSelected(1, v),
-                      controller: _controller1,
-                      exampleText: '예) 큰소리로 이름을 부르기',
-                    ),
-                    const SizedBox(height: 32),
+                      _QuestionText(1, '예민하게 반응하거나\n   무서워하는 소리, 상황이 있나요?'),
+                      const SizedBox(height: 16),
+                      _AnswerGroup(
+                        selectedAnswer: _answers[1],
+                        onAnswerSelected: (v) => _onAnswerSelected(1, v),
+                        controller: _controller1,
+                        exampleText: '예) 큰소리로 이름을 부르기',
+                      ),
+                      const SizedBox(height: 32),
 
-                    _QuestionText(2, '이물질이나 장난감을\n    주워 먹은 적이 있나요?'),
-                    const SizedBox(height: 16),
-                    _AnswerGroup(
-                      selectedAnswer: _answers[2],
-                      onAnswerSelected: (v) => _onAnswerSelected(2, v),
-                      controller: _controller2,
-                      exampleText: '예) 간식봉투, 휴지',
-                    ),
-                    const SizedBox(height: 32),
+                      _QuestionText(2, '이물질이나 장난감을\n    주워 먹은 적이 있나요?'),
+                      const SizedBox(height: 16),
+                      _AnswerGroup(
+                        selectedAnswer: _answers[2],
+                        onAnswerSelected: (v) => _onAnswerSelected(2, v),
+                        controller: _controller2,
+                        exampleText: '예) 간식봉투, 휴지',
+                      ),
+                      const SizedBox(height: 32),
 
-                    _QuestionText(3, '사람이나 다른 동물을 공격하거나\n     덤빈 적이 있나요?'),
-                    const SizedBox(height: 16),
-                    _AnswerGroup(
-                      selectedAnswer: _answers[3],
-                      onAnswerSelected: (v) => _onAnswerSelected(3, v),
-                      controller: _controller3,
-                      exampleText: '예) 간식을 뺏으려다 물었어요',
-                    ),
-                    const SizedBox(height: 32),
+                      _QuestionText(3, '사람이나 다른 동물을 공격하거나\n     덤빈 적이 있나요?'),
+                      const SizedBox(height: 16),
+                      _AnswerGroup(
+                        selectedAnswer: _answers[3],
+                        onAnswerSelected: (v) => _onAnswerSelected(3, v),
+                        controller: _controller3,
+                        exampleText: '예) 간식을 뺏으려다 물었어요',
+                      ),
+                      const SizedBox(height: 32),
 
-                    _QuestionText(4, '산책이나 돌봄 시 행동 / 환경 측면에서\n     주의할 점이 있나요?'),
-                    const SizedBox(height: 8),
-                    Text(
-                      '-  앞선 내용 외에, 산책이나 돌봄 시 행동·환경 측면에서,\n    더 알려주고 싶은 점이 있다면 작성해주세요.',
-                      style: AppTextStyle.description14R140.copyWith(color: AppColors.f03),
-                    ),
-                    const SizedBox(height: 16),
-                    _AnswerGroup(
-                      selectedAnswer: _answers[4],
-                      onAnswerSelected: (v) => _onAnswerSelected(4, v),
-                      controller: _controller4,
-                      exampleText: '예) 엘리베이터보다 계단 이용을 선호해요.',
-                    ),
+                      _QuestionText(4, '산책이나 돌봄 시 행동 / 환경 측면에서\n     주의할 점이 있나요?'),
+                      const SizedBox(height: 8),
+                      Text(
+                        '-  앞선 내용 외에, 산책이나 돌봄 시 행동·환경 측면에서,\n    더 알려주고 싶은 점이 있다면 작성해주세요.',
+                        style: AppTextStyle.description14R140.copyWith(color: AppColors.f03),
+                      ),
+                      const SizedBox(height: 16),
+                      _AnswerGroup(
+                        selectedAnswer: _answers[4],
+                        onAnswerSelected: (v) => _onAnswerSelected(4, v),
+                        controller: _controller4,
+                        exampleText: '예) 엘리베이터보다 계단 이용을 선호해요.',
+                      ),
 
-                    const SizedBox(height: 80),
-                  ],
-                ),
-              ),
-            ),
-
-            _BottomDualButton(
-              isActive: _isFormValid,
-              onSkip: () => SkipDialog.show(
-                context: context,
-                onSkip: _goToDestination,
-              ),
-              onNext: _isFormValid
-                  ? () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => PetHealthEditor(
-                    isFromMyPage: widget.isFromMyPage,
+                      const SizedBox(height: 80),
+                    ],
                   ),
                 ),
-              )
-                  : null,
-            ),
-          ],
+              ),
+
+              _BottomDualButton(
+                isActive: _isFormValid,
+                onSkip: () => SkipDialog.show(
+                  context: context,
+                  onSkip: _goToDestination,
+                ),
+                onNext: _isFormValid
+                    ? () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => PetHealthEditor(
+                      isFromMyPage: widget.isFromMyPage,
+                    ),
+                  ),
+                )
+                    : null,
+              ),
+            ],
+          ),
         ),
       ),
     );

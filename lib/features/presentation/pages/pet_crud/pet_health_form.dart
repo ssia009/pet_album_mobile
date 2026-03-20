@@ -100,93 +100,101 @@ class _PetHealthState extends State<PetHealthEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const CommonBackAppBar(),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    const _PageIndicator(currentIndex: 2, totalCount: 3),
-                    const SizedBox(height: 24),
-                    const _TitleText(),
-                    const SizedBox(height: 40),
+    return Theme(
+      // 스크롤 시 앱바 색상 변경 방지
+      data: Theme.of(context).copyWith(
+        appBarTheme: Theme.of(context).appBarTheme.copyWith(
+          scrolledUnderElevation: 0,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: const CommonBackAppBar(),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      const _PageIndicator(currentIndex: 2, totalCount: 3),
+                      const SizedBox(height: 24),
+                      const _TitleText(),
+                      const SizedBox(height: 40),
 
-                    _QuestionText(1, '현재 반려동물에게 관절 질환이 있나요?'),
-                    const SizedBox(height: 16),
-                    _AnswerGroup(
-                      selectedAnswer: _answers[1],
-                      onAnswerSelected: (a) => _onAnswerSelected(1, a),
-                      controller: _controller1,
-                      exampleText: '예) 관절염',
-                    ),
-                    const SizedBox(height: 32),
-
-                    _QuestionText(2, '현재 반려동물에게 피부 질환이 있나요?'),
-                    const SizedBox(height: 16),
-                    _AnswerGroup(
-                      selectedAnswer: _answers[2],
-                      onAnswerSelected: (a) => _onAnswerSelected(2, a),
-                      controller: _controller2,
-                      exampleText: '예) 아토피',
-                    ),
-                    const SizedBox(height: 32),
-
-                    _QuestionText(3, '산책이나 돌봄 시\n    건강상 특별히 주의해야 할 점이 있나요?'),
-                    const SizedBox(height: 8),
-                    Text(
-                      '    앞선 내용 외에, 산책이나 돌봄 시 행동·환경 측면에서\n    더 알려주고 싶은 점이 있다면 작성해주세요.',
-                      style: AppTextStyle.description14R120.copyWith(color: AppColors.f03),
-                    ),
-                    const SizedBox(height: 16),
-                    _AnswerGroup(
-                      selectedAnswer: _answers[3],
-                      onAnswerSelected: (a) => _onAnswerSelected(3, a),
-                      controller: _controller3,
-                      exampleText: '예) 체력이 약해 중간중간 휴식이 필요해요.',
-                    ),
-                    const SizedBox(height: 32),
-
-                    _QuestionText(4, '반려동물이 복용하는 약과 시간을\n    작성해 주세요.'),
-                    const SizedBox(height: 16),
-
-                    for (int i = 0; i < _medicines.length; i++) ...[
-                      _MedicineRowWithPicker(
-                        key: ValueKey(i),
-                        entry: _medicines[i],
-                        onTogglePicker: () => _togglePicker(i),
-                        onTimeSaved: (time) => _onTimeSaved(i, time),
-                        onNameChanged: () => setState(() {}),
+                      _QuestionText(1, '현재 반려동물에게 관절 질환이 있나요?'),
+                      const SizedBox(height: 16),
+                      _AnswerGroup(
+                        selectedAnswer: _answers[1],
+                        onAnswerSelected: (a) => _onAnswerSelected(1, a),
+                        controller: _controller1,
+                        exampleText: '예) 관절염',
                       ),
-                      if (i < _medicines.length - 1) const SizedBox(height: 12),
-                    ],
+                      const SizedBox(height: 32),
 
-                    if (_showAddButton) ...[
-                      const SizedBox(height: 12),
-                      _AddMedicineButton(onTap: _addMedicine),
-                    ],
+                      _QuestionText(2, '현재 반려동물에게 피부 질환이 있나요?'),
+                      const SizedBox(height: 16),
+                      _AnswerGroup(
+                        selectedAnswer: _answers[2],
+                        onAnswerSelected: (a) => _onAnswerSelected(2, a),
+                        controller: _controller2,
+                        exampleText: '예) 아토피',
+                      ),
+                      const SizedBox(height: 32),
 
-                    const SizedBox(height: 80),
-                  ],
+                      _QuestionText(3, '산책이나 돌봄 시\n    건강상 특별히 주의해야 할 점이 있나요?'),
+                      const SizedBox(height: 8),
+                      Text(
+                        '    앞선 내용 외에, 산책이나 돌봄 시 행동·환경 측면에서\n    더 알려주고 싶은 점이 있다면 작성해주세요.',
+                        style: AppTextStyle.description14R120.copyWith(color: AppColors.f03),
+                      ),
+                      const SizedBox(height: 16),
+                      _AnswerGroup(
+                        selectedAnswer: _answers[3],
+                        onAnswerSelected: (a) => _onAnswerSelected(3, a),
+                        controller: _controller3,
+                        exampleText: '예) 체력이 약해 중간중간 휴식이 필요해요.',
+                      ),
+                      const SizedBox(height: 32),
+
+                      _QuestionText(4, '반려동물이 복용하는 약과 시간을\n    작성해 주세요.'),
+                      const SizedBox(height: 16),
+
+                      for (int i = 0; i < _medicines.length; i++) ...[
+                        _MedicineRowWithPicker(
+                          key: ValueKey(i),
+                          entry: _medicines[i],
+                          onTogglePicker: () => _togglePicker(i),
+                          onTimeSaved: (time) => _onTimeSaved(i, time),
+                          onNameChanged: () => setState(() {}),
+                        ),
+                        if (i < _medicines.length - 1) const SizedBox(height: 12),
+                      ],
+
+                      if (_showAddButton) ...[
+                        const SizedBox(height: 12),
+                        _AddMedicineButton(onTap: _addMedicine),
+                      ],
+
+                      const SizedBox(height: 80),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            _BottomDualButton(
-              isActive: _isFormValid,
-              onSkip: () => SkipDialog.show(
-                context: context,
-                onSkip: _goToDestination,
+              _BottomDualButton(
+                isActive: _isFormValid,
+                onSkip: () => SkipDialog.show(
+                  context: context,
+                  onSkip: _goToDestination,
+                ),
+                onNext: _isFormValid ? _goToDestination : null,
               ),
-              onNext: _isFormValid ? _goToDestination : null,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -422,11 +430,9 @@ class _DrumrollPickerState extends State<_DrumrollPicker> {
         return Center(
           child: Text(
             item,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: AppColors.f05,
-            ),
+              style: AppTextStyle.subtitle20M120.copyWith(
+                color: AppColors.f05,
+              ),
           ),
         );
       }).toList(),
