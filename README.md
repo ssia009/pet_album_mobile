@@ -300,3 +300,25 @@
 - 폰트 스타일 적용
 - 밑줄 적용
 - 체크 아이콘 적용
+
+# 2026-03-20-수정사항
+- 폰트 추가
+- 김씨 손맛체.ttf
+- BMKkubulim.otf
+  BookkMyungjo.ttf
+- Cafe24PROUP.otf
+- Caveat-VariableFont_wght.ttf
+- IndieFlower.ttf
+- TAEBAEK milkyway.otf
+- TitanOne.ttf
+- YoonChildfundkoreaManSeh.otf
+- ZenSerif.otf
+- 고령딸기체.otf
+- 만년설체.ttf
+- 
+- text_style_sheet
+- LTIM 삭제
+- 텍스트 스타일 추가
+- 스크롤 기능 추가
+- 폰트 그리드 수정
+- 

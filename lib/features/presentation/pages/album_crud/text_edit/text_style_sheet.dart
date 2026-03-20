@@ -31,10 +31,23 @@ class TextStylePanel extends StatefulWidget {
   // 외부에서 TextStylePanel.fonts 로 접근 가능
   static const List<FontItem> fonts = [
     FontItem(label: '프리텐다드',             fontFamily: 'Pretendard'),
+    FontItem(label: '프리텐다드',             fontFamily: 'Pretendard'),
     FontItem(label: 'Memoment\nKkukkukk',   fontFamily: 'MemomentKkukkukk'),
-    FontItem(label: 'LTIM',                  fontFamily: 'LTIM'),
     FontItem(label: 'Hubbell',               fontFamily: 'Soap'),
     FontItem(label: 'IMPACT',                fontFamily: 'Impact'),
+    FontItem(label: '박다현체',               fontFamily: 'Dahyun'),
+    FontItem(label: '김씨손맛',               fontFamily: 'Kimsonmas'),
+    FontItem(label: 'BM꾸불림',              fontFamily: 'BMKkubulim'),
+    FontItem(label: '북크명조',               fontFamily: 'BookkMyungjo'),
+    FontItem(label: 'Cafe24\nPROUP',         fontFamily: 'Cafe24Proup'),
+    FontItem(label: 'Caveat',                fontFamily: 'Caveat'),
+    FontItem(label: 'Indie\nFlower',         fontFamily: 'IndieFlower'),
+    FontItem(label: '태백\n은하수',           fontFamily: 'TAEBAEK'),
+    FontItem(label: 'Titan\nOne',            fontFamily: 'TitanOne'),
+    FontItem(label: '윤아이',                 fontFamily: 'YoonChild'),
+    FontItem(label: 'Zen\nSerif',            fontFamily: 'ZenSerif'),
+    FontItem(label: '고령딸기',               fontFamily: 'Goryung'),
+    FontItem(label: '만년설체',               fontFamily: 'Mannyunsul'),
   ];
 
   @override
@@ -72,18 +85,22 @@ class _FontStylePanelState extends State<TextStylePanel> {
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHandle(),
-            const SizedBox(height: 20),
-            _buildFontGrid(),
-            const SizedBox(height: 20),
-          ],
-        ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: _buildHandle(),
+          ),
+          const SizedBox(height: 20),
+          Flexible(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+              child: _buildFontGrid(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -117,78 +134,72 @@ class _FontStylePanelState extends State<TextStylePanel> {
             ),
           ),
 
-          // ✓ 확인
-          GestureDetector(
-            onTap: () {
-              widget.onTextFamilyChanged(_selectedFamily);
-              widget.onClose();
-            },
-            child: SvgPicture.asset(
-              'assets/system/icons/icon_check.svg',
-              width: 24,
-              height: 24,
-              colorFilter: const ColorFilter.mode(
-                AppColors.f05,
-                BlendMode.srcIn,
-              ),
-            ),
-          ),
+          // ✕ 아이콘과 좌우 대칭을 맞추기 위한 빈 공간
+          const SizedBox(width: 24),
         ],
       ),
     );
   }
 
 
-  // ── 폰트 그리드 (wrap) ──
+  // ── 폰트 그리드 (반응형 wrap) ──
   Widget _buildFontGrid() {
-    return Wrap(
-      spacing: 16,
-      runSpacing: 16,
-      children: TextStylePanel.fonts.map((font) {
-        final isSelected = _selectedFamily == font.fontFamily;
-        return GestureDetector(
-          onTap: () {
-            setState(() => _selectedFamily = font.fontFamily);
-            widget.onTextFamilyChanged(font.fontFamily);
-          },
-          child: Container(
-            width: 75,
-            height: 42,
-            padding: isSelected
-                ? EdgeInsets.zero
-                : const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(6),
-              border: Border.all(
-                color: isSelected ? AppColors.main : AppColors.gray01,
-                width: isSelected ? 1.5 : 1,
-              ),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x0A000000),
-                  blurRadius: 12,
-                  offset: Offset(0, 4),
+    const double gap = 16;
+    const int columns = 4;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final itemWidth = (constraints.maxWidth - gap * (columns - 1)) / columns;
+        final itemHeight = itemWidth * (42 / 75); // 원래 비율 42:75 유지
+
+        return Wrap(
+          spacing: gap,
+          runSpacing: gap,
+          children: TextStylePanel.fonts.map((font) {
+            final isSelected = _selectedFamily == font.fontFamily;
+            return GestureDetector(
+              onTap: () {
+                setState(() => _selectedFamily = font.fontFamily);
+                widget.onTextFamilyChanged(font.fontFamily);
+                widget.onClose();
+              },
+              child: Container(
+                width: itemWidth,
+                height: itemHeight,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: isSelected ? AppColors.main : AppColors.gray01,
+                    width: isSelected ? 1.5 : 1,
+                  ),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x0A000000),
+                      blurRadius: 12,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Center(
-              child: Text(
-                font.label,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: font.fontFamily,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w400,
-                  height: 1.4,
-                  letterSpacing: -0.2,
-                  color: const Color(0xFF505050),
+                child: Center(
+                  child: Text(
+                    font.label,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: font.fontFamily,
+                      fontSize: itemWidth * 0.13,
+                      fontWeight: FontWeight.w400,
+                      height: 1.4,
+                      letterSpacing: -0.2,
+                      color: const Color(0xFF505050),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          }).toList(),
         );
-      }).toList(),
+      },
     );
   }
 }

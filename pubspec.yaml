@@ -78,18 +78,67 @@ flutter:
         - asset: assets/fonts/Pretendard/Pretendard-ExtraBold.otf
           weight: 700
 
+    - family: Kimsonmas
+      fonts:
+        - asset: assets/fonts/[김씨]손맛체.ttf
+
+    - family: BMKkubulim
+      fonts:
+        - asset: assets/fonts/BMKkubulim.otf
+
+    - family: BookkMyungjo
+      fonts:
+        - asset: assets/fonts/BookkMyungjo.ttf
+
+    - family: Cafe24Proup
+      fonts:
+        - asset: assets/fonts/Cafe24PROUP.otf
+
+    - family: Caveat
+      fonts:
+        - asset: assets/fonts/Caveat-VariableFont_wght.ttf
+
     - family: Impact
       fonts:
         - asset: assets/fonts/Impact.ttf
 
-    - family: Soap
+    - family: IndieFlower
       fonts:
-        - asset: assets/fonts/Soap.ttf
+        - asset: assets/fonts/IndieFlower.ttf
 
     - family: MemomentKkukkukk
       fonts:
         - asset: assets/fonts/MemomentKkukkukk.ttf
 
+    - family: Soap
+      fonts:
+        - asset: assets/fonts/Soap.ttf
+
+    - family: TAEBAEK
+      fonts:
+        - asset: assets/fonts/TAEBAEK milkyway.otf
+
+    - family: TitanOne
+      fonts:
+        - asset: assets/fonts/TitanOne.ttf
+
+    - family: YoonChild
+      fonts:
+        - asset: assets/fonts/YoonChildfundkoreaManSeh.otf
+
+
+    - family: ZenSerif
+      fonts:
+        - asset: assets/fonts/ZenSerif.otf
+
+
+    - family: Goryung
+      fonts:
+        - asset: assets/fonts/고령딸기체.otf
+
+    - family: Mannyunsul
+      fonts:
+        - asset: assets/fonts/만년설체.ttf
 
 
   # The following line ensures that the Material Icons font is
