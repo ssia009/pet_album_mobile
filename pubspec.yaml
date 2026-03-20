@@ -157,6 +157,16 @@ flutter:
     - assets/system/pet_character/dog/basic_dog/
     - assets/system/pet_character/dog/expression_dog/
     - assets/system/pet_character/dog/faceless_dog/
+    - assets/system/sticker/deco/
+    - assets/system/sticker/food/
+    - assets/system/sticker/masking_tape/
+    - assets/system/sticker/message/
+    - assets/system/sticker/nature/
+    - assets/system/sticker/note_paper/
+    - assets/system/sticker/props/
+    - assets/system/sticker/toy/
+
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
