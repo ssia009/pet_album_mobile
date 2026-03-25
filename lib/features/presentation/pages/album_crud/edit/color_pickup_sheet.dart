@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
-import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
+import 'package:petAblumMobile/core/theme/font/app_fonts_style_suit.dart';
 
 /// 색상 선택 바텀시트
 class ColorPickerBottomSheet extends StatefulWidget {
@@ -34,14 +34,7 @@ class ColorPickerBottomSheet extends StatefulWidget {
 
 class _ColorPickerBottomSheetState extends State<ColorPickerBottomSheet> {
   Color? selectedColor;
-  bool _isDropperMode = false; // 스포이드 모드 여부
-  final TextEditingController hexController = TextEditingController();
-
-  @override
-  void dispose() {
-    hexController.dispose();
-    super.dispose();
-  }
+  bool _isDropperMode = false;
 
   // 색상 팔레트 생성
   List<List<Color>> _generateColorPalette() {
@@ -110,27 +103,6 @@ class _ColorPickerBottomSheetState extends State<ColorPickerBottomSheet> {
     );
   }
 
-  // HEX → Color 업데이트
-  void _updateColorFromHex(String hexValue) {
-    hexValue = hexValue.replaceAll('#', '').trim();
-    if (hexValue.length == 6) {
-      try {
-        final Color color = Color(int.parse('FF$hexValue', radix: 16));
-        setState(() {
-          selectedColor = color;
-        });
-      } catch (_) {}
-    }
-  }
-
-  // Color → HEX 변환
-  String _colorToHex(Color color) {
-    return '${color.red.toRadixString(16).padLeft(2, '0')}'
-        '${color.green.toRadixString(16).padLeft(2, '0')}'
-        '${color.blue.toRadixString(16).padLeft(2, '0')}'
-        .toUpperCase();
-  }
-
   // + 버튼 색상: 선택된 색상이 있으면 해당 색상, 없으면 gray03
   Color get _addButtonColor => selectedColor ?? AppColors.gray03;
 
@@ -163,47 +135,49 @@ class _ColorPickerBottomSheetState extends State<ColorPickerBottomSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 핸들 바
+            // 헤더: x / 색상추가 / v
             Padding(
-              padding: const EdgeInsets.only(top: 12.0),
-              child: Container(
-                width: 54,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppColors.gray03,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // 헤더: 색상추가 / 취소
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Stack(
-                alignment: Alignment.center,
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+              child: Row(
                 children: [
-                  Text(
-                    '색상추가',
-                    style: AppTextStyle.body16M120.copyWith(
-                      color: AppColors.f05,
+                  // ✕ 닫기
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: SvgPicture.asset(
+                      'assets/system/icons/icon_close_big.svg',
+                      width: 24,
+                      height: 24,
+                      colorFilter: const ColorFilter.mode(
+                        AppColors.f05,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: const Size(50, 30),
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
+                  Expanded(
+                    child: Center(
                       child: Text(
-                        '취소',
-                        style: AppTextStyle.body16M120.copyWith(
-                          color: AppColors.f03,
-                        ),
+                        '색상추가',
+                        style: AppTextStyle.description14R120,
+                      ),
+                    ),
+                  ),
+                  // ✓ 확인
+                  GestureDetector(
+                    onTap: () {
+                      if (selectedColor != null) {
+                        widget.onColorAdded(selectedColor!);
+                        Navigator.of(context).pop(selectedColor);
+                      } else {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    child: SvgPicture.asset(
+                      'assets/system/icons/icon_check.svg',
+                      width: 24,
+                      height: 24,
+                      colorFilter: const ColorFilter.mode(
+                        AppColors.f05,
+                        BlendMode.srcIn,
                       ),
                     ),
                   ),
@@ -236,7 +210,6 @@ class _ColorPickerBottomSheetState extends State<ColorPickerBottomSheet> {
                                   onTap: () {
                                     setState(() {
                                       selectedColor = color;
-                                      hexController.text = _colorToHex(color);
                                       _isDropperMode = false;
                                     });
                                   },
@@ -302,6 +275,10 @@ class _ColorPickerBottomSheetState extends State<ColorPickerBottomSheet> {
                           decoration: BoxDecoration(
                             color: _addButtonColor,
                             shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Colors.black.withOpacity(0.10),
+                              width: 2,
+                            ),
                           ),
                           child: SvgPicture.asset(
                             'assets/system/icons/icon_add.svg',
@@ -317,15 +294,12 @@ class _ColorPickerBottomSheetState extends State<ColorPickerBottomSheet> {
 
                       const SizedBox(width: 12),
 
-                      // 스포이드 버튼: 누르면 HEX 입력 필드로 포커스 + 스포이드 모드 활성화
+                      // 스포이드 버튼
                       GestureDetector(
                         onTap: () {
                           setState(() {
                             _isDropperMode = !_isDropperMode;
                           });
-                          if (_isDropperMode && selectedColor != null) {
-                            hexController.text = _colorToHex(selectedColor!);
-                          }
                         },
                         child: Container(
                           width: 24,
@@ -337,7 +311,7 @@ class _ColorPickerBottomSheetState extends State<ColorPickerBottomSheet> {
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: SvgPicture.asset(
-                            'assets/system/icons/icon_ dropper.svg',
+                            'assets/system/icons/icon_dropper.svg',
                             width: 24,
                             height: 24,
                             colorFilter: ColorFilter.mode(
@@ -345,57 +319,6 @@ class _ColorPickerBottomSheetState extends State<ColorPickerBottomSheet> {
                               BlendMode.srcIn,
                             ),
                           ),
-                        ),
-                      ),
-
-                      const Spacer(),
-
-                      // HEX 입력 필드
-                      Container(
-                        height: 33,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: _isDropperMode
-                                ? AppColors.main
-                                : AppColors.gray02,
-                            width: 1.5,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'HEX:',
-                              style: AppTextStyle.description14R120.copyWith(
-                                color: AppColors.f04,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            SizedBox(
-                              width: 70,
-                              child: TextField(
-                                controller: hexController,
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: '263EDF',
-                                  contentPadding: EdgeInsets.zero,
-                                  isDense: true,
-                                ),
-                                style: AppTextStyle.description14R120.copyWith(
-                                  color: AppColors.f04,
-                                ),
-                                onChanged: (value) {
-                                  _updateColorFromHex(value);
-                                },
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ],

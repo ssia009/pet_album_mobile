@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
+import 'package:petAblumMobile/core/theme/font/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/widgets/common_app_back_bar_scaffold.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:petAblumMobile/core/theme/app_custom_button.dart';
+import 'package:petAblumMobile/core/widgets/skip_dialog.dart';
 import 'package:petAblumMobile/features/presentation/pages/main/main_shell.dart';
 import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_list.dart';
 

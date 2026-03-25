@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:petAblumMobile/features/presentation/pages/album_crud/edit/color_pickup_sheet.dart';
-import 'package:petAblumMobile/features/presentation/pages/album_crud/edit/color_pickup_sheet.dart';
 
 class ColorSelectorSection extends StatefulWidget {
   final Color? selectedColor;
@@ -71,9 +70,7 @@ class _ColorSelectorSectionState extends State<ColorSelectorSection> {
       onTap: () async {
         final pickedColor = await ColorPickerBottomSheet.show(
           context,
-          onColorAdded: (color) {
-            _addColor(color);
-          },
+          onColorAdded: (_) {}, // 콜백은 사용하지 않음
         );
         if (pickedColor != null) {
           _addColor(pickedColor);

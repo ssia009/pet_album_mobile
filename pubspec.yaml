@@ -71,6 +71,75 @@ flutter:
       fonts:
         - asset: assets/fonts/온글잎 박다현체.ttf
 
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/Pretendard/Pretendard-Regular.otf
+        - weight: 400
+        - asset: assets/fonts/Pretendard/Pretendard-ExtraBold.otf
+          weight: 700
+
+    - family: Kimsonmas
+      fonts:
+        - asset: assets/fonts/[김씨]손맛체.ttf
+
+    - family: BMKkubulim
+      fonts:
+        - asset: assets/fonts/BMKkubulim.otf
+
+    - family: BookkMyungjo
+      fonts:
+        - asset: assets/fonts/BookkMyungjo.ttf
+
+    - family: Cafe24Proup
+      fonts:
+        - asset: assets/fonts/Cafe24PROUP.otf
+
+    - family: Caveat
+      fonts:
+        - asset: assets/fonts/Caveat-VariableFont_wght.ttf
+
+    - family: Impact
+      fonts:
+        - asset: assets/fonts/Impact.ttf
+
+    - family: IndieFlower
+      fonts:
+        - asset: assets/fonts/IndieFlower.ttf
+
+    - family: MemomentKkukkukk
+      fonts:
+        - asset: assets/fonts/MemomentKkukkukk.ttf
+
+    - family: Soap
+      fonts:
+        - asset: assets/fonts/Soap.ttf
+
+    - family: TAEBAEK
+      fonts:
+        - asset: assets/fonts/TAEBAEK milkyway.otf
+
+    - family: TitanOne
+      fonts:
+        - asset: assets/fonts/TitanOne.ttf
+
+    - family: YoonChild
+      fonts:
+        - asset: assets/fonts/YoonChildfundkoreaManSeh.otf
+
+
+    - family: ZenSerif
+      fonts:
+        - asset: assets/fonts/ZenSerif.otf
+
+
+    - family: Goryung
+      fonts:
+        - asset: assets/fonts/고령딸기체.otf
+
+    - family: Mannyunsul
+      fonts:
+        - asset: assets/fonts/만년설체.ttf
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -82,8 +151,23 @@ flutter:
     - assets/system/icons/
     - assets/system/dumy/
     - assets/system/pet_card/
-    - assets/system/pet_character/dog/basic_dog/
     - assets/system/pet_character/cat/basic_cat/
+    - assets/system/pet_character/cat/expression_cat/
+    - assets/system/pet_character/cat/faceless_cat/
+    - assets/system/pet_character/dog/basic_dog/
+    - assets/system/pet_character/dog/expression_dog/
+    - assets/system/pet_character/dog/faceless_dog/
+    - assets/system/sticker/bubble/
+    - assets/system/sticker/deco/
+    - assets/system/sticker/food/
+    - assets/system/sticker/maskingtape/
+    - assets/system/sticker/message/
+    - assets/system/sticker/nature/
+    - assets/system/sticker/notepaper/
+    - assets/system/sticker/props/
+    - assets/system/sticker/toy/
+
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

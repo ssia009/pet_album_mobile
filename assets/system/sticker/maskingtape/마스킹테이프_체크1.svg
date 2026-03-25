@@ -1,0 +1,21 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M90 40.8604L88.1533 42.7061L90 44.5527L88.1533 46.3984L90 48.2451L88.1533 50.0908L90 51.9375L88.1533 53.7832L90 55.6299L88.1533 57.4756L89.7549 59.0771H11.0654L10 58.4619L11.8457 56.6152L10 54.7695L11.8457 52.9229L10 51.0771L11.8457 49.2305L10 47.3848L11.8457 45.5381L10 43.6924L11.8457 41.8457L10 40H88.5098L90 40.8604Z" fill="white"/>
+<mask id="mask0_3710_32704" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="10" y="40" width="80" height="20">
+<path d="M90 40.8604L88.1533 42.7061L90 44.5527L88.1533 46.3984L90 48.2451L88.1533 50.0908L90 51.9375L88.1533 53.7832L90 55.6299L88.1533 57.4756L89.7549 59.0771H11.0654L10 58.4619L11.8457 56.6152L10 54.7695L11.8457 52.9229L10 51.0771L11.8457 49.2305L10 47.3848L11.8457 45.5381L10 43.6924L11.8457 41.8457L10 40H88.5098L90 40.8604Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_3710_32704)">
+<rect x="89.7891" y="41.5898" width="3.92638" height="79.7897" transform="rotate(90 89.7891 41.5898)" fill="#D3D3D3" fill-opacity="0.47"/>
+<rect x="89.7891" y="49.582" width="3.92638" height="79.7897" transform="rotate(90 89.7891 49.582)" fill="#D3D3D3" fill-opacity="0.47"/>
+<rect x="89.7891" y="57.5742" width="3.92638" height="79.7897" transform="rotate(90 89.7891 57.5742)" fill="#D3D3D3" fill-opacity="0.47"/>
+<rect x="12.0332" y="24.4102" width="3.92638" height="50.6223" fill="#D3D3D3" fill-opacity="0.47"/>
+<rect x="20.0264" y="24.4102" width="3.92638" height="50.6223" fill="#D3D3D3" fill-opacity="0.47"/>
+<rect x="28.0195" y="24.4102" width="3.92638" height="50.6223" fill="#D3D3D3" fill-opacity="0.47"/>
+<rect x="36.0117" y="24.4102" width="3.92638" height="50.6223" fill="#D3D3D3" fill-opacity="0.47"/>
+<rect x="44.0049" y="24.4102" width="3.92638" height="50.6223" fill="#D3D3D3" fill-opacity="0.47"/>
+<rect x="51.998" y="24.4102" width="3.92638" height="50.6223" fill="#D3D3D3" fill-opacity="0.47"/>
+<rect x="59.9912" y="24.4102" width="3.92638" height="50.6223" fill="#D3D3D3" fill-opacity="0.47"/>
+<rect x="67.9834" y="24.4102" width="3.92638" height="50.6223" fill="#D3D3D3" fill-opacity="0.47"/>
+<rect x="75.9766" y="24.4102" width="3.92638" height="50.6223" fill="#D3D3D3" fill-opacity="0.47"/>
+<rect x="83.9697" y="24.4102" width="3.92638" height="50.6223" fill="#D3D3D3" fill-opacity="0.47"/>
+</g>
+</svg>
