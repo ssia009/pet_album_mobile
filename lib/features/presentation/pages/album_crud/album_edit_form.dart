@@ -39,6 +39,7 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
   String currentLineStyle = '실선';
   double currentLineWidth = 4;
   Color currentColor = const Color(0xFFBDBDBD);
+  Offset? _lastDotPoint;
 
   void _applyState(EditorState newState) {
     setState(() {
@@ -247,23 +248,10 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
             Positioned.fill(
               child: GestureDetector(
                 onPanStart: (details) {
-                  _applyState(_current.copyWith(
-                    drawingPoints: [
-                      ..._current.drawingPoints,
-                      DrawingPoint(
-                        offset: details.localPosition,
-                        lineStyle: currentLineStyle,
-                        paint: Paint()
-                          ..color = currentColor
-                          ..strokeWidth = currentLineWidth
-                          ..strokeCap = StrokeCap.round
-                          ..strokeJoin = StrokeJoin.round,
-                      ),
-                    ],
-                  ));
-                },
-                onPanUpdate: (details) {
+                  _saveToHistory();
+                  _lastDotPoint = details.localPosition;
                   setState(() {
+                    _isInitialState = false;
                     _current = _current.copyWith(
                       drawingPoints: [
                         ..._current.drawingPoints,
@@ -280,11 +268,53 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                     );
                   });
                 },
+                onPanUpdate: (details) {
+                  setState(() {
+                    final pos = details.localPosition;
+                    if (currentLineStyle == '실선') {
+                      _current = _current.copyWith(
+                        drawingPoints: [
+                          ..._current.drawingPoints,
+                          DrawingPoint(
+                            offset: pos,
+                            lineStyle: currentLineStyle,
+                            paint: Paint()
+                              ..color = currentColor
+                              ..strokeWidth = currentLineWidth
+                              ..strokeCap = StrokeCap.round
+                              ..strokeJoin = StrokeJoin.round,
+                          ),
+                        ],
+                      );
+                    } else {
+                      final gap = currentLineWidth * 4;
+                      final dist = (pos - _lastDotPoint!).distance;
+                      if (dist >= gap) {
+                        _current = _current.copyWith(
+                          drawingPoints: [
+                            ..._current.drawingPoints,
+                            DrawingPoint(
+                              offset: pos,
+                              lineStyle: currentLineStyle,
+                              paint: Paint()
+                                ..color = currentColor
+                                ..strokeWidth = currentLineWidth
+                                ..strokeCap = StrokeCap.round
+                                ..strokeJoin = StrokeJoin.round,
+                            ),
+                          ],
+                        );
+                        _lastDotPoint = pos;
+                      }
+                    }
+                  });
+                },
                 onPanEnd: (details) {
                   setState(() {
                     _current = _current.copyWith(
                       drawingPoints: [..._current.drawingPoints, null],
                     );
+                    _lastDotPoint = null;
                   });
                 },
                 child: CustomPaint(
