@@ -34,6 +34,7 @@ class _Login_device_pageState extends State<Login_device_page> {
       barrierColor: Colors.black.withOpacity(0.4),
       builder: (context) {
         return Dialog(
+          backgroundColor: AppColors.white,
           insetPadding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),

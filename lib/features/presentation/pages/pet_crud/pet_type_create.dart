@@ -1,6 +1,8 @@
+/* 현재 미사용
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:petAblumMobile/core/theme/font/app_fonts_style_suit.dart';
+import 'package:petAblumMobile/core/theme/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/widgets/common_app_back_bar_scaffold.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_info_form.dart';
@@ -111,13 +113,12 @@ class _PetTypeCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
+              // ✅ SizedBox 제거 후 SvgPicture에 직접 width/height 지정
+              SvgPicture.asset(
+                imagePath,
                 width: 152,
                 height: 146,
-                child: SvgPicture.asset(
-                  imagePath,
-                  fit: BoxFit.contain,
-                ),
+                fit: BoxFit.contain,
               ),
               const SizedBox(height: 8),
               Text(
@@ -132,4 +133,4 @@ class _PetTypeCard extends StatelessWidget {
       ),
     );
   }
-}
+}*/

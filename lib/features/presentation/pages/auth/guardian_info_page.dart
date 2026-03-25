@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
-import 'package:petAblumMobile/core/theme/font/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/theme/app_custom_button.dart';
+import 'package:petAblumMobile/core/theme/font/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/widgets/common_app_back_bar_scaffold.dart';
-import 'package:petAblumMobile/features/presentation/pages/auth/login_form.dart';
+import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_info_form.dart';
 
 class GuardianInfoPage extends StatefulWidget {
-  const GuardianInfoPage({super.key});
+  final bool isEdit;
+  const GuardianInfoPage({super.key, this.isEdit = false});
 
   @override
   State<GuardianInfoPage> createState() => _GuardianInfoPageState();
@@ -45,8 +46,6 @@ class _GuardianInfoPageState extends State<GuardianInfoPage> {
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
-            const hPad = 20.0;
-
             return Column(
               children: [
                 Expanded(
@@ -57,14 +56,12 @@ class _GuardianInfoPageState extends State<GuardianInfoPage> {
                       children: [
                         const SizedBox(height: 20),
 
-                        // 타이틀
                         Text(
                           '보호자님의 기본정보를\n알려주세요.',
                           style: AppTextStyle.titlePage28Sb130.copyWith(color: AppColors.f05),
                         ),
                         const SizedBox(height: 40),
 
-                        // 프로필 사진
                         GestureDetector(
                           onTap: () {},
                           child: Container(
@@ -86,13 +83,11 @@ class _GuardianInfoPageState extends State<GuardianInfoPage> {
                         ),
                         const SizedBox(height: 20),
 
-                        // 닉네임
                         Text('닉네임', style: AppTextStyle.body16M120.copyWith(color: AppColors.f03)),
                         const SizedBox(height: 8),
                         _InputField(controller: _nicknameController, hint: '닉네임을 입력해주세요'),
                         const SizedBox(height: 20),
 
-                        // 성별
                         Text('성별', style: AppTextStyle.body16M120.copyWith(color: AppColors.f03)),
                         const SizedBox(height: 8),
                         Row(
@@ -116,7 +111,6 @@ class _GuardianInfoPageState extends State<GuardianInfoPage> {
                         ),
                         const SizedBox(height: 20),
 
-                        // 거주지
                         Text('거주지', style: AppTextStyle.body16M120.copyWith(color: AppColors.f03)),
                         const SizedBox(height: 8),
                         Container(
@@ -150,7 +144,6 @@ class _GuardianInfoPageState extends State<GuardianInfoPage> {
                           ),
                         ),
 
-                        // 주소
                         if (_address.isNotEmpty) ...[
                           const SizedBox(height: 18),
                           Padding(
@@ -163,7 +156,6 @@ class _GuardianInfoPageState extends State<GuardianInfoPage> {
                         ],
                         const SizedBox(height: 18),
 
-                        // 상세주소
                         _InputField(
                           controller: _addressDetailController,
                           hint: '건물 명, 동/호수 등의 상세주소 입력',
@@ -174,7 +166,6 @@ class _GuardianInfoPageState extends State<GuardianInfoPage> {
                   ),
                 ),
 
-                // 하단 버튼
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
                   child: SizedBox(
@@ -183,11 +174,16 @@ class _GuardianInfoPageState extends State<GuardianInfoPage> {
                       text: '완료',
                       onTap: _isFormFilled
                           ? () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (_) => const IdLoginPage()),
-                              (route) => route.isFirst,
-                        );
+                        if (widget.isEdit) {
+                          Navigator.pop(context);
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const PetInfoEditor(),
+                            ),
+                          );
+                        }
                       }
                           : null,
                       backgroundColor: _isFormFilled ? AppColors.black : AppColors.gray02,

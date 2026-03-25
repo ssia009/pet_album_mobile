@@ -6,6 +6,7 @@ import 'package:petAblumMobile/core/theme/app_common_button_styles.dart';
 import 'package:petAblumMobile/core/theme/font/app_fonts_style_dahyun.dart';
 import 'package:petAblumMobile/core/theme/font/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/features/presentation/pages/main/alram.dart';
+import 'package:petAblumMobile/features/presentation/pages/album_crud/edit/album_create_sheet.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -61,7 +62,7 @@ class HomePage extends StatelessWidget {
                 width: 171,
                 height: 55,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => showAlbumCreateSheet(context), // ✅ 변경
                   style: AppButtonStyles.base(
                     backgroundColor: AppColors.black,
                     foregroundColor: AppColors.f01,

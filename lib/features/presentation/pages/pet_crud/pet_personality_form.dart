@@ -4,11 +4,14 @@ import 'package:petAblumMobile/core/theme/font/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/widgets/common_app_back_bar_scaffold.dart';
 import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:petAblumMobile/core/theme/app_custom_button.dart';
+import 'package:petAblumMobile/core/widgets/skip_dialog.dart';
 import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_health_form.dart';
 import 'package:petAblumMobile/features/presentation/pages/main/main_shell.dart';
+import 'package:petAblumMobile/features/presentation/pages/pet_crud/pet_list.dart';
 
 class PetPersonalityEditor extends StatefulWidget {
-  const PetPersonalityEditor({super.key});
+  final bool isFromMyPage;
+  const PetPersonalityEditor({super.key, this.isFromMyPage = false});
 
   @override
   State<PetPersonalityEditor> createState() => _PetPersonalityEditorState();
@@ -22,16 +25,30 @@ class _PetPersonalityEditorState extends State<PetPersonalityEditor> {
   final _controller3 = TextEditingController();
   final _controller4 = TextEditingController();
 
-  /// 1~3번 질문 모두 답변해야 활성화
   bool get _isFormValid =>
       _answers[1] != null &&
           _answers[2] != null &&
-          _answers[3] != null;
+          _answers[3] != null &&
+          _answers[4] != null;
 
   void _onAnswerSelected(int index, String answer) {
-    setState(() {
-      _answers[index] = answer;
-    });
+    setState(() => _answers[index] = answer);
+  }
+
+  void _goToDestination() {
+    if (widget.isFromMyPage) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const PetListPage()),
+            (route) => false,
+      );
+    } else {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const MainShell()),
+            (route) => false,
+      );
+    }
   }
 
   @override
@@ -43,206 +60,113 @@ class _PetPersonalityEditorState extends State<PetPersonalityEditor> {
     super.dispose();
   }
 
-  void _showSkipDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierColor: Colors.black.withOpacity(0.4),
-      builder: (context) {
-        return Dialog(
-          insetPadding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: SizedBox(
-            width: 350,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '건너뛰시겠습니까?',
-                    style: AppTextStyle.subtitle20M120.copyWith(
-                      color: AppColors.f05,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '미작성 시 다른 서비스 이용이 제한됩니다.\n입력한 내용은 자동저장됩니다.',
-                    style: AppTextStyle.description14R120.copyWith(
-                      color: AppColors.f04,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: AppCustomButton(
-                          text: '취소',
-                          onTap: () => Navigator.of(context).pop(),
-                          backgroundColor: AppColors.gray02,
-                          textColor: AppColors.f05,
-                          borderColor: AppColors.gray02,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: AppCustomButton(
-                          text: '건너뛰기',
-                          onTap: () {
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (_) => const MainShell(),
-                              ),
-                                  (route) => false,
-                            );
-                          },
-                          backgroundColor: AppColors.black,
-                          textColor: AppColors.f01,
-                          borderColor: AppColors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const CommonBackAppBar(),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
+    return Theme(
+      // 스크롤 시 앱바 색상 변경 방지
+      data: Theme.of(context).copyWith(
+        appBarTheme: Theme.of(context).appBarTheme.copyWith(
+          scrolledUnderElevation: 0,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: const CommonBackAppBar(),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      const _PageIndicator(currentIndex: 1, totalCount: 3),
+                      const SizedBox(height: 24),
+                      const _TitleText(),
+                      const SizedBox(height: 40),
 
-                    /// 🔵 페이지 인디케이터
-                    const _PageIndicator(
-                      currentIndex: 1,
-                      totalCount: 3,
-                    ),
-
-                    const SizedBox(height: 24),
-                    const _TitleText(),
-                    const SizedBox(height: 40),
-
-                    /// 1번 질문
-                    _QuestionText(
-                      1,
-                      '예민하게 반응하거나\n   무서워하는 소리, 상황이 있나요?',
-                    ),
-                    const SizedBox(height: 16),
-                    _AnswerGroup(
-                      selectedAnswer: _answers[1],
-                      onAnswerSelected: (v) => _onAnswerSelected(1, v),
-                      controller: _controller1,
-                      exampleText: '예) 큰소리로 이름을 부르기',
-                    ),
-                    const SizedBox(height: 32),
-
-                    /// 2번 질문
-                    _QuestionText(
-                      2,
-                      '이물질이나 장난감을\n    주워 먹은 적이 있나요?',
-                    ),
-                    const SizedBox(height: 16),
-                    _AnswerGroup(
-                      selectedAnswer: _answers[2],
-                      onAnswerSelected: (v) => _onAnswerSelected(2, v),
-                      controller: _controller2,
-                      exampleText: '예) 간식봉투, 휴지',
-                    ),
-                    const SizedBox(height: 32),
-
-                    /// 3번 질문
-                    _QuestionText(
-                      3,
-                      '사람이나 다른 동물을 공격하거나\n     덤빈 적이 있나요?',
-                    ),
-                    const SizedBox(height: 16),
-                    _AnswerGroup(
-                      selectedAnswer: _answers[3],
-                      onAnswerSelected: (v) => _onAnswerSelected(3, v),
-                      controller: _controller3,
-                      exampleText: '예) 간식을 뺏으려다 물었어요',
-                    ),
-                    const SizedBox(height: 32),
-
-                    /// 4번 질문 (선택)
-                    _QuestionText(
-                      4,
-                      '산책이나 돌봄 시 행동 / 환경 측면에서\n    주의할 점이 있나요?',
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '- 앞선 내용 외에, 산책이나 돌봄 시 행동·환경 측면에서,\n   더 알려주고 싶은 점이 있다면 작성해주세요.',
-                      style: AppTextStyle.description14R140.copyWith(
-                        color: AppColors.f03,
+                      _QuestionText(1, '예민하게 반응하거나\n   무서워하는 소리, 상황이 있나요?'),
+                      const SizedBox(height: 16),
+                      _AnswerGroup(
+                        selectedAnswer: _answers[1],
+                        onAnswerSelected: (v) => _onAnswerSelected(1, v),
+                        controller: _controller1,
+                        exampleText: '예) 큰소리로 이름을 부르기',
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    _AnswerGroup(
-                      selectedAnswer: _answers[4],
-                      onAnswerSelected: (v) => _onAnswerSelected(4, v),
-                      controller: _controller4,
-                      exampleText: '예) 엘리베이터보다 계단 이용을 선호해요.',
-                    ),
+                      const SizedBox(height: 32),
 
-                    const SizedBox(height: 80),
-                  ],
+                      _QuestionText(2, '이물질이나 장난감을\n    주워 먹은 적이 있나요?'),
+                      const SizedBox(height: 16),
+                      _AnswerGroup(
+                        selectedAnswer: _answers[2],
+                        onAnswerSelected: (v) => _onAnswerSelected(2, v),
+                        controller: _controller2,
+                        exampleText: '예) 간식봉투, 휴지',
+                      ),
+                      const SizedBox(height: 32),
+
+                      _QuestionText(3, '사람이나 다른 동물을 공격하거나\n     덤빈 적이 있나요?'),
+                      const SizedBox(height: 16),
+                      _AnswerGroup(
+                        selectedAnswer: _answers[3],
+                        onAnswerSelected: (v) => _onAnswerSelected(3, v),
+                        controller: _controller3,
+                        exampleText: '예) 간식을 뺏으려다 물었어요',
+                      ),
+                      const SizedBox(height: 32),
+
+                      _QuestionText(4, '산책이나 돌봄 시 행동 / 환경 측면에서\n     주의할 점이 있나요?'),
+                      const SizedBox(height: 8),
+                      Text(
+                        '-  앞선 내용 외에, 산책이나 돌봄 시 행동·환경 측면에서,\n    더 알려주고 싶은 점이 있다면 작성해주세요.',
+                        style: AppTextStyle.description14R140.copyWith(color: AppColors.f03),
+                      ),
+                      const SizedBox(height: 16),
+                      _AnswerGroup(
+                        selectedAnswer: _answers[4],
+                        onAnswerSelected: (v) => _onAnswerSelected(4, v),
+                        controller: _controller4,
+                        exampleText: '예) 엘리베이터보다 계단 이용을 선호해요.',
+                      ),
+
+                      const SizedBox(height: 80),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            /// 하단 버튼
-            _BottomDualButton(
-              isActive: _isFormValid,
-              onSkip: () => _showSkipDialog(context),
-              onNext: _isFormValid
-                  ? () {
-                Navigator.push(
+              _BottomDualButton(
+                isActive: _isFormValid,
+                onSkip: () => SkipDialog.show(
+                  context: context,
+                  onSkip: _goToDestination,
+                ),
+                onNext: _isFormValid
+                    ? () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const PetHealthEditor(),
+                    builder: (_) => PetHealthEditor(
+                      isFromMyPage: widget.isFromMyPage,
+                    ),
                   ),
-                );
-              }
-                  : null,
-            ),
-          ],
+                )
+                    : null,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-////////////////////////////////////////////////////////////
-/// 🔵 페이지 인디케이터
-////////////////////////////////////////////////////////////
-
 class _PageIndicator extends StatelessWidget {
   final int currentIndex;
   final int totalCount;
 
-  const _PageIndicator({
-    required this.currentIndex,
-    required this.totalCount,
-  });
+  const _PageIndicator({required this.currentIndex, required this.totalCount});
 
   @override
   Widget build(BuildContext context) {
@@ -260,7 +184,6 @@ class _PageIndicator extends StatelessWidget {
 
 class _Dot extends StatelessWidget {
   final bool isActive;
-
   const _Dot({required this.isActive});
 
   @override
@@ -275,10 +198,6 @@ class _Dot extends StatelessWidget {
     );
   }
 }
-
-////////////////////////////////////////////////////////////
-/// 🔹 타이틀
-////////////////////////////////////////////////////////////
 
 class _TitleText extends StatelessWidget {
   const _TitleText();
@@ -298,10 +217,6 @@ class _TitleText extends StatelessWidget {
   }
 }
 
-////////////////////////////////////////////////////////////
-/// 🔹 질문 텍스트
-////////////////////////////////////////////////////////////
-
 class _QuestionText extends StatelessWidget {
   final int number;
   final String text;
@@ -312,17 +227,10 @@ class _QuestionText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       '$number. $text',
-      style: AppTextStyle.body16M140.copyWith(
-        color: AppColors.f05,
-        height: 1.4,
-      ),
+      style: AppTextStyle.body16M140.copyWith(color: AppColors.f05, height: 1.4),
     );
   }
 }
-
-////////////////////////////////////////////////////////////
-/// 🔹 답변 그룹
-////////////////////////////////////////////////////////////
 
 class _AnswerGroup extends StatelessWidget {
   final String? selectedAnswer;
@@ -348,17 +256,11 @@ class _AnswerGroup extends StatelessWidget {
           isSelected: isYesSelected,
           onTap: () => onAnswerSelected('있어요'),
         ),
-
         if (isYesSelected) ...[
           const SizedBox(height: 12),
-          _InputField(
-            controller: controller,
-            hint: exampleText,
-          ),
+          _InputField(controller: controller, hint: exampleText),
         ],
-
         const SizedBox(height: 12),
-
         _AnswerOption(
           text: '없어요',
           isSelected: selectedAnswer == '없어요',
@@ -369,18 +271,11 @@ class _AnswerGroup extends StatelessWidget {
   }
 }
 
-////////////////////////////////////////////////////////////
-/// 🔹 입력 필드 (힌트 색상 f03)
-////////////////////////////////////////////////////////////
-
 class _InputField extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
 
-  const _InputField({
-    required this.controller,
-    required this.hint,
-  });
+  const _InputField({required this.controller, required this.hint});
 
   @override
   Widget build(BuildContext context) {
@@ -388,16 +283,11 @@ class _InputField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: AppTextStyle.body16M120.copyWith(
-          color: AppColors.f03,
-        ),
+        hintStyle: AppTextStyle.body16M120.copyWith(color: AppColors.f03),
         filled: true,
         fillColor: AppColors.gray01,
         isCollapsed: true,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 18,
-        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
@@ -406,10 +296,6 @@ class _InputField extends StatelessWidget {
     );
   }
 }
-
-////////////////////////////////////////////////////////////
-/// 🔹 답변 선택 옵션 (SVG 라디오 버튼)
-////////////////////////////////////////////////////////////
 
 class _AnswerOption extends StatelessWidget {
   final String text;
@@ -428,10 +314,7 @@ class _AnswerOption extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 18,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -444,9 +327,7 @@ class _AnswerOption extends StatelessWidget {
           children: [
             Text(
               text,
-              style: AppTextStyle.body16M120.copyWith(
-                color: AppColors.f05,
-              ),
+              style: AppTextStyle.body16M120.copyWith(color: AppColors.f05),
             ),
             const Spacer(),
             SvgPicture.asset(
@@ -462,10 +343,6 @@ class _AnswerOption extends StatelessWidget {
     );
   }
 }
-
-////////////////////////////////////////////////////////////
-/// 🔹 하단 버튼
-////////////////////////////////////////////////////////////
 
 class _BottomDualButton extends StatelessWidget {
   final bool isActive;
@@ -495,7 +372,6 @@ class _BottomDualButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
               child: SizedBox(
