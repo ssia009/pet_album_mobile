@@ -74,7 +74,7 @@ flutter:
     - family: Pretendard
       fonts:
         - asset: assets/fonts/Pretendard/Pretendard-Regular.otf
-        - weight: 400
+          weight: 400
         - asset: assets/fonts/Pretendard/Pretendard-ExtraBold.otf
           weight: 700
 
@@ -149,6 +149,7 @@ flutter:
     - assets/system/logo/logo.png
     - assets/system/logo/logo.svg
     - assets/system/icons/
+    - assets/system/icons/naver_logo.svg
     - assets/system/dumy/
     - assets/system/pet_card/
     - assets/system/pet_character/cat/basic_cat/

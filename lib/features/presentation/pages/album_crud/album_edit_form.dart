@@ -3,7 +3,8 @@ import 'package:petAblumMobile/core/theme/app_colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:petAblumMobile/core/theme/font/app_fonts_style_suit.dart';
 import 'package:petAblumMobile/core/widgets/common_app_bar_main_scaffold.dart';
-import 'package:petAblumMobile/features/presentation/pages/album_crud/text_edit_button_list_box.dart';import 'package:dotted_border/dotted_border.dart';
+import 'package:petAblumMobile/features/presentation/pages/album_crud/text_edit_button_list_box.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:petAblumMobile/features/presentation/pages/album_crud/edit/background_template_sheet.dart';
 import 'package:petAblumMobile/features/presentation/pages/album_crud/edit/drawing_tool_sheet.dart';
 import 'package:petAblumMobile/features/presentation/pages/album_crud/text_edit/text_style_sheet.dart';
@@ -30,9 +31,12 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
   TextAlign currentTextAlign = TextAlign.left;
   bool currentTextUnderline = false;
   int? _selectedTextIndex;
-  final List<_CanvasText> _canvasTexts = [];
+  List<_CanvasText> get _canvasTexts => _current.texts;
   int? _selectedStickerIndex;
   final List<_CanvasSticker> _canvasStickers = [];
+
+  double _textInputX = 40;
+  double _textInputY = 200;
 
   EditorState _current = EditorState();
   List<EditorState> _history = [];
@@ -82,26 +86,52 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
     _redoStack.clear();
   }
 
+  void _updateSelectedText({
+    String? fontFamily,
+    Color? color,
+    TextAlign? textAlign,
+    bool? isUnderline,
+  }) {
+    if (_selectedTextIndex == null ||
+        _selectedTextIndex! >= _current.texts.length) return;
+    final texts = List<_CanvasText>.from(_current.texts);
+    texts[_selectedTextIndex!] = texts[_selectedTextIndex!].copyWith(
+      fontFamily: fontFamily,
+      color: color,
+      textAlign: textAlign,
+      isUnderline: isUnderline,
+    );
+    _applyState(_current.copyWith(texts: texts));
+  }
+
   final TextEditingController _textInputController = TextEditingController();
   final FocusNode _textFocusNode = FocusNode();
   bool _isTextMode = false;
 
   void _onTextConfirmed() {
     if (_textInputController.text.isNotEmpty) {
-      setState(() {
-        _canvasTexts.add(_CanvasText(
+      final newTexts = [
+        ..._current.texts,
+        _CanvasText(
           text: _textInputController.text,
+          x: _textInputX,
+          y: _textInputY,
           fontFamily: currentTextFamily,
           color: currentTextColor,
           textAlign: currentTextAlign,
           isUnderline: currentTextUnderline,
-        ));
-        _selectedTextIndex = _canvasTexts.length - 1;
-      });
+        ),
+      ];
+      _applyState(_current.copyWith(texts: newTexts));
+      setState(() => _selectedTextIndex = newTexts.length - 1);
     }
     _textInputController.clear();
     _textFocusNode.unfocus();
-    setState(() => _isTextMode = false);
+    setState(() {
+      _isTextMode = false;
+      _textInputX = 40;
+      _textInputY = 200;
+    });
   }
 
   @override
@@ -119,17 +149,12 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              // 가운데: 앨범 이름
               Center(
                 child: Text(
                   widget.album?['title'] ?? '새로운 앨범',
-                  style: AppTextStyle.subtitle20M120.copyWith(
-                    color: AppColors.f05,
-                  ),
+                  style: AppTextStyle.subtitle20M120.copyWith(color: AppColors.f05),
                 ),
               ),
-
-              // 왼쪽: undo / redo 아이콘
               Positioned(
                 left: 20,
                 child: Row(
@@ -139,12 +164,8 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                       onTap: _undo,
                       child: SvgPicture.asset(
                         'assets/system/icons/icon_undo.svg',
-                        width: 24,
-                        height: 24,
-                        colorFilter: ColorFilter.mode(
-                          AppColors.f05,
-                          BlendMode.srcIn,
-                        ),
+                        width: 24, height: 24,
+                        colorFilter: ColorFilter.mode(AppColors.f05, BlendMode.srcIn),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -152,19 +173,13 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                       onTap: _redo,
                       child: SvgPicture.asset(
                         'assets/system/icons/icon_redo.svg',
-                        width: 24,
-                        height: 24,
-                        colorFilter: ColorFilter.mode(
-                          AppColors.f05,
-                          BlendMode.srcIn,
-                        ),
+                        width: 24, height: 24,
+                        colorFilter: ColorFilter.mode(AppColors.f05, BlendMode.srcIn),
                       ),
                     ),
                   ],
                 ),
               ),
-
-              // 오른쪽: 취소 / 완료 (같은 너비로 묶기)
               Positioned(
                 right: 20,
                 child: Row(
@@ -177,9 +192,7 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                         child: Text(
                           '취소',
                           textAlign: TextAlign.center,
-                          style: AppTextStyle.body16R120.copyWith(
-                            color: AppColors.f03,
-                          ),
+                          style: AppTextStyle.body16R120.copyWith(color: AppColors.f03),
                         ),
                       ),
                     ),
@@ -196,9 +209,7 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                         child: Text(
                           '완료',
                           textAlign: TextAlign.center,
-                          style: AppTextStyle.body16R120.copyWith(
-                            color: AppColors.f05,
-                          ),
+                          style: AppTextStyle.body16R120.copyWith(color: AppColors.f05),
                         ),
                       ),
                     ),
@@ -211,21 +222,20 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
       ),
       body: Stack(
         children: [
+          // 배경
           if (_current.background.color != null || _current.background.image != null)
             Positioned.fill(
               child: Container(
                 decoration: BoxDecoration(
                   color: _current.background.color,
                   image: _current.background.image != null
-                      ? DecorationImage(
-                    image: _current.background.image!,
-                    fit: BoxFit.cover,
-                  )
+                      ? DecorationImage(image: _current.background.image!, fit: BoxFit.cover)
                       : null,
                 ),
               ),
             ),
 
+          // 스크롤 캔버스
           Positioned.fill(
             child: GestureDetector(
               onTap: () => setState(() {
@@ -237,19 +247,17 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
             ),
           ),
 
-          // 그린 획 표시 (항상)
+          // 드로잉 획 표시 (항상)
           if (_current.drawingPoints.isNotEmpty)
             Positioned.fill(
               child: IgnorePointer(
                 child: CustomPaint(
-                  painter: DrawingPainter(
-                    drawingPoints: _current.drawingPoints,
-                  ),
+                  painter: DrawingPainter(drawingPoints: _current.drawingPoints),
                 ),
               ),
             ),
 
-          // 그리기 터치 입력 (드로잉 모드일 때만)
+          // 드로잉 터치 입력 (드로잉 모드일 때만)
           if (_isDrawingMode)
             Positioned.fill(
               child: GestureDetector(
@@ -324,14 +332,12 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                   });
                 },
                 child: CustomPaint(
-                  painter: DrawingPainter(
-                    drawingPoints: _current.drawingPoints,
-                  ),
+                  painter: DrawingPainter(drawingPoints: _current.drawingPoints),
                 ),
               ),
             ),
 
-          // 4. 배경 패널
+          // 배경 패널
           AnimatedPositioned(
             duration: const Duration(milliseconds: 250),
             curve: Curves.easeOut,
@@ -339,9 +345,7 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
             bottom: _showBackgroundPanel ? 0 : -400,
             child: BackgroundTabletPanel(
               onClose: () => setState(() => _showBackgroundPanel = false),
-              onSave: () {
-                setState(() => _showBackgroundPanel = false);
-              },
+              onSave: () => setState(() => _showBackgroundPanel = false),
               onColorChanged: (color) {
                 _applyState(_current.copyWith(
                   background: BackgroundState(color: color),
@@ -350,21 +354,15 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
             ),
           ),
 
+          // 텍스트 아이템 렌더링
           ..._canvasTexts.asMap().entries.map((entry) {
             final index = entry.key;
             final item = entry.value;
             final isSelected = _selectedTextIndex == index;
             const handleSize = 20.0;
             const padding = handleSize / 2;
-
-            // 핸들 공통 그림자
             const handleShadow = [
-              BoxShadow(
-                color: Color(0x1F000000),
-                blurRadius: 3,
-                spreadRadius: 0,
-                offset: Offset(0, 0),
-              ),
+              BoxShadow(color: Color(0x1F000000), blurRadius: 3, spreadRadius: 0, offset: Offset(0, 0)),
             ];
 
             return Positioned(
@@ -373,23 +371,21 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  // 텍스트 컨테이너 + 드래그/선택 GestureDetector
                   Padding(
                     padding: const EdgeInsets.all(padding),
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () => setState(() {
-                        if (_selectedTextIndex == index) {
-                          _selectedTextIndex = null;
-                        } else {
-                          _selectedTextIndex = index;
-                        }
+                        _selectedTextIndex = _selectedTextIndex == index ? null : index;
                       }),
+                      onPanStart: (_) => _saveToHistory(),
                       onPanUpdate: (details) {
-                        setState(() {
-                          item.x += details.delta.dx;
-                          item.y += details.delta.dy;
-                        });
+                        final texts = List<_CanvasText>.from(_current.texts);
+                        texts[index] = texts[index].copyWith(
+                          x: texts[index].x + details.delta.dx,
+                          y: texts[index].y + details.delta.dy,
+                        );
+                        setState(() => _current = _current.copyWith(texts: texts));
                       },
                       child: Container(
                         padding: const EdgeInsets.all(4),
@@ -398,12 +394,7 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                           border: Border.all(color: Colors.white, width: 2.0),
                           borderRadius: BorderRadius.circular(4),
                           boxShadow: const [
-                            BoxShadow(
-                              color: Color(0x1F000000),
-                              blurRadius: 3,
-                              spreadRadius: 0,
-                              offset: Offset(0, 0),
-                            ),
+                            BoxShadow(color: Color(0x1F000000), blurRadius: 3, spreadRadius: 0, offset: Offset(0, 0)),
                           ],
                         )
                             : BoxDecoration(
@@ -417,9 +408,7 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                             fontSize: item.fontSize,
                             color: item.color,
                             fontFamily: item.fontFamily,
-                            decoration: item.isUnderline
-                                ? TextDecoration.underline
-                                : TextDecoration.none,
+                            decoration: item.isUnderline ? TextDecoration.underline : TextDecoration.none,
                             decorationColor: item.color,
                           ),
                         ),
@@ -427,71 +416,55 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                     ),
                   ),
 
-                  // 좌측 상단: X (삭제) — 부모 GestureDetector와 완전 분리
+                  // 좌측 상단: X (삭제)
                   if (isSelected)
                     Positioned(
-                      left: 0,
-                      top: 0,
+                      left: 0, top: 0,
                       child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
-                          setState(() {
-                            _canvasTexts.removeAt(index);
-                            _selectedTextIndex = null;
-                          });
+                          final texts = List<_CanvasText>.from(_current.texts)..removeAt(index);
+                          _applyState(_current.copyWith(texts: texts));
+                          setState(() => _selectedTextIndex = null);
                         },
                         child: Container(
-                          width: handleSize,
-                          height: handleSize,
+                          width: handleSize, height: handleSize,
                           decoration: BoxDecoration(
-                            color: AppColors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: handleShadow,
+                            color: AppColors.white, shape: BoxShape.circle, boxShadow: handleShadow,
                           ),
                           child: SvgPicture.asset(
                             'assets/system/icons/icon_close.svg',
-                            width: 20,
-                            height: 20,
-                            fit: BoxFit.contain,
-                            colorFilter: ColorFilter.mode(
-                              AppColors.f05,
-                              BlendMode.srcIn,
-                            ),
+                            width: 20, height: 20, fit: BoxFit.contain,
+                            colorFilter: ColorFilter.mode(AppColors.f05, BlendMode.srcIn),
                           ),
                         ),
                       ),
                     ),
 
-                  // 우측 하단: 크기 조절 — 부모 GestureDetector와 완전 분리
+                  // 우측 하단: 크기 조절
                   if (isSelected)
                     Positioned(
-                      right: 0,
-                      bottom: 0,
+                      right: 0, bottom: 0,
                       child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
+                        onPanStart: (_) => _saveToHistory(),
                         onPanUpdate: (details) {
-                          setState(() {
-                            item.fontSize = (item.fontSize + details.delta.dx * 0.3).clamp(8, 80);
-                          });
+                          final texts = List<_CanvasText>.from(_current.texts);
+                          texts[index] = texts[index].copyWith(
+                            fontSize: (texts[index].fontSize + details.delta.dx * 0.3).clamp(8, 80),
+                          );
+                          setState(() => _current = _current.copyWith(texts: texts));
                         },
                         child: Container(
-                          width: handleSize,
-                          height: handleSize,
+                          width: handleSize, height: handleSize,
                           decoration: BoxDecoration(
-                            color: AppColors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: handleShadow,
+                            color: AppColors.white, shape: BoxShape.circle, boxShadow: handleShadow,
                           ),
                           child: Center(
                             child: SvgPicture.asset(
                               'assets/system/icons/icon_zoom_inout.svg',
-                              width: 20,
-                              height: 20,
-                              fit: BoxFit.contain,
-                              colorFilter: ColorFilter.mode(
-                                AppColors.f05,
-                                BlendMode.srcIn,
-                              ),
+                              width: 20, height: 20, fit: BoxFit.contain,
+                              colorFilter: ColorFilter.mode(AppColors.f05, BlendMode.srcIn),
                             ),
                           ),
                         ),
@@ -502,7 +475,7 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
             );
           }),
 
-          // 스티커 렌더링
+          // 스티커 렌더링 (Doc3 그대로)
           ..._canvasStickers.asMap().entries.map((entry) {
             final index = entry.key;
             final item = entry.value;
@@ -510,12 +483,7 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
             const handleSize = 20.0;
             const padding = handleSize / 2;
             const handleShadow = [
-              BoxShadow(
-                color: Color(0x1F000000),
-                blurRadius: 3,
-                spreadRadius: 0,
-                offset: Offset(0, 0),
-              ),
+              BoxShadow(color: Color(0x1F000000), blurRadius: 3, spreadRadius: 0, offset: Offset(0, 0)),
             ];
 
             return Positioned(
@@ -545,12 +513,7 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                           border: Border.all(color: Colors.white, width: 2.0),
                           borderRadius: BorderRadius.circular(4),
                           boxShadow: const [
-                            BoxShadow(
-                              color: Color(0x1F000000),
-                              blurRadius: 3,
-                              spreadRadius: 0,
-                              offset: Offset(0, 0),
-                            ),
+                            BoxShadow(color: Color(0x1F000000), blurRadius: 3, spreadRadius: 0, offset: Offset(0, 0)),
                           ],
                         )
                             : BoxDecoration(
@@ -558,24 +521,14 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: item.svgPath != null
-                            ? SvgPicture.asset(
-                          item.svgPath!,
-                          width: item.size,
-                          height: item.size,
-                        )
-                            : Text(
-                          item.emoji,
-                          style: TextStyle(fontSize: item.size * 0.7),
-                        ),
+                            ? SvgPicture.asset(item.svgPath!, width: item.size, height: item.size)
+                            : Text(item.emoji, style: TextStyle(fontSize: item.size * 0.7)),
                       ),
                     ),
                   ),
-
-                  // 좌측 상단: X 삭제
                   if (isSelected)
                     Positioned(
-                      left: 0,
-                      top: 0,
+                      left: 0, top: 0,
                       child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
@@ -585,32 +538,21 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                           });
                         },
                         child: Container(
-                          width: handleSize,
-                          height: handleSize,
+                          width: handleSize, height: handleSize,
                           decoration: BoxDecoration(
-                            color: AppColors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: handleShadow,
+                            color: AppColors.white, shape: BoxShape.circle, boxShadow: handleShadow,
                           ),
                           child: SvgPicture.asset(
                             'assets/system/icons/icon_close.svg',
-                            width: 20,
-                            height: 20,
-                            fit: BoxFit.contain,
-                            colorFilter: ColorFilter.mode(
-                              AppColors.f05,
-                              BlendMode.srcIn,
-                            ),
+                            width: 20, height: 20, fit: BoxFit.contain,
+                            colorFilter: ColorFilter.mode(AppColors.f05, BlendMode.srcIn),
                           ),
                         ),
                       ),
                     ),
-
-                  // 우측 하단: 리사이즈 핸들
                   if (isSelected)
                     Positioned(
-                      right: 0,
-                      bottom: 0,
+                      right: 0, bottom: 0,
                       child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onPanUpdate: (details) {
@@ -619,23 +561,15 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                           });
                         },
                         child: Container(
-                          width: handleSize,
-                          height: handleSize,
+                          width: handleSize, height: handleSize,
                           decoration: BoxDecoration(
-                            color: AppColors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: handleShadow,
+                            color: AppColors.white, shape: BoxShape.circle, boxShadow: handleShadow,
                           ),
                           child: Center(
                             child: SvgPicture.asset(
                               'assets/system/icons/icon_zoom_inout.svg',
-                              width: 20,
-                              height: 20,
-                              fit: BoxFit.contain,
-                              colorFilter: ColorFilter.mode(
-                                AppColors.f05,
-                                BlendMode.srcIn,
-                              ),
+                              width: 20, height: 20, fit: BoxFit.contain,
+                              colorFilter: ColorFilter.mode(AppColors.f05, BlendMode.srcIn),
                             ),
                           ),
                         ),
@@ -646,7 +580,7 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
             );
           }),
 
-          // 5. 드로잉 툴 패널
+          // 드로잉 툴 패널
           AnimatedPositioned(
             duration: const Duration(milliseconds: 250),
             curve: Curves.easeOut,
@@ -669,31 +603,39 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
 
           if (_isTextMode)
             Positioned(
-              left: 40, right: 40, top: 200,
-              child: TextField(
-                controller: _textInputController,
-                focusNode: _textFocusNode,
-                autofocus: true,
-                maxLines: null,
-                keyboardType: TextInputType.multiline,
-                textInputAction: TextInputAction.newline,
-                style: TextStyle(
-                  fontFamily: currentTextFamily,
-                  fontSize: 20,
-                  color: currentTextColor,
-                  decoration: currentTextUnderline
-                      ? TextDecoration.underline
-                      : TextDecoration.none,
-                ),
-                textAlign: currentTextAlign,
-                decoration: const InputDecoration(
-                  hintText: '텍스트 입력',
-                  border: InputBorder.none,
+              left: _textInputX,
+              top: _textInputY,
+              right: 40,
+              child: GestureDetector(
+                onPanUpdate: (details) {
+                  setState(() {
+                    _textInputX += details.delta.dx;
+                    _textInputY += details.delta.dy;
+                  });
+                },
+                child: TextField(
+                  controller: _textInputController,
+                  focusNode: _textFocusNode,
+                  autofocus: true,
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
+                  textInputAction: TextInputAction.newline,
+                  style: TextStyle(
+                    fontFamily: currentTextFamily,
+                    fontSize: 20,
+                    color: currentTextColor,
+                    decoration: currentTextUnderline ? TextDecoration.underline : TextDecoration.none,
+                  ),
+                  textAlign: currentTextAlign,
+                  decoration: const InputDecoration(
+                    hintText: '텍스트 입력',
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
             ),
 
-          // 6. 하단 아이콘바
+          // 하단 아이콘바
           if (!_showBackgroundPanel && !_showDrawingPanel && !_showModalSheet)
             Positioned(
               left: 0, right: 0,
@@ -758,88 +700,38 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                           selectedFontFamily: currentTextFamily,
                           selectedTextAlign: currentTextAlign,
                           onTextFamilyChanged: (family) {
-                            setState(() {
-                              currentTextFamily = family;
-                              if (_selectedTextIndex != null &&
-                                  _selectedTextIndex! < _canvasTexts.length) {
-                                _canvasTexts[_selectedTextIndex!].fontFamily = family;
-                              }
-                            });
+                            setState(() => currentTextFamily = family);
+                            _updateSelectedText(fontFamily: family);
                           },
                           onTextAlignChanged: (align) {
-                            setState(() {
-                              currentTextAlign = align;
-                              if (_selectedTextIndex != null &&
-                                  _selectedTextIndex! < _canvasTexts.length) {
-                                _canvasTexts[_selectedTextIndex!].textAlign = align;
-                              }
-                            });
+                            setState(() => currentTextAlign = align);
+                            _updateSelectedText(textAlign: align);
                           },
                           onClose: () => Navigator.pop(context),
                         ),
                       ),
                     );
                   },
-                  onTextClosed: () {
-                    if (_textInputController.text.isNotEmpty) {
-                      setState(() {
-                        _canvasTexts.add(_CanvasText(
-                          text: _textInputController.text,
-                          fontFamily: currentTextFamily,
-                          color: currentTextColor,
-                          textAlign: currentTextAlign,
-                          isUnderline: currentTextUnderline,
-                        ));
-                        _selectedTextIndex = _canvasTexts.length - 1;
-                      });
-                    }
-                    _textInputController.clear();
-                    _textFocusNode.unfocus();
-                    setState(() {
-                      _isTextMode = false;
-                    });
-                  },
+                  onTextClosed: _onTextConfirmed,
                   onFontFamilyChanged: (family) {
-                    setState(() {
-                      currentTextFamily = family;
-                      if (_selectedTextIndex != null &&
-                          _selectedTextIndex! < _canvasTexts.length) {
-                        _canvasTexts[_selectedTextIndex!].fontFamily = family;
-                      }
-                    });
+                    setState(() => currentTextFamily = family);
+                    _updateSelectedText(fontFamily: family);
                   },
                   onTextColorChanged: (color) {
-                    setState(() {
-                      currentTextColor = color;
-                      if (_selectedTextIndex != null &&
-                          _selectedTextIndex! < _canvasTexts.length) {
-                        _canvasTexts[_selectedTextIndex!].color = color;
-                      }
-                    });
+                    setState(() => currentTextColor = color);
+                    _updateSelectedText(color: color);
                   },
                   onTextAlignChanged: (align) {
-                    setState(() {
-                      currentTextAlign = align;
-                      if (_selectedTextIndex != null &&
-                          _selectedTextIndex! < _canvasTexts.length) {
-                        _canvasTexts[_selectedTextIndex!].textAlign = align;
-                      }
-                    });
+                    setState(() => currentTextAlign = align);
+                    _updateSelectedText(textAlign: align);
                   },
                   onUnderlineChanged: (val) {
-                    setState(() {
-                      currentTextUnderline = val;
-                      if (_selectedTextIndex != null &&
-                          _selectedTextIndex! < _canvasTexts.length) {
-                        _canvasTexts[_selectedTextIndex!].isUnderline = val;
-                      }
-                    });
+                    setState(() => currentTextUnderline = val);
+                    _updateSelectedText(isUnderline: val);
                   },
                 ),
               ),
             ),
-
-
         ],
       ),
     );
@@ -848,7 +740,6 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
   Widget _first() {
     return SingleChildScrollView(
       child: Padding(
-        // 4. 양쪽 20px
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Column(
           children: [
@@ -880,9 +771,7 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                         child: Text(
                           '표지 영역입니다.\n앨범의 표지를 꾸며주세요!',
                           textAlign: TextAlign.center,
-                          style: AppTextStyle.body16M140.copyWith(
-                            color: AppColors.f02,
-                          ),
+                          style: AppTextStyle.body16M140.copyWith(color: AppColors.f02),
                         ),
                       ),
                     ),
@@ -890,9 +779,7 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                     Center(
                       child: Text(
                         '아래로 스크롤해서 앨범을 꾸며주세요.',
-                        style: AppTextStyle.body16M120.copyWith(
-                          color: AppColors.f02,
-                        ),
+                        style: AppTextStyle.body16M120.copyWith(color: AppColors.f02),
                       ),
                     ),
                   ],
@@ -918,21 +805,23 @@ class BackgroundState {
 class EditorState {
   final List<DrawingPoint?> drawingPoints;
   final BackgroundState background;
-  // final List<StickerItem> stickers;
-  // final List<TextItem> texts;
+  final List<_CanvasText> texts;
 
   EditorState({
     this.drawingPoints = const [],
     BackgroundState? background,
+    this.texts = const [],
   }) : background = background ?? BackgroundState();
 
   EditorState copyWith({
     List<DrawingPoint?>? drawingPoints,
     BackgroundState? background,
+    List<_CanvasText>? texts,
   }) {
     return EditorState(
       drawingPoints: drawingPoints ?? this.drawingPoints,
       background: background ?? this.background,
+      texts: texts ?? this.texts,
     );
   }
 }
@@ -960,7 +849,7 @@ class DrawingPainter extends CustomPainter {
       if (drawingPoints[i] != null && drawingPoints[i + 1] != null) {
         final point1 = drawingPoints[i]!;
         final point2 = drawingPoints[i + 1]!;
-        final style = point1.lineStyle; // 각 획의 스타일 사용
+        final style = point1.lineStyle;
 
         if (style == '점선') {
           _drawDottedLine(canvas, point1.offset, point2.offset, point1.paint);
@@ -973,15 +862,12 @@ class DrawingPainter extends CustomPainter {
     }
   }
 
-  // 파선 (두께 반영)
   void _drawDashedLine(Canvas canvas, Offset p1, Offset p2, Paint paint) {
     final strokeW = paint.strokeWidth;
     final dashWidth = strokeW * 4;
     final dashSpace = strokeW * 2;
-
     final distance = (p2 - p1).distance;
     if (distance == 0) return;
-
     final dir = Offset((p2.dx - p1.dx) / distance, (p2.dy - p1.dy) / distance);
     double d = 0.0;
     while (d < distance) {
@@ -996,19 +882,15 @@ class DrawingPainter extends CustomPainter {
     }
   }
 
-  // 점선 (두께 반영: dotRadius = strokeWidth / 2)
   void _drawDottedLine(Canvas canvas, Offset p1, Offset p2, Paint paint) {
     final dotRadius = paint.strokeWidth / 2;
     final dotGap = paint.strokeWidth * 2;
-
     final distance = (p2 - p1).distance;
     if (distance == 0) return;
-
     final dir = Offset((p2.dx - p1.dx) / distance, (p2.dy - p1.dy) / distance);
     final dotPaint = Paint()
       ..color = paint.color
       ..style = PaintingStyle.fill;
-
     double d = 0.0;
     while (d < distance) {
       final point = Offset(p1.dx + dir.dx * d, p1.dy + dir.dy * d);
@@ -1039,13 +921,13 @@ class _CanvasSticker {
 
 class _CanvasText {
   final String text;
-  double x;
-  double y;
-  double fontSize;
-  String fontFamily;
-  Color color;
-  TextAlign textAlign;
-  bool isUnderline;
+  final double x;
+  final double y;
+  final double fontSize;
+  final String fontFamily;
+  final Color color;
+  final TextAlign textAlign;
+  final bool isUnderline;
 
   _CanvasText({
     required this.text,
@@ -1057,4 +939,24 @@ class _CanvasText {
     this.textAlign = TextAlign.left,
     this.isUnderline = false,
   });
+
+  _CanvasText copyWith({
+    double? x,
+    double? y,
+    double? fontSize,
+    String? fontFamily,
+    Color? color,
+    TextAlign? textAlign,
+    bool? isUnderline,
+  }) =>
+      _CanvasText(
+        text: text,
+        x: x ?? this.x,
+        y: y ?? this.y,
+        fontSize: fontSize ?? this.fontSize,
+        fontFamily: fontFamily ?? this.fontFamily,
+        color: color ?? this.color,
+        textAlign: textAlign ?? this.textAlign,
+        isUnderline: isUnderline ?? this.isUnderline,
+      );
 }
