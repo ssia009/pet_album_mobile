@@ -330,37 +330,41 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
             ),
           ),
 
-          // 3. 드로잉 획 표시
-          if (_current.drawingPoints.isNotEmpty)
-            Positioned.fill(
-              child: IgnorePointer(
-                child: CustomPaint(
-                  painter: DrawingPainter(drawingPoints: _current.drawingPoints),
-                ),
+          // 3. 드로잉 획 표시 (항상 렌더 - drawingPoints 비어도 위젯 유지)
+          Positioned.fill(
+            child: IgnorePointer(
+              child: CustomPaint(
+                painter: DrawingPainter(drawingPoints: _current.drawingPoints),
               ),
             ),
+          ),
 
-          // 4. 드로잉 터치 입력
+          // 4. 드로잉 터치 입력 (드로잉 모드일 때만)
           if (_isDrawingMode)
             Positioned.fill(
               child: GestureDetector(
                 onPanStart: (details) {
+                  final pos = details.localPosition;
                   _saveToHistory();
-                  _lastDotPoint = details.localPosition;
+                  _lastDotPoint = pos;
+                  _isInitialState = false;
+
+                  // ✅ album_edit_form1 브러쉬 개선: 첫 터치부터 즉시 점 추가 → 탭으로 찍어도 바로 렌더
                   setState(() {
-                    _isInitialState = false;
+                    DrawingPoint mp(Offset o) => DrawingPoint(
+                      offset: o,
+                      lineStyle: currentLineStyle,
+                      paint: Paint()
+                        ..color = currentColor
+                        ..strokeWidth = currentLineWidth
+                        ..strokeCap = StrokeCap.round
+                        ..strokeJoin = StrokeJoin.round,
+                    );
                     _current = _current.copyWith(
                       drawingPoints: [
                         ..._current.drawingPoints,
-                        DrawingPoint(
-                          offset: details.localPosition,
-                          lineStyle: currentLineStyle,
-                          paint: Paint()
-                            ..color = currentColor
-                            ..strokeWidth = currentLineWidth
-                            ..strokeCap = StrokeCap.round
-                            ..strokeJoin = StrokeJoin.round,
-                        ),
+                        null,    // 이전 획과 격리
+                        mp(pos), // 시작점 즉시 추가
                       ],
                     );
                   });
@@ -368,38 +372,27 @@ class _AlbumEditFormPageState extends State<AlbumEditFormPage> {
                 onPanUpdate: (details) {
                   setState(() {
                     final pos = details.localPosition;
+
+                    DrawingPoint mp(Offset o) => DrawingPoint(
+                      offset: o,
+                      lineStyle: currentLineStyle,
+                      paint: Paint()
+                        ..color = currentColor
+                        ..strokeWidth = currentLineWidth
+                        ..strokeCap = StrokeCap.round
+                        ..strokeJoin = StrokeJoin.round,
+                    );
+
                     if (currentLineStyle == '실선') {
                       _current = _current.copyWith(
-                        drawingPoints: [
-                          ..._current.drawingPoints,
-                          DrawingPoint(
-                            offset: pos,
-                            lineStyle: currentLineStyle,
-                            paint: Paint()
-                              ..color = currentColor
-                              ..strokeWidth = currentLineWidth
-                              ..strokeCap = StrokeCap.round
-                              ..strokeJoin = StrokeJoin.round,
-                          ),
-                        ],
+                        drawingPoints: [..._current.drawingPoints, mp(pos)],
                       );
                     } else {
                       final gap = currentLineWidth * 4;
                       final dist = (pos - _lastDotPoint!).distance;
                       if (dist >= gap) {
                         _current = _current.copyWith(
-                          drawingPoints: [
-                            ..._current.drawingPoints,
-                            DrawingPoint(
-                              offset: pos,
-                              lineStyle: currentLineStyle,
-                              paint: Paint()
-                                ..color = currentColor
-                                ..strokeWidth = currentLineWidth
-                                ..strokeCap = StrokeCap.round
-                                ..strokeJoin = StrokeJoin.round,
-                            ),
-                          ],
+                          drawingPoints: [..._current.drawingPoints, mp(pos)],
                         );
                         _lastDotPoint = pos;
                       }
@@ -905,6 +898,8 @@ class DrawingPoint {
   });
 }
 
+// ✅ album_edit_form1의 개선된 DrawingPainter: 획을 stroke 단위로 그룹화하여
+//    점/파선/실선 각각을 정확하게 렌더링 (탭 한 번으로도 점이 바로 찍힘)
 class DrawingPainter extends CustomPainter {
   final List<DrawingPoint?> drawingPoints;
 
@@ -912,57 +907,80 @@ class DrawingPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    for (int i = 0; i < drawingPoints.length - 1; i++) {
-      if (drawingPoints[i] != null && drawingPoints[i + 1] != null) {
-        final point1 = drawingPoints[i]!;
-        final point2 = drawingPoints[i + 1]!;
-        final style = point1.lineStyle;
-
-        if (style == '점선') {
-          _drawDottedLine(canvas, point1.offset, point2.offset, point1.paint);
-        } else if (style == '파선') {
-          _drawDashedLine(canvas, point1.offset, point2.offset, point1.paint);
-        } else {
-          canvas.drawLine(point1.offset, point2.offset, point1.paint);
+    // null을 구분자로 삼아 획(stroke) 단위로 그룹화
+    final List<List<DrawingPoint>> strokes = [];
+    List<DrawingPoint> cur = [];
+    for (final p in drawingPoints) {
+      if (p == null) {
+        if (cur.isNotEmpty) {
+          strokes.add(List.from(cur));
+          cur = [];
         }
+      } else {
+        cur.add(p);
       }
     }
-  }
+    if (cur.isNotEmpty) strokes.add(cur);
 
-  void _drawDashedLine(Canvas canvas, Offset p1, Offset p2, Paint paint) {
-    final strokeW = paint.strokeWidth;
-    final dashWidth = strokeW * 4;
-    final dashSpace = strokeW * 2;
-    final distance = (p2 - p1).distance;
-    if (distance == 0) return;
-    final dir = Offset((p2.dx - p1.dx) / distance, (p2.dy - p1.dy) / distance);
-    double d = 0.0;
-    while (d < distance) {
-      final start = Offset(p1.dx + dir.dx * d, p1.dy + dir.dy * d);
-      d += dashWidth;
-      final end = Offset(
-        p1.dx + dir.dx * d.clamp(0, distance),
-        p1.dy + dir.dy * d.clamp(0, distance),
-      );
-      canvas.drawLine(start, end, paint);
-      d += dashSpace;
-    }
-  }
+    for (final stroke in strokes) {
+      if (stroke.isEmpty) continue;
+      final style = stroke.first.lineStyle;
 
-  void _drawDottedLine(Canvas canvas, Offset p1, Offset p2, Paint paint) {
-    final dotRadius = paint.strokeWidth / 2;
-    final dotGap = paint.strokeWidth * 2;
-    final distance = (p2 - p1).distance;
-    if (distance == 0) return;
-    final dir = Offset((p2.dx - p1.dx) / distance, (p2.dy - p1.dy) / distance);
-    final dotPaint = Paint()
-      ..color = paint.color
-      ..style = PaintingStyle.fill;
-    double d = 0.0;
-    while (d < distance) {
-      final point = Offset(p1.dx + dir.dx * d, p1.dy + dir.dy * d);
-      canvas.drawCircle(point, dotRadius, dotPaint);
-      d += dotRadius * 2 + dotGap;
+      if (style == '점선') {
+        // 점선: 각 포인트를 원으로 그림
+        for (final p in stroke) {
+          canvas.drawCircle(
+            p.offset,
+            p.paint.strokeWidth / 2,
+            Paint()
+              ..color = p.paint.color
+              ..style = PaintingStyle.fill,
+          );
+        }
+      } else if (style == '파선') {
+        // 파선: 포인트 1개면 짧은 선, 2개 이상이면 방향을 계산해 대시 그리기
+        if (stroke.length == 1) {
+          final p = stroke.first;
+          canvas.drawLine(
+            p.offset,
+            p.offset + Offset(p.paint.strokeWidth * 2.5, 0),
+            p.paint,
+          );
+        } else {
+          for (int i = 0; i < stroke.length; i++) {
+            final p = stroke[i];
+            Offset dir;
+            if (i < stroke.length - 1) {
+              final d = stroke[i + 1].offset - p.offset;
+              dir = d.distance > 0 ? d / d.distance : const Offset(1, 0);
+            } else {
+              final d = p.offset - stroke[i - 1].offset;
+              dir = d.distance > 0 ? d / d.distance : const Offset(1, 0);
+            }
+            canvas.drawLine(
+              p.offset,
+              p.offset + dir * (p.paint.strokeWidth * 2.5),
+              p.paint,
+            );
+          }
+        }
+      } else {
+        // 실선: 포인트 1개면 점, 2개 이상이면 선으로 연결
+        if (stroke.length == 1) {
+          final p = stroke.first;
+          canvas.drawCircle(
+            p.offset,
+            p.paint.strokeWidth / 2,
+            Paint()
+              ..color = p.paint.color
+              ..style = PaintingStyle.fill,
+          );
+        } else {
+          for (int i = 0; i < stroke.length - 1; i++) {
+            canvas.drawLine(stroke[i].offset, stroke[i + 1].offset, stroke[i].paint);
+          }
+        }
+      }
     }
   }
 
